@@ -10,6 +10,7 @@ class ProfilePage extends StatelessWidget {
       body: Column(
         children: <Widget>[
           SizedBox(height: getProportionateScreenHeight(60)),
+            // for image
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,9 +47,14 @@ class ProfilePage extends StatelessWidget {
               ),
             ],
           ),
+              //  List
           Expanded(
             child: ListView(
               children: <Widget>[
+                ProfileListItem(
+                  icon: Icons.person_add_alt_1,
+                  text: 'Profili Düzenle',
+                ),
                 ProfileListItem(
                   icon: Icons.settings,
                   text: 'Ayarlar',
