@@ -1,8 +1,9 @@
 import 'package:fitterapi/button.dart';
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/error.dart';
-import 'package:fitterapi/login/login_screen.dart';
+import '../main_page/home/home_screen.dart';
 import 'package:fitterapi/sign_up/dart/sign_up_screen.dart';
+
 import 'package:fitterapi/size_config.dart';
 import 'package:fitterapi/social_card.dart';
 import 'package:flutter/cupertino.dart';
@@ -50,13 +51,13 @@ class _SignInBodyState extends State<SignInBody> {
                   horizontal: getProportionateScreenHeight(20)),
               child: Column(
                 children: <Widget>[
-                  SizedBox(height: 20),
+                  SizedBox(height: getProportionateScreenHeight(20)),
                   // Resim ayarlaması
                   Container(
                     height: 300,
                     child: Image.asset("assets/images/iconYazılı2.jpeg"),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: getProportionateScreenHeight(10)),
                   Text(
                     "'ye Hoşgeldiniz!",
                     style: TextStyle(
@@ -107,7 +108,7 @@ class _SignInBodyState extends State<SignInBody> {
 
                   //  Error kısımları
                   FormError(errors: errors),
-                  SizedBox(height: 10),
+                  SizedBox(height: getProportionateScreenHeight(10)),
                   //Button
                   Button(
                     text: "İleri",
@@ -122,12 +123,12 @@ class _SignInBodyState extends State<SignInBody> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => LoginScreen()),
+                              builder: (context) => HomeScreen()),
                         );
                       }
                     },
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: getProportionateScreenHeight(10)),
                   // google-facebook-twitter
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -174,6 +175,7 @@ class _SignInBodyState extends State<SignInBody> {
                       ),
                     ],
                   ),
+                  SizedBox(height: getProportionateScreenHeight(10)),
                 ],
               ),
             ),

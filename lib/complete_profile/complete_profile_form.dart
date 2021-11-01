@@ -1,4 +1,6 @@
-import 'package:fitterapi/login/login_screen.dart';
+import 'package:fitterapi/main_page/home/home_screen.dart';
+
+import '../main_page/home/home_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../button.dart';
@@ -76,7 +78,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => LoginScreen()),
+                      builder: (context) => HomeScreen()),
                 );
               }
             },

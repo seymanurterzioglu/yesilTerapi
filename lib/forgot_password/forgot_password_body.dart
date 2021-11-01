@@ -1,5 +1,5 @@
 import 'package:fitterapi/button.dart';
-import 'package:fitterapi/login/login_screen.dart';
+import '../main_page/home/home_screen.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/material.dart';
 
@@ -127,7 +127,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => LoginScreen()),
+                      builder: (context) => HomeScreen()),
                 );
               }
             },
