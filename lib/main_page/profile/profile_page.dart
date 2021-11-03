@@ -1,4 +1,7 @@
 import 'package:fitterapi/const.dart';
+import 'package:fitterapi/main_page/profile/profile_edit.dart';
+import 'package:fitterapi/main_page/profile/settings.dart';
+import 'package:fitterapi/main_page/profile/suggestion_page.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +13,7 @@ class ProfilePage extends StatelessWidget {
       body: Column(
         children: <Widget>[
           SizedBox(height: getProportionateScreenHeight(60)),
-            // for image
+          // for image
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,46 +29,70 @@ class ProfilePage extends StatelessWidget {
                       radius: 80,
                       backgroundImage: AssetImage('assets/images/back4.jpg'),
                     ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Container(
-                        height: getProportionateScreenHeight(40),
-                        width: getProportionateScreenWidth(40),
-                        decoration: BoxDecoration(
-                          color: Colors.white70,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.black,
-                          size: getProportionateScreenHeight(25),
-                        ),
-                      ),
-                    ),
+                    // Align(
+                    //   alignment: Alignment.bottomRight,
+                    //   child: Container(
+                    //     height: getProportionateScreenHeight(40),
+                    //     width: getProportionateScreenWidth(40),
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.white70,
+                    //       shape: BoxShape.circle,
+                    //     ),
+                    //     child: Icon(
+                    //       Icons.edit,
+                    //       color: Colors.black,
+                    //       size: getProportionateScreenHeight(25),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
             ],
           ),
-              //  List
+          //  List
           Expanded(
             child: ListView(
               children: <Widget>[
                 ProfileListItem(
                   icon: Icons.person_add_alt_1,
                   text: 'Profili Düzenle',
+                  onPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfileEdit()),
+                    );
+                  },
                 ),
                 ProfileListItem(
                   icon: Icons.settings,
                   text: 'Ayarlar',
+                  onPress: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Settings()),
+                    );
+                  },
                 ),
                 ProfileListItem(
                   icon: Icons.note_add,
-                  text: 'Öneri',
+                  text: 'Öneri Yaz',
+                  onPress: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SuggestionPage()),
+                    );
+                  },
                 ),
                 ProfileListItem(
                   icon: Icons.outbond,
                   text: 'Çıkış Yap',
+                  onPress: () {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => SignInScreen()),
+                    // );   // bu şekilde çıkış yapmış olmuyor.sign in sayfasına gidiyor sadece
+                  },
                 ),
               ],
             ),
@@ -80,12 +107,14 @@ class ProfileListItem extends StatelessWidget {
   final IconData? icon;
   final text;
   final bool? hasNavigation;
+  final VoidCallback? onPress;
 
   const ProfileListItem({
     Key? key,
     this.icon,
     this.text,
     this.hasNavigation = true,
+    this.onPress,
   }) : super(key: key);
 
   @override
@@ -107,10 +136,14 @@ class ProfileListItem extends StatelessWidget {
             size: getProportionateScreenWidth(20),
           ),
           SizedBox(width: getProportionateScreenWidth(15)),
-          Text(
-            this.text,
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
+          TextButton(
+            onPressed: onPress,
+            child: Text(
+              this.text,
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           Spacer(),

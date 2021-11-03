@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
+class CuresPage extends StatefulWidget {
+  @override
+  State<CuresPage> createState() => _CuresPageState();
+}
 
-
-class CuresPage extends StatelessWidget {
+class _CuresPageState extends State<CuresPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+
+    );
   }
 }

@@ -67,7 +67,7 @@ class ForumPage extends StatelessWidget {
                       style: TextStyle(color: Colors.black54),
                     ),
                   ),
-                  SizedBox(width: getProportionateScreenWidth(35)),
+                  SizedBox(width: getProportionateScreenWidth(10)),
                   Container(
                     padding: EdgeInsets.all(getProportionateScreenWidth(7)),
                     height: getProportionateScreenHeight(45),
