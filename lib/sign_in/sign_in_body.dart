@@ -1,6 +1,7 @@
 import 'package:fitterapi/button.dart';
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/error.dart';
+import 'package:fitterapi/services/auth.dart';
 import '../main_page/home/home_screen.dart';
 import 'package:fitterapi/sign_up/dart/sign_up_screen.dart';
 
@@ -23,6 +24,8 @@ class _SignInBodyState extends State<SignInBody> {
   bool remember = false;
   bool isPasswordVisible = true;
   List<String> errors = [];
+
+  final AuthService _auth = AuthService();
 
   void addError({String? error}) {
     if (!errors.contains(error))
@@ -125,6 +128,18 @@ class _SignInBodyState extends State<SignInBody> {
                           MaterialPageRoute(
                               builder: (context) => HomeScreen()),
                         );
+                      }
+                    },
+                  ),
+                  Button(
+                    text: "Sign In Anon",
+                    press: () async {
+                      dynamic result = await _auth.signInAnon();
+                      if(result == null){
+                        print('error sign ın');
+                      }else{
+                        print('sign in succesfully');
+                        print(result.uid);
                       }
                     },
                   ),

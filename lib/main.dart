@@ -1,35 +1,40 @@
+import 'package:fitterapi/services/auth.dart';
 import 'package:fitterapi/theme.dart';
+import 'package:fitterapi/wrapper.dart';
+import 'package:provider/provider.dart';
+import 'modules/user.dart';
 
-import 'splash/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+//
+// void main() {
+//   runApp(MyApp());
+// }
+
+Future main()  async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp();
+
   runApp(MyApp());
+
 }
+
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'FitTerapi',
-      theme: theme(),
-      home: SplashScreen(),
+    return StreamProvider<theUser?>.value(
+      value: AuthService().user,
+      initialData: null,
+      catchError: (User,theUser) => null,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'FitTerapi',
+        theme: theme(),
+        home: Wrapper(),
+      ),
     );
   }
 }
-
-
-
-/*
-
-class MyHomePage extends StatelessWidget {
-  var title;
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-*/

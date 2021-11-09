@@ -111,7 +111,7 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
           ),
           SizedBox(height: getProportionateScreenHeight(30)),
           FormError(errors: errors),
-          SizedBox(height: SizeConfig.screenHeight * 0.1),
+          SizedBox(height: getProportionateScreenHeight(10)),
           Button(
             text: "Gönder",
             press: () {

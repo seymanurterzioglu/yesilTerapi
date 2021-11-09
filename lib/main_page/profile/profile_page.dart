@@ -2,11 +2,15 @@ import 'package:fitterapi/const.dart';
 import 'package:fitterapi/main_page/profile/profile_edit.dart';
 import 'package:fitterapi/main_page/profile/settings.dart';
 import 'package:fitterapi/main_page/profile/suggestion_page.dart';
+import 'package:fitterapi/services/auth.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
+
+  final AuthService _auth = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,11 +91,9 @@ class ProfilePage extends StatelessWidget {
                 ProfileListItem(
                   icon: Icons.outbond,
                   text: 'Çıkış Yap',
-                  onPress: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => SignInScreen()),
-                    // );   // bu şekilde çıkış yapmış olmuyor.sign in sayfasına gidiyor sadece
+                  //çıkış yaptığı bildirimi geliyor ama başka sayfaya gidilmiyor
+                  onPress: () async {
+                    await _auth.signOut();
                   },
                 ),
               ],

@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:fitterapi/main_page/profile/const/edit_form.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../button.dart';
 
@@ -23,6 +25,16 @@ class _ProfileEditState extends State<ProfileEdit> {
     setState(() {
       _image = File(pickedFile!.path);
     });
+
+      //add profile photo to Firebase Storage
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref = storage.ref().child("user").child("admin").child("profil.png");
+
+    UploadTask uploadTask = ref.putFile(_image!);
+    var imageUrl = await (await uploadTask).ref.getDownloadURL();
+
+
+
   }
 
   @override
@@ -169,8 +181,23 @@ class _ProfileEditState extends State<ProfileEdit> {
               ),
               TextButton.icon(
                 style: TextButton.styleFrom(primary: Colors.black),
-                onPressed: () {
+                onPressed: () async {
                   _getPhoto(ImageSource.gallery);
+
+                      //  resim firebase upload etmek için ama önce hesapla giriş yapmak lazım
+
+                  // final results = await FilePicker.platform.pickFiles(
+                  //   allowMultiple: false,
+                  //   type: FileType.custom,
+                  //   allowedExtensions: ['png','jpg',],
+                  // );
+                  //
+                  // final path = results!.files.single.path!;
+                  // final fileName = results.files.single.name;
+                  //
+                  // print(path);
+                  // print(fileName);
+
                 },
                 icon: Icon(Icons.image),
                 label: Text('Galeri',
@@ -185,8 +212,4 @@ class _ProfileEditState extends State<ProfileEdit> {
     );
   }
 
-  // list kısmı
-  Widget list() {
-    return Container();
-  }
 }

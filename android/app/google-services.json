@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "715681721939",
+    "project_id": "yesilterapi-58b11",
+    "storage_bucket": "yesilterapi-58b11.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:715681721939:android:ed2c64a71e02eff9b720a6",
+        "android_client_info": {
+          "package_name": "com.example.fitterapi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "715681721939-snk3p5ulkdb0sl4odid357fr7b90dinb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDA4WxZ40L0tqC3SSdGSCEDmxF0w2DrcoY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "715681721939-snk3p5ulkdb0sl4odid357fr7b90dinb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
