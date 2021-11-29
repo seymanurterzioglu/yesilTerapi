@@ -25,6 +25,7 @@ Future main()  async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final _init= Firebase.initializeApp();
     return StreamProvider<theUser?>.value(
       value: AuthService().user,
       initialData: null,

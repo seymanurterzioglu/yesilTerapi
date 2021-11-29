@@ -8,8 +8,14 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
         title: Text(
           "Giriş",
+          style: TextStyle(
+            color: Colors.black12,
+          ),
         ),
       ),
       body: SignInBody(),

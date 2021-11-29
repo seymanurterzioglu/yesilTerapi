@@ -1,4 +1,5 @@
 import 'package:fitterapi/complete_profile/complete_profile_screen.dart';
+import 'package:fitterapi/services/auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../button.dart';
@@ -17,9 +18,12 @@ class _SignUpFormState extends State<SignUpForm> {
   String? email;
   String? password;
   String? confirmPassword;
+  String? error;
   bool isPasswordVisible = true;
   bool isConfirmPasswordVisible = true;
   final List<String> errors = [];
+
+  final AuthService _auth = AuthService();
 
   void addError({String? error}) {
     if (!errors.contains(error))
@@ -57,8 +61,14 @@ class _SignUpFormState extends State<SignUpForm> {
             SizedBox(height: getProportionateScreenHeight(10)),
             Button(
               text: "İleri",
-              press: () {
+              press: ()  async {
                 if (_formKey.currentState!.validate()) {
+                  dynamic result = await _auth.signUpWithEmailPassword(email!, password!);
+                  print(email);
+                  print(password);
+                  if(result == null){
+                    setState(() => error = 'Lütfen var olan bir email giriniz');
+                  }
                   _formKey.currentState!.save();
                   // eğer her şey doğruysa giriş ekranına git
                   FocusScopeNode currentFocus = FocusScope.of(context);
@@ -84,6 +94,7 @@ class _SignUpFormState extends State<SignUpForm> {
     return TextFormField(
       onSaved: (newValue) => confirmPassword = newValue,
       onChanged: (value) {
+        setState(() => confirmPassword = value);
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
         } else if (value.isNotEmpty && password == confirmPassword) {
@@ -105,18 +116,17 @@ class _SignUpFormState extends State<SignUpForm> {
         labelText: "Yeniden Şifre",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
-        border: InputBorder.none,
         hintText: "Şifrenizi yeniden Giriniz.",
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 2,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 2,
-        ),
+        // enabledBorder: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(28),
+        //   borderSide: BorderSide(color: Colors.black45),
+        //   gapPadding: 2,
+        // ),
+        // focusedBorder: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(28),
+        //   borderSide: BorderSide(color: Colors.black45),
+        //   gapPadding: 2,
+        // ),
         suffixIcon: IconButton(
           icon: isConfirmPasswordVisible
               ? Icon(
@@ -137,6 +147,7 @@ class _SignUpFormState extends State<SignUpForm> {
     return TextFormField(
       onSaved: (newValue) => password = newValue,
       onChanged: (value) {
+        setState(() => password = value);
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
         } else if (value.length >= 8) {
@@ -158,18 +169,17 @@ class _SignUpFormState extends State<SignUpForm> {
         labelText: "Şifre",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
-        border: InputBorder.none,
         hintText: "Şifrenizi Giriniz.",
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 2,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 2,
-        ),
+        // enabledBorder: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(28),
+        //   borderSide: BorderSide(color: Colors.black45),
+        //   gapPadding: 2,
+        // ),
+        // focusedBorder: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(28),
+        //   borderSide: BorderSide(color: Colors.black45),
+        //   gapPadding: 2,
+        // ),
         suffixIcon: IconButton(
           icon: isPasswordVisible
               ? Icon(
@@ -191,6 +201,7 @@ class _SignUpFormState extends State<SignUpForm> {
       keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => email = newValue,
       onChanged: (value) {
+        setState(() => email = value);
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);
         } else if (emailValidatorRegExp.hasMatch(value)) {
@@ -212,18 +223,17 @@ class _SignUpFormState extends State<SignUpForm> {
         labelText: "Email",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
-        border: InputBorder.none,
         hintText: "Emailinizi Giriniz.",
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 2,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 2,
-        ),
+        // enabledBorder: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(28),
+        //   borderSide: BorderSide(color: Colors.black45),
+        //   gapPadding: 2,
+        // ),
+        // focusedBorder: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(28),
+        //   borderSide: BorderSide(color: Colors.black45),
+        //   gapPadding: 2,
+        // ),
       ),
     );
   }

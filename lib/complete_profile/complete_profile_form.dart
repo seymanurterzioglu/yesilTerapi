@@ -111,18 +111,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
             labelText: "İsim",
             floatingLabelBehavior: FloatingLabelBehavior.always,
             contentPadding: EdgeInsets.all(20),
-            border: InputBorder.none,
             hintText: "İsminizi Giriniz.",
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(28),
-              borderSide: BorderSide(color: Colors.black45),
-              gapPadding: 10,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(28),
-              borderSide: BorderSide(color: Colors.black45),
-              gapPadding: 10,
-            ),
+
           ),
         );
   }
@@ -149,18 +139,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         labelText: "Soyisim",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
-        border: InputBorder.none,
         hintText: "Soyisminizi Giriniz.",
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
+
       ),
     );
   }
@@ -187,18 +167,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         labelText: "Yaş",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
-        border: InputBorder.none,
         hintText: "Yaşınızı Giriniz.",
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
+
       ),
     );
   }
@@ -225,18 +195,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         labelText: "Boy",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
-        border: InputBorder.none,
         hintText: "Boyunuzu Giriniz.",
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
+
       ),
     );
   }
@@ -263,18 +223,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         labelText: "Kilo",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
-        border: InputBorder.none,
         hintText: "Kilonuzu Giriniz.",
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
+
       ),
     );
   }
@@ -301,18 +251,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         labelText: "Hastalık",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
-        border: InputBorder.none,
         hintText: "Hastalığınızı Giriniz.",
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
+
       ),
     );
   }
@@ -339,18 +279,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         labelText: "Son Zamanlardaki Rahatsızlık",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
-        border: InputBorder.none,
         hintText: "Rahatsızlığınızı Giriniz.",
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,   // bunu ne işe yaradığına bak
-        ),
+
       ),
     );
   }

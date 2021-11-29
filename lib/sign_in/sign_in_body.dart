@@ -21,11 +21,14 @@ class _SignInBodyState extends State<SignInBody> {
   final _formKey = GlobalKey<FormState>();
   String? email;
   String? password;
+  String? error;
   bool remember = false;
   bool isPasswordVisible = true;
   List<String> errors = [];
 
   final AuthService _auth = AuthService();
+
+
 
   void addError({String? error}) {
     if (!errors.contains(error))
@@ -57,10 +60,10 @@ class _SignInBodyState extends State<SignInBody> {
                   SizedBox(height: getProportionateScreenHeight(20)),
                   // Resim ayarlaması
                   Container(
-                    height: 300,
+                    height: 280,
                     child: Image.asset("assets/images/iconYazılı2.jpeg"),
                   ),
-                  SizedBox(height: getProportionateScreenHeight(10)),
+                  SizedBox(height: getProportionateScreenHeight(2)),
                   Text(
                     "'ye Hoşgeldiniz!",
                     style: TextStyle(
@@ -72,10 +75,10 @@ class _SignInBodyState extends State<SignInBody> {
                     "Lütfen email ve şifreniz ile giriş yapınız.",
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: getProportionateScreenHeight(15)),
+                  SizedBox(height: getProportionateScreenHeight(7)),
                   //Email form
                   formEmail(),
-                  SizedBox(height: getProportionateScreenHeight(15)),
+                  SizedBox(height: getProportionateScreenHeight(7)),
                   //Password form
                   formPassword(),
                   //Şifremi unuttum
@@ -115,11 +118,19 @@ class _SignInBodyState extends State<SignInBody> {
                   //Button
                   Button(
                     text: "İleri",
-                    press: () {
+                    press: () async {
+                      print(email);
+                      print(password);
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                         // eğer her şey doğruysa giriş ekranına git
                         FocusScopeNode currentFocus = FocusScope.of(context);
+                        dynamic result = await _auth.signUpWithEmailPassword(email!, password!);
+                        if(result==null){
+                          setState(() => error = 'Email ya da şifreniz hatalıdır');
+                          AlertDialog(title: Text(error!));
+
+                              }
                         if (!currentFocus.hasPrimaryFocus) {
                           currentFocus.unfocus();
                         }
@@ -131,18 +142,20 @@ class _SignInBodyState extends State<SignInBody> {
                       }
                     },
                   ),
-                  Button(
-                    text: "Sign In Anon",
-                    press: () async {
-                      dynamic result = await _auth.signInAnon();
-                      if(result == null){
-                        print('error sign ın');
-                      }else{
-                        print('sign in succesfully');
-                        print(result.uid);
-                      }
-                    },
-                  ),
+
+                  //anonlymosy sign in buton
+                  // Button(
+                  //   text: "Sign In Anon",
+                  //   press: () async {
+                  //     dynamic result = await _auth.signInAnon();
+                  //     if(result == null){
+                  //       print('error sign ın');
+                  //     }else{
+                  //       print('sign in succesfully');
+                  //       print(result.uid);
+                  //     }
+                  //   },
+                  // ),
                   SizedBox(height: getProportionateScreenHeight(10)),
                   // google-facebook-twitter
                   Row(
@@ -208,6 +221,7 @@ class _SignInBodyState extends State<SignInBody> {
     return TextFormField(
       onSaved: (newValue) => password = newValue,
       onChanged: (value) {
+        setState(() => password = value);
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
         } else if (value.length >= 8) {
@@ -229,18 +243,17 @@ class _SignInBodyState extends State<SignInBody> {
         labelText: "Şifre",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
-        border: InputBorder.none,
         hintText: "Şifrenizi Giriniz.",
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
+        // enabledBorder: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(28),
+        //   borderSide: BorderSide(color: Colors.black45),
+        //   gapPadding: 10,
+        // ),
+        // focusedBorder: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(28),
+        //   borderSide: BorderSide(color: Colors.black45),
+        //   gapPadding: 10,
+        // ),
         suffixIcon: IconButton(
           icon: isPasswordVisible
               ? Icon(
@@ -264,6 +277,7 @@ class _SignInBodyState extends State<SignInBody> {
       keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => email = newValue,
       onChanged: (value) {
+        setState(() => email = value);
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);
         } else if (emailValidatorRegExp.hasMatch(value)) {
@@ -285,18 +299,17 @@ class _SignInBodyState extends State<SignInBody> {
         labelText: "Email",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
-        border: InputBorder.none,
         hintText: "Emailinizi Giriniz.",
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
-          borderSide: BorderSide(color: Colors.black45),
-          gapPadding: 10,
-        ),
+        // enabledBorder: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(28),
+        //   borderSide: BorderSide(color: Colors.black45),
+        //   gapPadding: 10,
+        // ),
+        // focusedBorder: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(28),
+        //   borderSide: BorderSide(color: Colors.black45),
+        //   gapPadding: 10,
+        // ),
       ),
     );
   }

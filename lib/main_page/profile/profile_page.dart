@@ -3,6 +3,7 @@ import 'package:fitterapi/main_page/profile/profile_edit.dart';
 import 'package:fitterapi/main_page/profile/settings.dart';
 import 'package:fitterapi/main_page/profile/suggestion_page.dart';
 import 'package:fitterapi/services/auth.dart';
+import 'package:fitterapi/sign_in/sign_in_screen.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -94,6 +95,11 @@ class ProfilePage extends StatelessWidget {
                   //çıkış yaptığı bildirimi geliyor ama başka sayfaya gidilmiyor
                   onPress: () async {
                     await _auth.signOut();
+                     Navigator.push(
+                       context,
+                       MaterialPageRoute(
+                           builder: (context) => SignInScreen()),
+                     );
                   },
                 ),
               ],
