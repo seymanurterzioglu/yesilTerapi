@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
+//import 'package:file_picker/file_picker.dart'; we will use this
 import 'package:fitterapi/main_page/profile/const/edit_form.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,8 +30,8 @@ class _ProfileEditState extends State<ProfileEdit> {
     FirebaseStorage storage = FirebaseStorage.instance;
     Reference ref = storage.ref().child("user").child("admin").child("profil.png");
 
-    UploadTask uploadTask = ref.putFile(_image!);
-    var imageUrl = await (await uploadTask).ref.getDownloadURL();
+    //UploadTask uploadTask = ref.putFile(_image!);
+    // var imageUrl = await (await uploadTask).ref.getDownloadURL(); we will use
 
 
 

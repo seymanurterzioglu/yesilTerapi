@@ -2,11 +2,16 @@ import 'package:fitterapi/const.dart';
 import 'package:fitterapi/main_page/profile/profile_edit.dart';
 import 'package:fitterapi/main_page/profile/settings.dart';
 import 'package:fitterapi/main_page/profile/suggestion_page.dart';
+import 'package:fitterapi/main_page/profile/users_info.dart';
 import 'package:fitterapi/services/auth.dart';
+import 'package:fitterapi/services/user_database.dart';
 import 'package:fitterapi/sign_in/sign_in_screen.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class ProfilePage extends StatelessWidget {
 
@@ -14,98 +19,102 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: <Widget>[
-          SizedBox(height: getProportionateScreenHeight(60)),
-          // for image
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(width: getProportionateScreenWidth(10)),
-              Container(
-                height: getProportionateScreenHeight(170),
-                width: getProportionateScreenWidth(130),
-                margin: EdgeInsets.only(top: getProportionateScreenHeight(10)),
-                child: Stack(
-                  children: <Widget>[
-                    CircleAvatar(
-                      radius: 80,
-                      backgroundImage: AssetImage('assets/images/back4.jpg'),
-                    ),
-                    // Align(
-                    //   alignment: Alignment.bottomRight,
-                    //   child: Container(
-                    //     height: getProportionateScreenHeight(40),
-                    //     width: getProportionateScreenWidth(40),
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.white70,
-                    //       shape: BoxShape.circle,
-                    //     ),
-                    //     child: Icon(
-                    //       Icons.edit,
-                    //       color: Colors.black,
-                    //       size: getProportionateScreenHeight(25),
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          //  List
-          Expanded(
-            child: ListView(
+    return StreamProvider<List<UsersInfo>>.value(
+      value: UserDatabase().users,
+      initialData: [],
+      child: Scaffold(
+        body: Column(
+          children: <Widget>[
+            SizedBox(height: getProportionateScreenHeight(60)),
+            // for image
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ProfileListItem(
-                  icon: Icons.person_add_alt_1,
-                  text: 'Profili Düzenle',
-                  onPress: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ProfileEdit()),
-                    );
-                  },
-                ),
-                ProfileListItem(
-                  icon: Icons.settings,
-                  text: 'Ayarlar',
-                  onPress: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Settings()),
-                    );
-                  },
-                ),
-                ProfileListItem(
-                  icon: Icons.note_add,
-                  text: 'Öneri Yaz',
-                  onPress: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SuggestionPage()),
-                    );
-                  },
-                ),
-                ProfileListItem(
-                  icon: Icons.outbond,
-                  text: 'Çıkış Yap',
-                  //çıkış yaptığı bildirimi geliyor ama başka sayfaya gidilmiyor
-                  onPress: () async {
-                    await _auth.signOut();
-                     Navigator.push(
-                       context,
-                       MaterialPageRoute(
-                           builder: (context) => SignInScreen()),
-                     );
-                  },
+                SizedBox(width: getProportionateScreenWidth(10)),
+                Container(
+                  height: getProportionateScreenHeight(170),
+                  width: getProportionateScreenWidth(130),
+                  margin: EdgeInsets.only(top: getProportionateScreenHeight(10)),
+                  child: Stack(
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: 80,
+                        backgroundImage: AssetImage('assets/images/back4.jpg'),
+                      ),
+                      // Align(
+                      //   alignment: Alignment.bottomRight,
+                      //   child: Container(
+                      //     height: getProportionateScreenHeight(40),
+                      //     width: getProportionateScreenWidth(40),
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.white70,
+                      //       shape: BoxShape.circle,
+                      //     ),
+                      //     child: Icon(
+                      //       Icons.edit,
+                      //       color: Colors.black,
+                      //       size: getProportionateScreenHeight(25),
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-        ],
+            //  List
+            Expanded(
+              child: ListView(
+                children: <Widget>[
+                  ProfileListItem(
+                    icon: Icons.person_add_alt_1,
+                    text: 'Profili Düzenle',
+                    onPress: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfileEdit()),
+                      );
+                    },
+                  ),
+                  ProfileListItem(
+                    icon: Icons.settings,
+                    text: 'Ayarlar',
+                    onPress: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SettingsProfile()),
+                      );
+                    },
+                  ),
+                  ProfileListItem(
+                    icon: Icons.note_add,
+                    text: 'Öneri Yaz',
+                    onPress: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SuggestionPage()),
+                      );
+                    },
+                  ),
+                  ProfileListItem(
+                    icon: Icons.outbond,
+                    text: 'Çıkış Yap',
+                    //çıkış yaptığı bildirimi geliyor ama başka sayfaya gidilmiyor
+                    onPress: () async {
+                      await _auth.signOut();
+                       Navigator.push(
+                         context,
+                         MaterialPageRoute(
+                             builder: (context) => SignInScreen()),
+                       );
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

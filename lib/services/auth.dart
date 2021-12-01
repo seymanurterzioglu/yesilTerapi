@@ -52,6 +52,10 @@ class AuthService {
     try{
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
+
+      //create a new document  for the user with the uid
+      // await UserDatabase(uid: user!.uid).terapiCollection(''); içindeki kısımları dolduracağız sonra
+
       return _userFromFirebase(user!);
     } catch(e){
       print(e.toString());

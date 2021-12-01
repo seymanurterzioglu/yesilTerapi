@@ -3,12 +3,12 @@ import 'package:fitterapi/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Settings extends StatefulWidget {
+class SettingsProfile extends StatefulWidget {
   @override
-  _SettingsState createState() => _SettingsState();
+  _SettingsProfileState createState() => _SettingsProfileState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsProfileState extends State<SettingsProfile> {
   bool valNotify1 = true;
   bool valNotify2 = false;
   bool valNotify3 = false;

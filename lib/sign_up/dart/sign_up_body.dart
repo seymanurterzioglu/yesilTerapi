@@ -4,7 +4,6 @@ import 'package:fitterapi/size_config.dart';
 import 'package:flutter/material.dart';
 
 import '../../const.dart';
-import '../../social_card.dart';
 import 'sign_up_form.dart';
 
 class SignUpBody extends StatelessWidget {
