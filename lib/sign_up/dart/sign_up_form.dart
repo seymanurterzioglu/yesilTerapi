@@ -7,6 +7,8 @@ import '../../const.dart';
 import '../../error.dart';
 import '../../size_config.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
@@ -61,12 +63,23 @@ class _SignUpFormState extends State<SignUpForm> {
             SizedBox(height: getProportionateScreenHeight(10)),
             Button(
               text: "İleri",
-              press: ()  async {
+              press: () async {
                 if (_formKey.currentState!.validate()) {
-                  dynamic result = await _auth.signUpWithEmailPassword(email!, password!);
-                  print(email);
-                  print(password);
-                  if(result == null){
+                  dynamic result =
+                      await _auth.signUpWithEmailPassword(email!, password!);
+                  // User? user = FirebaseAuth.instance.currentUser;
+                  // //AuthService use=AuthService();
+                  // // I will look at here later
+                  // await FirebaseFirestore.instance
+                  //     .collection('users')
+                  //     .doc(user!.uid)
+                  //     .set({
+                  //   'uid':user.uid,
+                  //   'email':email,
+                  //   'password':password,
+                  // });
+                  // //use.sendNowUID(user.uid);
+                  if (result == null) {
                     setState(() => error = 'Lütfen var olan bir email giriniz');
                   }
                   _formKey.currentState!.save();
@@ -75,7 +88,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   if (!currentFocus.hasPrimaryFocus) {
                     currentFocus.unfocus();
                   }
-                      //Gideceği sayfa daha yapılmadı
+                  //Gideceği sayfa daha yapılmadı
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -130,12 +143,12 @@ class _SignUpFormState extends State<SignUpForm> {
         suffixIcon: IconButton(
           icon: isConfirmPasswordVisible
               ? Icon(
-            Icons.visibility,
-            color: Colors.black45,
-          )
+                  Icons.visibility,
+                  color: Colors.black45,
+                )
               : Icon(Icons.visibility),
           onPressed: () => setState(
-                  () => isConfirmPasswordVisible = !isConfirmPasswordVisible),
+              () => isConfirmPasswordVisible = !isConfirmPasswordVisible),
         ),
       ),
       obscureText: isConfirmPasswordVisible,
@@ -183,9 +196,9 @@ class _SignUpFormState extends State<SignUpForm> {
         suffixIcon: IconButton(
           icon: isPasswordVisible
               ? Icon(
-            Icons.visibility,
-            color: Colors.black45,
-          )
+                  Icons.visibility,
+                  color: Colors.black45,
+                )
               : Icon(Icons.visibility),
           onPressed: () =>
               setState(() => isPasswordVisible = !isPasswordVisible),

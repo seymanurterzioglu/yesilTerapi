@@ -1,4 +1,11 @@
-class UsersInfo {
+class User{
+  final String? uid;
+
+  User({this.uid});
+}
+
+class UserData {
+  final String? uid;
   String? firstName;
   String? lastName;
   String? age;
@@ -6,7 +13,8 @@ class UsersInfo {
   String? weight;
   String? disease;
 
-  UsersInfo({
+  UserData({
+    this.uid,
     this.firstName,
     this.lastName,
     this.age,

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitterapi/main_page/home/home_screen.dart';
 
 import '../main_page/home/home_screen.dart';
@@ -24,7 +26,6 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   String? height;
   String? weight;
   String? disease; // hastalık
-  String? discomfort; // rahatsızlık
 
   void addError({String? error}) {
     if (!errors.contains(error))
@@ -59,15 +60,26 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
           SizedBox(height: getProportionateScreenHeight(20)),
           buildDiseaseFormField(),
           SizedBox(height: getProportionateScreenHeight(20)),
-          buildDiscomfortFormField(),
-          SizedBox(height: getProportionateScreenHeight(10)),
           //Error kısımları
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(10)),
           Button(
             text: "İleri",
-            press: () {
+            press: () async {
               if (_formKey.currentState!.validate()) {
+                User? user = FirebaseAuth.instance.currentUser;
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(user!.uid)
+                    .set({
+                  'uid':user.uid,
+                  'firstName': firstName,
+                  'lastName': lastName,
+                  'age': age,
+                  'height': height,
+                  'weight': weight,
+                  'disease': disease,
+                });
                 _formKey.currentState!.save();
                 // eğer her şey doğruysa giriş ekranına git
                 FocusScopeNode currentFocus = FocusScope.of(context);
@@ -77,8 +89,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                 //Gideceği sayfa daha yapılmadı
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
                 );
               }
             },
@@ -89,40 +100,41 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
     );
   }
 
-       // Firstname form
+  // Firstname form
   TextFormField buildFirstNameFormField() {
     return TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          onSaved: (newValue) => firstName = newValue,
-          onChanged: (value) {
-            if (value.isNotEmpty) {
-              removeError(error: kFirstNameNullError);
-            }
-            return null;
-          },
-          validator: (value) {
-            if (value!.isEmpty) {
-              addError(error: kFirstNameNullError);
-              return "";
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-            labelText: "İsim",
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            contentPadding: EdgeInsets.all(20),
-            hintText: "İsminizi Giriniz.",
-
-          ),
-        );
+      keyboardType: TextInputType.emailAddress,
+      onSaved: (newValue) => firstName = newValue,
+      onChanged: (value) {
+        setState(() => firstName = value);
+        if (value.isNotEmpty) {
+          removeError(error: kFirstNameNullError);
+        }
+        return null;
+      },
+      validator: (value) {
+        if (value!.isEmpty) {
+          addError(error: kFirstNameNullError);
+          return "";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "İsim",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        contentPadding: EdgeInsets.all(20),
+        hintText: "İsminizi Giriniz.",
+      ),
+    );
   }
 
-      //Lastname Form
+  //Lastname Form
   TextFormField buildLastNameFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => lastName = newValue,
       onChanged: (value) {
+        setState(() => lastName = value);
         if (value.isNotEmpty) {
           removeError(error: kLastNameNullError);
         }
@@ -140,17 +152,17 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
         hintText: "Soyisminizi Giriniz.",
-
       ),
     );
   }
 
-      // Age form
+  // Age form
   TextFormField buildAgeFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => age = newValue,
       onChanged: (value) {
+        setState(() => age = value);
         if (value.isNotEmpty) {
           removeError(error: kAgeNullError);
         }
@@ -168,17 +180,17 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
         hintText: "Yaşınızı Giriniz.",
-
       ),
     );
   }
 
-     // height form
+  // height form
   TextFormField buildHeightFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => height = newValue,
       onChanged: (value) {
+        setState(() => height = value);
         if (value.isNotEmpty) {
           removeError(error: kHeightNullError);
         }
@@ -196,7 +208,6 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
         hintText: "Boyunuzu Giriniz.",
-
       ),
     );
   }
@@ -205,8 +216,9 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   TextFormField buildWeightFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => height = newValue,
+      onSaved: (newValue) => weight = newValue,
       onChanged: (value) {
+        setState(() => weight = value);
         if (value.isNotEmpty) {
           removeError(error: kWeightNullError);
         }
@@ -224,17 +236,17 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
         hintText: "Kilonuzu Giriniz.",
-
       ),
     );
   }
 
-     //Disease form
+  //Disease form
   TextFormField buildDiseaseFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => disease = newValue,
       onChanged: (value) {
+        setState(() => disease = value);
         if (value.isNotEmpty) {
           removeError(error: kDiseaseNullError);
         }
@@ -252,39 +264,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
         hintText: "Hastalığınızı Giriniz.",
-
-      ),
-    );
-  }
-
-    //Discomfort form
-  TextFormField buildDiscomfortFormField() {
-    return TextFormField(
-      keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => discomfort = newValue,
-      onChanged: (value) {
-        if (value.isNotEmpty) {
-          removeError(error: kDiscomfortNullError);
-        }
-        return null;
-      },
-      validator: (value) {
-        if (value!.isEmpty) {
-          addError(error: kDiscomfortNullError);
-          return "";
-        }
-        return null;
-      },
-      decoration: InputDecoration(
-        labelText: "Son Zamanlardaki Rahatsızlık",
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        contentPadding: EdgeInsets.all(20),
-        hintText: "Rahatsızlığınızı Giriniz.",
-
       ),
     );
   }
 }
-
-
-

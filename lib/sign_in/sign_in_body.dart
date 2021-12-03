@@ -32,7 +32,6 @@ class _SignInBodyState extends State<SignInBody> {
 
   final AuthService _auth = AuthService();
 
-
   void addError({String? error}) {
     if (!errors.contains(error))
       setState(() {
@@ -100,12 +99,11 @@ class _SignInBodyState extends State<SignInBody> {
                       Text("Hatırla Beni"),
                       SizedBox(width: getProportionateScreenWidth(100)),
                       GestureDetector(
-                        onTap: () =>
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ForgotPasswordScreen()),
-                            ),
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ForgotPasswordScreen()),
+                        ),
                         child: Text(
                           "Şifremi Unuttum",
                           style: TextStyle(
@@ -140,8 +138,8 @@ class _SignInBodyState extends State<SignInBody> {
                           );
                         }
                         if (result == null) {
-                          setState(() =>
-                          error = 'Eposta ya da şifreniz hatalıdır');
+                          setState(
+                              () => error = 'Eposta ya da şifreniz hatalıdır');
                         }
                         // if (!currentFocus.hasPrimaryFocus) {
                         //   currentFocus.unfocus();
@@ -155,7 +153,7 @@ class _SignInBodyState extends State<SignInBody> {
                     },
                   ),
                   SizedBox(height: getProportionateScreenHeight(10)),
-                  if(error!=null)
+                  if (error != null)
                     Container(
                       color: kPrimaryColor,
                       child: ListTile(
@@ -282,9 +280,9 @@ class _SignInBodyState extends State<SignInBody> {
         suffixIcon: IconButton(
           icon: isPasswordVisible
               ? Icon(
-            Icons.visibility,
-            color: Colors.black45,
-          )
+                  Icons.visibility,
+                  color: Colors.black45,
+                )
               : Icon(Icons.visibility),
           onPressed: () =>
               setState(() => isPasswordVisible = !isPasswordVisible),
@@ -325,12 +323,10 @@ class _SignInBodyState extends State<SignInBody> {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
         hintText: "Emailinizi Giriniz.",
-
       ),
     );
   }
 }
-
 
 // class _SignInBodyState extends State<SignInBody> {
 //   final _formKey = GlobalKey<FormState>();

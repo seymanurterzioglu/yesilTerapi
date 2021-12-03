@@ -1,5 +1,7 @@
+
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/main_page/profile/profile_edit.dart';
+
 import 'package:fitterapi/main_page/profile/settings.dart';
 import 'package:fitterapi/main_page/profile/suggestion_page.dart';
 import 'package:fitterapi/main_page/profile/users_info.dart';
@@ -15,14 +17,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatelessWidget {
 
+
   final AuthService _auth = AuthService();
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<List<UsersInfo>>.value(
-      value: UserDatabase().users,
-      initialData: [],
-      child: Scaffold(
+    return Scaffold(
         body: Column(
           children: <Widget>[
             SizedBox(height: getProportionateScreenHeight(60)),
@@ -115,8 +115,7 @@ class ProfilePage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
 

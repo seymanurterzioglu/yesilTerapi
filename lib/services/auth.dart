@@ -3,6 +3,25 @@ import 'package:fitterapi/modules/user.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  String? nowUID;
+  String? nowUser;
+  //AuthService(this._auth);
+
+
+  void sendNowUID(String now){
+    nowUID=now;
+  }
+
+
+
+  Future<String> getCurrentUID() async {
+    return (await _auth.currentUser)!.uid;
+  }
+
+  Future getCurrentUser() async {
+    //
+    return await _auth.currentUser;
+  }
 
   theUser? _userFromFirebase(User? user){
     if (user != null) {
