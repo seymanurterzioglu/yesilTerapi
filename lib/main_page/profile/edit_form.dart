@@ -127,23 +127,28 @@ class _EditFormState extends State<EditForm> {
                       ),
                     ),
                     SizedBox(height: getProportionateScreenHeight(20)),
-                    Button(
-                      text: "Düzenle",
-                      press: () async{
-                        User? user = FirebaseAuth.instance.currentUser;
-                        await FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user!.uid)
-                            .set({
-                          'uid':user.uid,
-                          'firstName': _firstName,
-                          'lastName': _lastName,
-                          'age': _age,
-                          'height': _height,
-                          'weight': _weight,
-                          'disease': _disease,
-                        });
-                      },
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: getProportionateScreenHeight(50),
+                          vertical: getProportionateScreenWidth(10)),
+                      child: Button(
+                        text: "Düzenle",
+                        press: () async{
+                          User? user = FirebaseAuth.instance.currentUser;
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(user!.uid)
+                              .set({
+                            'uid':user.uid,
+                            'firstName': _firstName,
+                            'lastName': _lastName,
+                            'age': _age,
+                            'height': _height,
+                            'weight': _weight,
+                            'disease': _disease,
+                          });
+                        },
+                      ),
                     ),
                   ],
                 ),

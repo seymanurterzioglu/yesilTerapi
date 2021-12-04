@@ -4,11 +4,12 @@ import 'package:fitterapi/error.dart';
 import 'package:fitterapi/main_page/home/home_screen.dart';
 import 'package:fitterapi/modules/user.dart';
 import 'package:fitterapi/services/auth.dart';
+import 'package:fitterapi/sign_in/google_sign_in.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:fitterapi/sign_up/dart/sign_up_screen.dart';
 
 import 'package:fitterapi/size_config.dart';
-import 'package:fitterapi/social_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -140,6 +141,12 @@ class _SignInBodyState extends State<SignInBody> {
                         if (result == null) {
                           setState(
                               () => error = 'Eposta ya da şifreniz hatalıdır');
+                        }else{
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen()),
+                          );
                         }
                         // if (!currentFocus.hasPrimaryFocus) {
                         //   currentFocus.unfocus();
@@ -180,24 +187,27 @@ class _SignInBodyState extends State<SignInBody> {
                   //   },
                   // ),
 
-                  // google-facebook-twitter
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SocialCArd(
-                        icon: "assets/icons/google.svg",
-                        press: () {},
-                      ),
-                      SocialCArd(
-                        icon: "assets/icons/facebook.svg",
-                        press: () {},
-                      ),
-                      SocialCArd(
-                        icon: "assets/icons/twitter.svg",
-                        press: () {},
-                      ),
-                    ],
+                  // google sign in
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.white,
+                      onPrimary: Colors.black,
+                      minimumSize: Size(getProportionateScreenHeight(40),
+                          getProportionateScreenWidth(35)),
+                    ),
+                    icon: FaIcon(
+                      FontAwesomeIcons.google,
+                      color: Colors.red,
+                    ),
+                    label: Text('Google ile giriş yap'),
+                    onPressed: () {
+                      final provider = Provider.of<GoogleSignInProvider>(
+                          context,
+                          listen: false);
+                      provider.googleLogin();
+                    },
                   ),
+
                   //Hesabın yok mu? Kayıt ol
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

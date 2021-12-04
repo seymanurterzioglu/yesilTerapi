@@ -8,7 +8,8 @@ class ForumPage extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Search(),
+            Text("Forum ",style: TextStyle(fontSize: 100),),
+            //Search(),
             // ElevatedButton(onPressed: (){
             //   _auth.signOut();
             // }, child: Text('Çıkış'))

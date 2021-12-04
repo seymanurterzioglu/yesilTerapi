@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'sign_up_body.dart';
 
@@ -10,7 +11,8 @@ class SignUpScreen extends StatelessWidget {
           "Kayıt Ol",
         ),
       ),
-      body: SignUpBody(),
+      body:SignUpBody(),
+
     );
   }
 }

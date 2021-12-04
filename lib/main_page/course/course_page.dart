@@ -4,7 +4,7 @@ class CoursePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("HELlo",style: TextStyle(fontSize: 100),),
+      child: Text("Hello",style: TextStyle(fontSize: 100),),
     );
   }
 }

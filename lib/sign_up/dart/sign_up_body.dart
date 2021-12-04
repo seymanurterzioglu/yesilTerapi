@@ -1,6 +1,7 @@
 import 'package:fitterapi/sign_in/sign_in_screen.dart';
 import 'package:fitterapi/sign_up/dart/sign_up_background.dart';
 import 'package:fitterapi/size_config.dart';
+import 'package:fitterapi/social_card.dart';
 import 'package:flutter/material.dart';
 
 import '../../const.dart';
@@ -56,7 +57,7 @@ class SignUpBody extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: getProportionateScreenHeight(20)),
-                //  google-facebook - twitter ile kayıt olma
+                 //google-facebook - twitter ile kayıt olma
                 // Row(
                 //   mainAxisAlignment: MainAxisAlignment.center,
                 //   children: [
