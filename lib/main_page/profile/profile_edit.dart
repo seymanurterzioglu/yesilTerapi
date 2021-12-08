@@ -1,18 +1,12 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:fitterapi/loading.dart';
-import 'package:fitterapi/size_config.dart';
-import 'package:fitterapi/main_page/profile/user_and_datas.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import '../../button.dart';
-
 
 import 'package:fitterapi/main_page/profile/edit_form.dart';
-import 'package:fitterapi/main_page/profile/users_info.dart';
-import 'package:fitterapi/services/user_database.dart';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 
 
 

@@ -63,6 +63,7 @@ class _EditFormState extends State<EditForm> {
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         contentPadding: EdgeInsets.all(20),
                         hintText: "İsminizi Giriniz.",
+
                       ),
                     ),
                     SizedBox(height: getProportionateScreenHeight(20)),

@@ -1,4 +1,5 @@
 import 'package:fitterapi/const.dart';
+import 'package:fitterapi/main_page/profile/profile_edit.dart';
 
 import 'package:fitterapi/main_page/profile/profile_info.dart';
 
@@ -72,6 +73,7 @@ class ProfilePage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ProfileInfo()),
+                      //MaterialPageRoute(builder: (context) => ProfileEdit()),
                     );
                   },
                 ),

@@ -1,5 +1,6 @@
 import "package:firebase_auth/firebase_auth.dart";
-import 'package:fitterapi/modules/user.dart';
+import 'package:fitterapi/main_page/profile/user_and_datas.dart';
+
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -13,7 +14,6 @@ class AuthService {
   }
 
 
-
   Future<String> getCurrentUID() async {
     return (await _auth.currentUser)!.uid;
   }
@@ -23,16 +23,16 @@ class AuthService {
     return await _auth.currentUser;
   }
 
-  theUser? _userFromFirebase(User? user){
+  Users? _userFromFirebase(User? user){
     if (user != null) {
-      return theUser(uid:user.uid);
+      return Users(uid:user.uid);
     } else {
       return null;
     }
   }
 
   //auth change user stream
-  Stream<theUser?> get user {
+  Stream<Users?> get user {
     return _auth.authStateChanges()
         .map((User? user) => _userFromFirebase(user!));
         // .map(_userFromFirebase); same as up line
