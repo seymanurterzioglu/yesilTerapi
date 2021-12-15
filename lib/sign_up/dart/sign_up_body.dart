@@ -56,24 +56,7 @@ class SignUpBody extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: getProportionateScreenHeight(20)),
-                 //google-facebook - twitter ile kayıt olma
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     SocialCArd(
-                //       icon: "assets/icons/google.svg",
-                //       press: () {},
-                //     ),
-                //     SocialCArd(
-                //       icon: "assets/icons/facebook.svg",
-                //       press: () {},
-                //     ),
-                //     SocialCArd(
-                //       icon: "assets/icons/twitter.svg",
-                //       press: () {},
-                //     ),
-                //   ],
-                // ),
+
               ],
             ),
           ),

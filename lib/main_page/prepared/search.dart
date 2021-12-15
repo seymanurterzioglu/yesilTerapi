@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 import '../../const.dart';
 import '../../size_config.dart';
@@ -15,19 +14,19 @@ class Search extends StatelessWidget {
       decoration: BoxDecoration(
         color: kPrimaryColor,
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(60),
-          bottomRight: Radius.circular(60),
+          bottomLeft: Radius.circular(50),
+          bottomRight: Radius.circular(50),
         ),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
             vertical: getProportionateScreenWidth(10),
-            horizontal: getProportionateScreenHeight(20)
+            horizontal: getProportionateScreenHeight(30)
         ),
         child: Row(
           children: <Widget>[
             Container(
-              width: getProportionateScreenWidth(230),
+              width: getProportionateScreenWidth(250),
               height: 50,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -47,7 +46,7 @@ class Search extends StatelessWidget {
                     color: Colors.black,
                   ),
                   contentPadding: EdgeInsets.symmetric(
-                    horizontal: getProportionateScreenHeight(20),
+                    horizontal: getProportionateScreenHeight(5),
                     vertical: getProportionateScreenWidth(15),
                   ),
                 ),
@@ -55,16 +54,16 @@ class Search extends StatelessWidget {
               ),
             ),
             SizedBox(width: getProportionateScreenWidth(10)),
-            Container(
-              padding: EdgeInsets.all(getProportionateScreenWidth(7)),
-              height: getProportionateScreenHeight(45),
-              width: getProportionateScreenWidth(45),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-              child: SvgPicture.asset("assets/icons/bell5.svg"),
-            ),
+            // Container(
+            //   padding: EdgeInsets.all(getProportionateScreenWidth(7)),
+            //   height: getProportionateScreenHeight(45),
+            //   width: getProportionateScreenWidth(45),
+            //   decoration: BoxDecoration(
+            //     color: Colors.white,
+            //     shape: BoxShape.circle,
+            //   ),
+            //   child: SvgPicture.asset("assets/icons/bell5.svg"),
+            // ),
           ],
         ),
       ),

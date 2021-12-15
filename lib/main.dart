@@ -8,6 +8,10 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import 'package:get/get.dart';
+
+import 'main_page/cures/new_cure_screen.dart';
+
 // void main() {
 //   runApp(MyApp());
 // }
@@ -29,10 +33,13 @@ class MyApp extends StatelessWidget {
             value: AuthService().user, initialData: null),
         ChangeNotifierProvider(create: (context) => GoogleSignInProvider()),
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         theme: theme(),
         home: Wrapper(),
+        getPages: [
+          GetPage(name: '/cures/new', page: () => NewCureScreen()),
+        ],
       ),
     );
 

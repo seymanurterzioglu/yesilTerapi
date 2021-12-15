@@ -47,6 +47,11 @@ dependencies:
   #Google icon
   font_awesome_flutter: ^9.2.0
 
+  equatable: ^2.0.3
+  get: ^4.5.1
+  fluttertoast: ^8.0.8
+  flutter_rating_bar: ^4.0.0
+
 
 
 dev_dependencies:

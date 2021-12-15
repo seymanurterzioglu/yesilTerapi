@@ -30,12 +30,12 @@ class AuthService {
       return null;
     }
   }
-
   //auth change user stream
   Stream<Users?> get user {
     return _auth.authStateChanges()
-        .map((User? user) => _userFromFirebase(user!));
-        // .map(_userFromFirebase); same as up line
+    // hep null sıkıntısı verdikten sonra burayı değiştirdim
+        //.map((User? user) => _userFromFirebase(user!));
+        .map(_userFromFirebase); //same as up line
   }
 
 
@@ -96,3 +96,5 @@ class AuthService {
 
 
 }
+
+

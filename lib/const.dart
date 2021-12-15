@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-const kPrimaryColor=Color(0xFF339000);
+//const kPrimaryColor=Color(0xFF339000);
+const kPrimaryColor=Color(0xFF36b64d);
+
 
 // Form Error
 final RegExp emailValidatorRegExp =

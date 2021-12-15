@@ -103,7 +103,6 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   // Firstname form
   TextFormField buildFirstNameFormField() {
     return TextFormField(
-      keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => firstName = newValue,
       onChanged: (value) {
         setState(() => firstName = value);
@@ -131,7 +130,6 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   //Lastname Form
   TextFormField buildLastNameFormField() {
     return TextFormField(
-      keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => lastName = newValue,
       onChanged: (value) {
         setState(() => lastName = value);
@@ -159,7 +157,6 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   // Age form
   TextFormField buildAgeFormField() {
     return TextFormField(
-      keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => age = newValue,
       onChanged: (value) {
         setState(() => age = value);
@@ -187,7 +184,6 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   // height form
   TextFormField buildHeightFormField() {
     return TextFormField(
-      keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => height = newValue,
       onChanged: (value) {
         setState(() => height = value);
@@ -215,7 +211,6 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   // weight form
   TextFormField buildWeightFormField() {
     return TextFormField(
-      keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => weight = newValue,
       onChanged: (value) {
         setState(() => weight = value);
@@ -243,7 +238,6 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   //Disease form
   TextFormField buildDiseaseFormField() {
     return TextFormField(
-      keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => disease = newValue,
       onChanged: (value) {
         setState(() => disease = value);

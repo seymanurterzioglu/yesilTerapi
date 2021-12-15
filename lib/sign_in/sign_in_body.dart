@@ -1,3 +1,4 @@
+
 import 'package:fitterapi/button.dart';
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/error.dart';
@@ -200,7 +201,7 @@ class _SignInBodyState extends State<SignInBody> {
                       color: Colors.red,
                     ),
                     label: Text('Google ile giriş yap'),
-                    onPressed: () {
+                    onPressed: () async {
                       final provider = Provider.of<GoogleSignInProvider>(
                           context,
                           listen: false);
@@ -622,3 +623,44 @@ class _SignInBodyState extends State<SignInBody> {
 //     );
 //   }
 // }
+
+
+
+//
+// StreamBuilder<Object>(
+// stream: userDatabase.userData,
+// builder: (context, snapshot) {
+// return ElevatedButton.icon(
+// style: ElevatedButton.styleFrom(
+// primary: Colors.white,
+// onPrimary: Colors.black,
+// minimumSize: Size(getProportionateScreenHeight(40),
+// getProportionateScreenWidth(35)),
+// ),
+// icon: FaIcon(
+// FontAwesomeIcons.google,
+// color: Colors.red,
+// ),
+// label: Text('Google ile giriş yap'),
+// onPressed: () async {
+// final provider = Provider.of<GoogleSignInProvider>(
+// context,
+// listen: false);
+// provider.googleLogin();
+// if(snapshot.hasData){
+// Navigator.push(
+// context,
+// MaterialPageRoute(
+// builder: (context) => HomeScreen()),
+// );
+// }else{
+// Navigator.push(
+// context,
+// MaterialPageRoute(
+// builder: (context) => CompleteProfileScreen()),
+// );
+// }
+// },
+// );
+// }
+// ),

@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:fitterapi/button.dart';
 
-import 'package:fitterapi/main_page/profile/profile_edit.dart';
 import 'package:fitterapi/main_page/profile/user_and_datas.dart';
 
 import 'package:fitterapi/services/auth.dart';
@@ -47,17 +45,17 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
   final _formKey = GlobalKey<FormState>();
 
-  String? _firstName;
+  String? _currentfirstName;
 
-  String? _lastName;
+  String? _currentlastName;
 
-  String? _age;
+  String? _currentage;
 
-  String? _height;
+  String? _currentheight;
 
-  String? _weight;
+  String? _currentweight;
 
-  String? _disease;
+  String? _currentdisease;
 
   @override
   Widget build(BuildContext context) {
@@ -90,124 +88,274 @@ class _ProfileInfoState extends State<ProfileInfo> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     UserData? _userData = snapshot.data;
-                    //firstnami diğerlerinede uygulayınca sıkıntı çıkıyor nedense
-                    _firstName=_userData!.firstName!;
-                    // return Text(
-                    //   'İsim:' + _userData!.firstName!,
-                    //   style: TextStyle(
-                    //       color: Colors.black,
-                    //       fontSize: getProportionateScreenHeight(20),
-                    //       fontWeight: FontWeight.bold
-                    //   ),
-                    // );
+                    String ? _firstName=_userData!.firstName;
+                    String? _lastName=_userData.lastName;
+                    String? _age= _userData.age;
+                    String? _height= _userData.height;
+                    String? _weight= _userData.weight;
+                    String? _disease= _userData.disease;
+
 
                     return Form(
                       key: _formKey,
                       child: Column(
                         children: <Widget>[
-                          SizedBox(height: getProportionateScreenHeight(10)),
                           ImageProfile(context),
                           SizedBox(height: getProportionateScreenHeight(20)),
                           //firstName Form
                           TextFormField(
-                            onChanged: (val) =>
-                                setState(() => _firstName = val),
+                            onChanged: (val){
+                              setState(() => _currentfirstName = val);
+                              if(val.isEmpty){
+                                setState(() {
+                                  _currentfirstName=_firstName;
+                                });
+                              }
+                            },
                             decoration: InputDecoration(
                               labelText: "İsim",
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
                               contentPadding: EdgeInsets.all(20),
-                              hintText: _firstName,
+                              hintText: _userData.firstName,
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.edit_outlined),
+                                onPressed: () async {
+                                  User? user = FirebaseAuth.instance.currentUser;
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(user!.uid)
+                                      .set({
+                                    'uid': user.uid,
+                                    'firstName': _currentfirstName,
+                                    'lastName': _lastName,
+                                    'age': _age,
+                                    'height': _height,
+                                    'weight': _weight,
+                                    'disease': _disease,
+                                  });
+                                },
+                              ),
                             ),
                           ),
                           SizedBox(height: getProportionateScreenHeight(20)),
 
                           //lastName Form
                           TextFormField(
-                            onChanged: (val) => setState(() => _lastName = val),
+                            onChanged: (val){
+                              setState(() => _currentlastName = val);
+                              if(val.isEmpty){
+                                setState(() {
+                                  _currentlastName=_lastName;
+                                });
+                              }
+                            },
                             decoration: InputDecoration(
                               labelText: "Soyisim",
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
                               contentPadding: EdgeInsets.all(20),
-                              hintText: "Soyisminizi Giriniz.",
+                              hintText: _userData.lastName,
+
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.edit_outlined),
+                                onPressed: () async {
+                                  User? user = FirebaseAuth.instance.currentUser;
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(user!.uid)
+                                      .set({
+                                    'uid': user.uid,
+                                    'firstName': _firstName,
+                                    'lastName': _currentlastName,
+                                    'age': _age,
+                                    'height': _height,
+                                    'weight': _weight,
+                                    'disease': _disease,
+                                  });
+                                },
+                              ),
                             ),
                           ),
                           SizedBox(height: getProportionateScreenHeight(20)),
 
                           // Age form
                           TextFormField(
-                            onChanged: (val) => setState(() => _age = val),
+                            onChanged: (val){
+                              setState(() => _currentage = val);
+                              if(val.isEmpty){
+                                setState(() {
+                                  _currentage=_age;
+                                });
+                              }
+                            },
                             decoration: InputDecoration(
                               labelText: "Yaş",
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
                               contentPadding: EdgeInsets.all(20),
-                              hintText: "Yaşınızı Giriniz.",
+                              hintText: _userData.age,
+
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.edit_outlined),
+                                onPressed: () async {
+                                  User? user = FirebaseAuth.instance.currentUser;
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(user!.uid)
+                                      .set({
+                                    'uid': user.uid,
+                                    'firstName': _firstName,
+                                    'lastName': _lastName,
+                                    'age': _currentage,
+                                    'height': _height,
+                                    'weight': _weight,
+                                    'disease': _disease,
+                                  });
+                                },
+                              ),
                             ),
                           ),
                           SizedBox(height: getProportionateScreenHeight(20)),
 
                           // height form
                           TextFormField(
-                            onChanged: (val) => setState(() => _height = val),
+                            onChanged: (val){
+                              setState(() => _currentheight = val);
+                              if(val.isEmpty){
+                                setState(() {
+                                  _currentheight=_height;
+                                });
+                              }
+                            },
                             decoration: InputDecoration(
                               labelText: "Boy",
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
                               contentPadding: EdgeInsets.all(20),
-                              hintText: "Boyunuzu Giriniz.",
+                              hintText: _userData.height,
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.edit_outlined),
+                                onPressed: () async {
+                                  User? user = FirebaseAuth.instance.currentUser;
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(user!.uid)
+                                      .set({
+                                    'uid': user.uid,
+                                    'firstName': _firstName,
+                                    'lastName': _lastName,
+                                    'age': _age,
+                                    'height': _currentheight,
+                                    'weight': _weight,
+                                    'disease': _disease,
+                                  });
+                                },
+                              ),
                             ),
                           ),
                           SizedBox(height: getProportionateScreenHeight(20)),
                           // weight form
                           TextFormField(
-                            onChanged: (val) => setState(() => _weight = val),
+
+                            onChanged: (val){
+                              setState(() => _currentweight = val);
+                              if(val.isEmpty){
+                                setState(() {
+                                  _currentweight=_weight;
+                                });
+                              }
+                            },
                             decoration: InputDecoration(
                               labelText: "Kilo",
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
                               contentPadding: EdgeInsets.all(20),
-                              hintText: "Kilonuzu Giriniz.",
+                              hintText: _userData.weight,
+
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.edit_outlined),
+                                onPressed: () async {
+                                  User? user = FirebaseAuth.instance.currentUser;
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(user!.uid)
+                                      .set({
+                                    'uid': user.uid,
+                                    'firstName': _firstName,
+                                    'lastName': _lastName,
+                                    'age': _age,
+                                    'height': _height,
+                                    'weight': _currentweight,
+                                    'disease': _disease,
+                                  });
+                                },
+                              ),
                             ),
                           ),
                           SizedBox(height: getProportionateScreenHeight(20)),
 
                           //Disease form
                           TextFormField(
-                            onChanged: (val) => setState(() => _disease = val),
+                            onChanged: (val){
+                              setState(() => _currentdisease = val);
+                              if(val.isEmpty){
+                                setState(() {
+                                  _currentdisease=_disease;
+                                });
+                              }
+                            },
                             decoration: InputDecoration(
                               labelText: "Hastalık",
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
                               contentPadding: EdgeInsets.all(20),
-                              hintText: "Hastalığınızı Giriniz.",
+                              hintText: _userData.disease,
+
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.edit_outlined),
+                                onPressed: () async {
+                                  User? user = FirebaseAuth.instance.currentUser;
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(user!.uid)
+                                      .set({
+                                    'uid': user.uid,
+                                    'firstName': _firstName,
+                                    'lastName': _lastName,
+                                    'age': _age,
+                                    'height': _height,
+                                    'weight': _weight,
+                                    'disease': _currentdisease,
+                                  });
+                                },
+                              ),
                             ),
                           ),
                           SizedBox(height: getProportionateScreenHeight(20)),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: getProportionateScreenHeight(50),
-                                vertical: getProportionateScreenWidth(10)),
-                            child: Button(
-                              text: "Düzenle",
-                              press: () async {
-                                User? user = FirebaseAuth.instance.currentUser;
-                                await FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(user!.uid)
-                                    .set({
-                                  'uid': user.uid,
-                                  'firstName': _firstName,
-                                  'lastName': _lastName,
-                                  'age': _age,
-                                  'height': _height,
-                                  'weight': _weight,
-                                  'disease': _disease,
-                                });
-                              },
-                            ),
-                          ),
+                          // Padding(
+                          //   padding: EdgeInsets.symmetric(
+                          //       horizontal: getProportionateScreenHeight(50),
+                          //       vertical: getProportionateScreenWidth(10)),
+                          //   child: Button(
+                          //     text: "Düzenle",
+                          //     press: () async {
+                          //       User? user = FirebaseAuth.instance.currentUser;
+                          //       await FirebaseFirestore.instance
+                          //           .collection('users')
+                          //           .doc(user!.uid)
+                          //           .set({
+                          //         'uid': user.uid,
+                          //         'firstName': _firstName,
+                          //         'lastName': _lastName,
+                          //         'age': _age,
+                          //         'height': _height,
+                          //         'weight': _weight,
+                          //         'disease': _disease,
+                          //       });
+                          //     },
+                          //   ),
+                          // ),
                         ],
                       ),
                     );
@@ -237,11 +385,10 @@ class _ProfileInfoState extends State<ProfileInfo> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        SizedBox(width: getProportionateScreenWidth(10)),
         Container(
           height: getProportionateScreenHeight(160),
           width: getProportionateScreenWidth(140),
-          margin: EdgeInsets.only(top: getProportionateScreenHeight(20)),
+          margin: EdgeInsets.only(top: getProportionateScreenHeight(5)),
           child: Stack(
             children: <Widget>[
               _image != null

@@ -11,20 +11,20 @@ class UserDatabase {
   final CollectionReference terapiCollection =
       FirebaseFirestore.instance.collection('users');
 
-  Future getUserData() async {
-    try {
-      DocumentSnapshot ds = await terapiCollection.doc(uid).get();
-      String firstName = ds.get('firstName') ?? '';
-      String lastName = ds.get('lastName');
-      String age = ds.get('age');
-      String height = ds.get('height');
-      String weight = ds.get('weight');
-      String disease = ds.get('disease');
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
+  // Future getUserData() async {
+  //   try {
+  //     DocumentSnapshot ds = await terapiCollection.doc(uid).get();
+  //     String firstName = ds.get('firstName') ?? '';
+  //     String lastName = ds.get('lastName');
+  //     String age = ds.get('age');
+  //     String height = ds.get('height');
+  //     String weight = ds.get('weight');
+  //     String disease = ds.get('disease');
+  //   } catch (e) {
+  //     print(e.toString());
+  //     return null;
+  //   }
+  // }
 
   //users list from snapshot
   List<UsersInfo> _usersListFromSnapshot(QuerySnapshot snapshot) {

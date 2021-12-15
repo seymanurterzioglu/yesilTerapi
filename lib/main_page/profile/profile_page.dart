@@ -1,5 +1,4 @@
 import 'package:fitterapi/const.dart';
-import 'package:fitterapi/main_page/profile/profile_edit.dart';
 
 import 'package:fitterapi/main_page/profile/profile_info.dart';
 
@@ -24,44 +23,44 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: <Widget>[
-          SizedBox(height: getProportionateScreenHeight(60)),
+          SizedBox(height: getProportionateScreenHeight(150)),
           // for image
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(width: getProportionateScreenWidth(10)),
-              Container(
-                height: getProportionateScreenHeight(170),
-                width: getProportionateScreenWidth(130),
-                margin: EdgeInsets.only(top: getProportionateScreenHeight(10)),
-                child: Stack(
-                  children: <Widget>[
-                    CircleAvatar(
-                      radius: 80,
-                      backgroundImage: AssetImage('assets/images/back4.jpg'),
-                    ),
-                    // Align(
-                    //   alignment: Alignment.bottomRight,
-                    //   child: Container(
-                    //     height: getProportionateScreenHeight(40),
-                    //     width: getProportionateScreenWidth(40),
-                    //     decoration: BoxDecoration(
-                    //       color: Colors.white70,
-                    //       shape: BoxShape.circle,
-                    //     ),
-                    //     child: Icon(
-                    //       Icons.edit,
-                    //       color: Colors.black,
-                    //       size: getProportionateScreenHeight(25),
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: <Widget>[
+          //     SizedBox(width: getProportionateScreenWidth(10)),
+          //     Container(
+          //       height: getProportionateScreenHeight(170),
+          //       width: getProportionateScreenWidth(130),
+          //       margin: EdgeInsets.only(top: getProportionateScreenHeight(10)),
+          //       child: Stack(
+          //         children: <Widget>[
+          //           CircleAvatar(
+          //             radius: 80,
+          //             backgroundImage: AssetImage('assets/images/back4.jpg'),
+          //           ),
+          //           // Align(
+          //           //   alignment: Alignment.bottomRight,
+          //           //   child: Container(
+          //           //     height: getProportionateScreenHeight(40),
+          //           //     width: getProportionateScreenWidth(40),
+          //           //     decoration: BoxDecoration(
+          //           //       color: Colors.white70,
+          //           //       shape: BoxShape.circle,
+          //           //     ),
+          //           //     child: Icon(
+          //           //       Icons.edit,
+          //           //       color: Colors.black,
+          //           //       size: getProportionateScreenHeight(25),
+          //           //     ),
+          //           //   ),
+          //           // ),
+          //         ],
+          //       ),
+          //     ),
+          //   ],
+          // ),
           //  List
           Expanded(
             child: ListView(

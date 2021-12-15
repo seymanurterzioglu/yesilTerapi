@@ -175,7 +175,7 @@ class _EditFormState extends State<EditForm> {
                     )
                   : CircleAvatar(
                       radius: getProportionateScreenWidth(80),
-                      backgroundImage: AssetImage('assets/images/back4.jpg'),
+                      backgroundImage: AssetImage('assets/images/resim_yok.jpg'),
                     ),
               Align(
                 alignment: Alignment.bottomRight,

@@ -1,6 +1,7 @@
 import 'package:fitterapi/authenticate/authenticate.dart';
 import 'package:fitterapi/main_page/home/home_screen.dart';
-import 'package:fitterapi/modules/user.dart';
+import 'package:fitterapi/main_page/profile/user_and_datas.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +13,7 @@ class Wrapper extends StatelessWidget {
 
     //Provider.of<theUser?> we add ? because we say this can be null or not null
 
-    final user = Provider.of<theUser?>(context);
+    final user = Provider.of<Users?>(context);
     print(user);
 
     //return Authenticate();
