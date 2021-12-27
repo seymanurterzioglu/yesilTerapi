@@ -1,4 +1,5 @@
 import 'package:fitterapi/const.dart';
+import 'package:fitterapi/main_page/profile/add_page.dart';
 
 import 'package:fitterapi/main_page/profile/profile_info.dart';
 
@@ -88,7 +89,17 @@ class ProfilePage extends StatelessWidget {
                   },
                 ),
                 ProfileListItem(
-                  icon: Icons.note_add,
+                  icon: Icons.add_box,
+                  text: 'Bilgilerini Paylaş',
+                  onPress: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AddPage()),
+                    );
+                  },
+                ),
+                ProfileListItem(
+                  icon: Icons.menu_book,
                   text: 'Öneri Yaz',
                   onPress: () {
                     Navigator.push(

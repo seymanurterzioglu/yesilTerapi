@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 //const kPrimaryColor=Color(0xFF339000);
 const kPrimaryColor=Color(0xFF36b64d);
+const pregnancyColor=Color(0xFFfcbbe8);
+const stomachColor=Color(0xFFe7e669);
+const sleepColor = Color(0xFF9bdbef);
 
 
 // Form Error

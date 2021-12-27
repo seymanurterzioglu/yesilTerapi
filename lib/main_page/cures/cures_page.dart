@@ -29,18 +29,18 @@ class _CuresPageState extends State<CuresPage> {
           child: Column(
             children: <Widget>[
               Search(),
-              SizedBox(
-                height: getProportionateScreenHeight(50),
-                child: Card(
-                  color: kPrimaryColor,
-                  child: IconButton(
-                    onPressed: () {
-                      Get.to(() => NewCureScreen());
-                    },
-                    icon: const Icon(Icons.add),
-                  ),
-                ),
-              ),
+              // SizedBox(
+              //   height: getProportionateScreenHeight(50),
+              //   child: Card(
+              //     color: kPrimaryColor,
+              //     child: IconButton(
+              //       onPressed: () {
+              //         Get.to(() => NewCureScreen());
+              //       },
+              //       icon: const Icon(Icons.add),
+              //     ),
+              //   ),
+              // ),
               CuresList(),
             ],
           ),

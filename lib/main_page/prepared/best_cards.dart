@@ -6,13 +6,12 @@ import '../../size_config.dart';
 
 class BestCards extends StatelessWidget {
   final String? name, image;
-  final GestureTapCallback? press;
 
   const BestCards({
     Key? key,
     this.name,
     this.image,
-    this.press,
+
   }) : super(key: key);
 
   @override
@@ -20,18 +19,19 @@ class BestCards extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(left:getProportionateScreenWidth(10)),
       child: SizedBox(
-        height: getProportionateScreenHeight(100),
-        width: getProportionateScreenWidth(120),
+        height: getProportionateScreenHeight(130),
+        width: getProportionateScreenWidth(190),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(4),
           child: Stack(
             children: <Widget>[
-              Image.asset(
+              Image.network(
                 image!,
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
               ),
               Container(
                 decoration: BoxDecoration(
+                  color: Colors.white,
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,

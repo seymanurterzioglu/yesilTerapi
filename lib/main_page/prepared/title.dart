@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-
 import '../../size_config.dart';
 
 class Title extends StatelessWidget {
-  final String? text;
-  final GestureTapCallback? press;
+  final String text;
+  final GestureTapCallback press;
 
   const Title({
     Key? key,
-    this.text,
-    this.press,
+    required this.text,
+    required this.press,
   }) : super(key: key);
 
   @override
