@@ -1,10 +1,10 @@
-import 'package:fitterapi/const.dart';
+
 import 'package:fitterapi/main_page/cures/cures.dart';
 import 'package:fitterapi/main_page/cures/cures_list.dart';
-import 'package:fitterapi/main_page/cures/new_cure_screen.dart';
+
 import 'package:fitterapi/main_page/prepared/search.dart';
 import 'package:fitterapi/services/cures_database.dart';
-import 'package:fitterapi/size_config.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

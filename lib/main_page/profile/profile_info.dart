@@ -59,7 +59,6 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
   @override
   Widget build(BuildContext context) {
-    Users user = Provider.of<Users>(context);
     UserDatabase userDatabase = UserDatabase(uid: currentUser!.uid);
     return Scaffold(
       appBar: AppBar(

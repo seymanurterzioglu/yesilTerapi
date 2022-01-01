@@ -19,7 +19,7 @@ class Title extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            text!,
+            text,
             style: TextStyle(
               fontSize: getProportionateScreenWidth(18),
               color: Colors.black,

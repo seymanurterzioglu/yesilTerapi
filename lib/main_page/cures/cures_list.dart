@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/main_page/prepared/idb_icons.dart';
+import 'package:fitterapi/main_page/prepared/like_button.dart';
 import 'package:fitterapi/services/cures_database.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class CuresList extends StatefulWidget {
 class _CuresListState extends State<CuresList> {
   CuresDatabase curesDatabase = CuresDatabase();
   bool toggle = false;
+
 
   navigateToDetail(List<DocumentSnapshot> cure, int index) {
     Get.to(() => cureDetail(cure, index));
@@ -139,7 +141,7 @@ class _CuresListState extends State<CuresList> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          color: kPrimaryColor,
+          color: Colors.white,
         ),
         child: Column(
           children: [
@@ -152,6 +154,16 @@ class _CuresListState extends State<CuresList> {
                 Container(
                   height: getProportionateScreenHeight(200),
                   width: getProportionateScreenWidth(180),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 4),
+                        blurRadius: 20,
+                        color: Colors.black38.withOpacity(0.7),
+                      ),
+                    ],
+                  ),
                   margin:
                       EdgeInsets.only(top: getProportionateScreenHeight(30)),
                   child: Stack(
@@ -179,6 +191,13 @@ class _CuresListState extends State<CuresList> {
                     topLeft: Radius.circular(getProportionateScreenHeight(40)),
                     topRight: Radius.circular(getProportionateScreenHeight(40)),
                   ),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, 7),
+                      blurRadius: 20,
+                      color: Colors.black38.withOpacity(0.7),
+                    ),
+                  ],
                 ),
                 child: Column(
                   children: [
@@ -186,7 +205,10 @@ class _CuresListState extends State<CuresList> {
                     Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Padding(
-                        padding: const EdgeInsets.all(10.0),
+                        padding: EdgeInsets.only(
+                          left: getProportionateScreenWidth(8),
+                          right: getProportionateScreenWidth(10),
+                        ),
                         child: Row(
                           children: [
                             Expanded(
@@ -251,30 +273,34 @@ class _CuresListState extends State<CuresList> {
                                 ],
                               ),
                             ),
+                            // LikeButtonWidget(),
                             // favorite button
                             ClipPath(
                               clipper: PricerCliper(),
                               child: Container(
-                                alignment: Alignment.bottomCenter,
+                                alignment: Alignment.topCenter,
                                 padding: EdgeInsets.symmetric(
-                                    vertical: getProportionateScreenHeight(10)),
+                                  horizontal: getProportionateScreenHeight(2),
+                                    vertical: getProportionateScreenHeight(5)),
+
                                 height: getProportionateScreenHeight(60),
-                                width: getProportionateScreenWidth(50),
+                                width: getProportionateScreenWidth(80),
                                 color: kPrimaryColor,
                                 //   SIKINTI
                                 //icon sayfadan çıkıp geri girildiğinde değişiyor!!!!!
-                                child: IconButton(
-                                    icon: toggle
-                                        ? Icon(Icons.favorite_border)
-                                        : Icon(
-                                            Icons.favorite,
-                                          ),
-                                    onPressed: () {
-                                      setState(() {
-                                        // Here we changing the icon.
-                                        toggle = !toggle;
-                                      });
-                                    }),
+                                child: LikeButtonWidget(),
+                                // child: IconButton(
+                                //     icon: toggle
+                                //         ? Icon(Icons.favorite_border)
+                                //         : Icon(
+                                //             Icons.favorite,
+                                //           ),
+                                //     onPressed: () {
+                                //       setState(() {
+                                //         // Here we changing the icon.
+                                //         toggle = !toggle;
+                                //       });
+                                //     }),
                               ),
                             ),
                           ],
@@ -291,6 +317,7 @@ class _CuresListState extends State<CuresList> {
                               '${(cure[index].data() as Map)['about'] ?? ' '} için faydalı',
                               style: TextStyle(
                                 fontSize: getProportionateScreenHeight(17),
+                                  fontFamily: 'muli',
                                 color: kPrimaryColor
                               ),
                             ),
@@ -299,6 +326,7 @@ class _CuresListState extends State<CuresList> {
                               (cure[index].data() as Map)['recipe'] ?? ' ',
                               style: TextStyle(
                                 fontSize: getProportionateScreenHeight(15),
+                                fontFamily: 'muli',
                               ),
                             ),
                           ],

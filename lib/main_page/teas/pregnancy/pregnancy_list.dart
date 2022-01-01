@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/main_page/prepared/idb_icons.dart';
+import 'package:fitterapi/main_page/prepared/like_button.dart';
 import 'package:fitterapi/services/teas_database.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class _PregnancyListState extends State<PregnancyList> {
                                 Expanded(
                                   child: Padding(
                                     padding: EdgeInsets.all(
-                                        getProportionateScreenHeight(10)),
+                                        getProportionateScreenHeight(20)),
                                     child: Column(
                                       children: [
                                         SizedBox(
@@ -180,113 +181,169 @@ class _PregnancyListState extends State<PregnancyList> {
                     topRight: Radius.circular(getProportionateScreenHeight(40)),
                   ),
                 ),
-                child: Column(
-                  children: [
-                    SizedBox(height: getProportionateScreenHeight(20)),
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    (cure[index].data() as Map)['curesName'] ??
-                                        ' ',
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(height: getProportionateScreenHeight(20)),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                    '${(cure[index].data() as Map)['useful'] ?? ' '} için ',
                                     style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize:
-                                      getProportionateScreenHeight(18),
-                                      fontWeight: FontWeight.bold,
+                                        fontSize: getProportionateScreenHeight(17),
+                                        color: kPrimaryColor
                                     ),
                                   ),
-                                  SizedBox(
-                                      height: getProportionateScreenHeight(8)),
-                                  //reting bar
-                                  RatingBar.builder(
-                                    initialRating: 3,
-                                    itemSize: getProportionateScreenHeight(28),
-                                    itemCount: 5,
-                                    itemBuilder: (context, index) {
-                                      switch (index) {
-                                        case 0:
-                                          return Icon(
-                                            DBIcons.tea,
-                                            color: Colors.red,
-                                          );
-                                        case 1:
-                                          return Icon(
-                                            DBIcons.tea,
-                                            color: Colors.deepOrangeAccent,
-                                          );
-                                        case 2:
-                                          return Icon(
-                                            DBIcons.tea,
-                                            color: Colors.amberAccent,
-                                          );
-                                        case 3:
-                                          return Icon(
-                                            DBIcons.tea,
-                                            color: Colors.lightGreen,
-                                          );
-                                        case 4:
-                                          return Icon(
-                                            DBIcons.tea,
-                                            color: kPrimaryColor,
-                                          );
-                                        default:
-                                          return Icon(
-                                            DBIcons.tea,
-                                            color: Colors.red,
-                                          );
-                                      }
-                                    },
-                                    onRatingUpdate: (rating) {
-                                      print(rating);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // favorite button
-                            ClipPath(
-                              clipper: PricerCliper(),
-                              child: Container(
-                                alignment: Alignment.bottomCenter,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: getProportionateScreenHeight(10)),
-                                height: getProportionateScreenHeight(60),
-                                width: getProportionateScreenWidth(50),
-                                color: kPrimaryColor,
-                                //   SIKINTI
-                                //icon sayfadan çıkıp geri girildiğinde değişiyor!!!!!
-                                child: IconButton(
-                                    icon: toggle
-                                        ? Icon(Icons.favorite_border)
-                                        : Icon(
-                                      Icons.favorite,
+                                    SizedBox(
+                                        height: getProportionateScreenHeight(3)),
+                                    Text(
+                                      (cure[index].data() as Map)['teaName'] ??
+                                          ' ',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize:
+                                        getProportionateScreenHeight(18),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                    onPressed: () {
-                                      setState(() {
-                                        // Here we changing the icon.
-                                        toggle = !toggle;
-                                      });
-                                    }),
+                                    SizedBox(
+                                        height: getProportionateScreenHeight(5)),
+                                    //reting bar
+                                    RatingBar.builder(
+                                      initialRating: 3,
+                                      itemSize: getProportionateScreenHeight(28),
+                                      itemCount: 5,
+                                      itemBuilder: (context, index) {
+                                        switch (index) {
+                                          case 0:
+                                            return Icon(
+                                              DBIcons.tea,
+                                              color: Colors.red,
+                                            );
+                                          case 1:
+                                            return Icon(
+                                              DBIcons.tea,
+                                              color: Colors.deepOrangeAccent,
+                                            );
+                                          case 2:
+                                            return Icon(
+                                              DBIcons.tea,
+                                              color: Colors.amberAccent,
+                                            );
+                                          case 3:
+                                            return Icon(
+                                              DBIcons.tea,
+                                              color: Colors.lightGreen,
+                                            );
+                                          case 4:
+                                            return Icon(
+                                              DBIcons.tea,
+                                              color: kPrimaryColor,
+                                            );
+                                          default:
+                                            return Icon(
+                                              DBIcons.tea,
+                                              color: Colors.red,
+                                            );
+                                        }
+                                      },
+                                      onRatingUpdate: (rating) {
+                                        print(rating);
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                              // favorite button
+                              ClipPath(
+                                clipper: PricerCliper(),
+                                child: Container(
+                                  alignment: Alignment.topCenter,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: getProportionateScreenHeight(2),
+                                      vertical: getProportionateScreenHeight(5)),
+                                  height: getProportionateScreenHeight(60),
+                                  width: getProportionateScreenWidth(80),
+                                  color: kPrimaryColor,
+                                  //   SIKINTI
+                                  //icon sayfadan çıkıp geri girildiğinde değişiyor!!!!!
+                                  child: LikeButtonWidget(),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Çay Hakkında',
+                                style: TextStyle(
+                                  fontSize: getProportionateScreenHeight(15),
+                                  color: Colors.pinkAccent,
+                                ),
+                              ),
+                              SizedBox(height: getProportionateScreenHeight(2)),
+                              Text(
+                                (cure[index].data() as Map)['info'] ?? ' ',
+                                style: TextStyle(
+                                  fontSize: getProportionateScreenHeight(15),
+                                  fontFamily: 'muli',
+                                ),
+                              ),
+                              SizedBox(height: getProportionateScreenHeight(15)),
+                              Text(
+                                'Çay Tarifi',
+                                style: TextStyle(
+                                  fontSize: getProportionateScreenHeight(15),
+                                  color: Colors.pinkAccent,
+                                ),
+                              ),
+                              SizedBox(height: getProportionateScreenHeight(2)),
+                              Text(
+                                (cure[index].data() as Map)['recipe'] ?? ' ',
+                                style: TextStyle(
+                                  fontSize: getProportionateScreenHeight(15),
+                                  fontFamily: 'muli',
+                                ),
+                              ),
+                              SizedBox(height: getProportionateScreenHeight(15)),
+                              Text(
+                                'Okumadan Geçmeyin!',
+                                style: TextStyle(
+                                  fontSize: getProportionateScreenHeight(15),
+                                  color: Colors.pinkAccent,
+                                ),
+                              ),
+                              SizedBox(height: getProportionateScreenHeight(2)),
+                              Text(
+                                (cure[index].data() as Map)['warning'] ?? ' ',
+                                style: TextStyle(
+                                  fontSize: getProportionateScreenHeight(15),
+                                  fontFamily: 'muli',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-
           ],
         ),
       ),

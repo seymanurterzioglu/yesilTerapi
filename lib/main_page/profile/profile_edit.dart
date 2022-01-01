@@ -33,7 +33,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     // var imageUrl = await (await uploadTask).ref.getDownloadURL(); we will use
   }
 
-  final _formKey = GlobalKey<FormState>();
+  // final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     // Users user = Provider.of<Users>(context);
