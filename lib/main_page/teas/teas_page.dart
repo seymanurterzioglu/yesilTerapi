@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitterapi/const.dart';
-import 'package:fitterapi/main_page/prepared/search.dart';
+import 'package:fitterapi/main_page/teas/teas.dart';
 import 'sleep/teas_sleep_page.dart';
 import 'pregnancy/teas_pregnancy_page.dart';
 import 'stomach/teas_stomach_page.dart';
@@ -7,7 +8,92 @@ import 'package:fitterapi/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class TeaPage extends StatelessWidget {
+class TeaPage extends StatefulWidget {
+  @override
+  State<TeaPage> createState() => _TeaPageState();
+}
+
+class _TeaPageState extends State<TeaPage> {
+  TextEditingController _searchController = TextEditingController();
+
+  late Future resultsLoaded;
+  List _allResults = [];
+  List _resultsList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    resultsLoaded = getTeasSnapshot();
+  }
+
+  getTeasSnapshot() async {
+    var dataPreg = await FirebaseFirestore.instance
+        .collection('teas')
+        .doc('yS1NMBa4dULBEPdpipV8')
+        .collection('Pregnancy')
+        .orderBy('teaName')
+        .get();
+    var dataSleep = await FirebaseFirestore.instance
+        .collection('teas')
+        .doc('yS1NMBa4dULBEPdpipV8')
+        .collection('Sleep')
+        .orderBy('teaName')
+        .get();
+    var dataStomach = await FirebaseFirestore.instance
+        .collection('teas')
+        .doc('yS1NMBa4dULBEPdpipV8')
+        .collection('Stomach')
+        .orderBy('teaName')
+        .get();
+    setState(() {
+      _allResults = dataPreg.docs;
+      _allResults = dataSleep.docs;
+      _allResults = dataStomach.docs;
+    });
+    //searchResultsList();
+    return 'complete';
+  }
+
+  _onSearchChanged() {
+    searchResultsList();
+  }
+
+  searchResultsList() {
+    var showResults = [];
+
+    if (_searchController.text != "") {
+      for (var courseSnapshot in _allResults) {
+        var title = Teas.fromSnapshot(courseSnapshot).teaName!.toLowerCase();
+
+        if (title.contains(_searchController.text.toLowerCase())) {
+          showResults.add(courseSnapshot);
+        }
+      }
+    } else {
+
+    }
+    setState(() {
+      _resultsList = showResults;
+    });
+  }
+
+  getTags(){
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,8 +101,64 @@ class TeaPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Search(),
-            //sık incelenenler
+            Container(
+              padding: EdgeInsets.symmetric(
+                  vertical: getProportionateScreenWidth(20),
+                  horizontal: getProportionateScreenHeight(20)),
+              decoration: BoxDecoration(
+                color: kPrimaryColor,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(50),
+                  bottomRight: Radius.circular(50),
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: getProportionateScreenWidth(10),
+                    horizontal: getProportionateScreenHeight(30)),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: getProportionateScreenWidth(250),
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: TextField(
+                        // onTap: ()=>
+                        //   Flexible(
+                        //     child: ListView.builder(
+                        //       itemCount: _resultsList.length,
+                        //       itemBuilder: (BuildContext context, int index) =>
+                        //           listSearch(context, _resultsList[index]),
+                        //     ),
+                        //   ),
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          hintText: "Sen sor biz arayalım",
+                          hintStyle: TextStyle(color: Colors.black38),
+                          prefixIcon: Icon(
+                            Icons.search_sharp,
+                            color: Colors.black,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: getProportionateScreenHeight(5),
+                            vertical: getProportionateScreenWidth(15),
+                          ),
+                        ),
+                        style: TextStyle(color: Colors.black54),
+                      ),
+                    ),
+                    SizedBox(width: getProportionateScreenWidth(10)),
+                  ],
+                ),
+              ),
+            ),
+            // tags
+
             ListTile(
               onTap: (){
                 Navigator.push(
@@ -40,9 +182,9 @@ class TeaPage extends StatelessWidget {
                 );
               },
               title: Tag(
-                  color: stomachColor,
-                  image: 'https://static.daktilo.com/sites/449/uploads/2021/04/01/large/mide-agrisi.jpg',
-                  text: 'Mide',
+                color: stomachColor,
+                image: 'https://static.daktilo.com/sites/449/uploads/2021/04/01/large/mide-agrisi.jpg',
+                text: 'Mide',
               ),
             ),
             ListTile(
@@ -60,40 +202,87 @@ class TeaPage extends StatelessWidget {
               ),
             ),
 
-            // Padding(
-            //   padding: EdgeInsets.symmetric(
-            //     horizontal: getProportionateScreenHeight(18),
-            //     vertical: getProportionateScreenWidth(2),
-            //   ),
-            //   child: Column(
-            //     children: <Widget>[
-            //       SizedBox(height: getProportionateScreenHeight(10)),
-            //       Title(
-            //         text: 'Sık İncelenenler',
-            //         press: () {},
-            //       ),
-            //       SizedBox(height: getProportionateScreenHeight(10)),
-            //       // sık incelenenler yana doğru kaydırmalı
-            //       SingleChildScrollView(
-            //         scrollDirection: Axis.horizontal,
-            //         child: Row(
-            //           children: [
-            //             BestCards(
-            //               name: 'Papatya',
-            //               image: 'assets/images/papatya.jpg',
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),
     );
   }
+
+  Widget listSearch(BuildContext context, DocumentSnapshot document){
+    final tea = Teas.fromSnapshot(document);
+    return SizedBox(
+      height: getProportionateScreenHeight(200),
+      width: getProportionateScreenWidth(50),
+      child: ListTile(
+        onTap: () {
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //       builder: (context) => teaDetail(context, document)),
+          // );
+        },
+        title: ClipRRect(
+          child: Padding(
+            padding:
+            EdgeInsets.all(getProportionateScreenHeight(10)),
+            child: Container(
+              decoration: BoxDecoration(
+                color: pregnancyColor,
+                borderRadius: BorderRadius.circular(
+                    getProportionateScreenHeight(50)),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(
+                          getProportionateScreenHeight(20)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                              height:
+                              getProportionateScreenHeight(
+                                  30)),
+                          Text(
+                            tea.teaName!,
+                            style: TextStyle(
+                              fontSize:
+                              getProportionateScreenHeight(
+                                  20),
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                              height:
+                              getProportionateScreenHeight(
+                                  20)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: Image.network(
+                      tea.image!,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  SizedBox(
+                      width: getProportionateScreenWidth(20)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 }
+
+
 
 class Tag extends StatelessWidget {
   final Color color;
@@ -109,7 +298,10 @@ class Tag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top:getProportionateScreenHeight(15) ,left:getProportionateScreenWidth(20),right: getProportionateScreenWidth(20)),
+      padding: EdgeInsets.only(
+          top: getProportionateScreenHeight(15),
+          left: getProportionateScreenWidth(20),
+          right: getProportionateScreenWidth(20)),
       child: Container(
         decoration: BoxDecoration(
           color: color,

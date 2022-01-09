@@ -10,8 +10,8 @@ import '../const.dart';
 class ForgotPasswordBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ForgotPasswordBackground(
-      child: SingleChildScrollView(
+    return SingleChildScrollView(
+      child: ForgotPasswordBackground(
         child: Padding(
           padding: EdgeInsets.symmetric(
               horizontal: getProportionateScreenHeight(20)),

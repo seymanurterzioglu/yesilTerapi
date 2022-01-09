@@ -3,15 +3,11 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:fitterapi/main_page/profile/user_and_datas.dart';
-
 import 'package:fitterapi/services/auth.dart';
 import 'package:fitterapi/services/user_database.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import 'package:image_picker/image_picker.dart';
 
 class ProfileInfo extends StatefulWidget {
@@ -28,6 +24,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
   File? _image;
 
+
   void _getPhoto(ImageSource source) async {
     XFile? pickedFile = await ImagePicker().pickImage(source: source);
     setState(() {
@@ -35,12 +32,24 @@ class _ProfileInfoState extends State<ProfileInfo> {
     });
 
     //add profile photo to Firebase Storage
+    currentUser!.updatePhotoURL('${_image}');
     FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref =
-        storage.ref().child("user").child("admin").child("profil.png");
+    UploadTask ref = storage
+        .ref('userPhoto/${currentUser!.email}')
+        .putFile(File(pickedFile!.path));
+    _currentImage = await (await ref).ref.getDownloadURL();
 
-    //UploadTask uploadTask = ref.putFile(_image!);
-    // var imageUrl = await (await uploadTask).ref.getDownloadURL(); we will use
+    // add user firebas information
+
+    User? user =
+        FirebaseAuth.instance.currentUser;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .update({
+      'uid': user.uid,
+      'image':_currentImage,
+    });
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -56,6 +65,8 @@ class _ProfileInfoState extends State<ProfileInfo> {
   String? _currentweight;
 
   String? _currentdisease;
+
+  String? _currentImage;
 
   @override
   Widget build(BuildContext context) {
@@ -87,27 +98,81 @@ class _ProfileInfoState extends State<ProfileInfo> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     UserData? _userData = snapshot.data;
-                    String ? _firstName=_userData!.firstName;
-                    String? _lastName=_userData.lastName;
-                    String? _age= _userData.age;
-                    String? _height= _userData.height;
-                    String? _weight= _userData.weight;
-                    String? _disease= _userData.disease;
-
+                    String? _firstName = _userData!.firstName;
+                    String? _lastName = _userData.lastName;
+                    String? _age = _userData.age;
+                    String? _height = _userData.height;
+                    String? _weight = _userData.weight;
+                    String? _disease = _userData.disease;
+                    String? _profil=_userData.image;
+                    if(_profil==null){
+                      _profil='https://coflex.com.tr/wp-content/uploads/2021/01/resim-yok.jpg';
+                    }
 
                     return Form(
                       key: _formKey,
                       child: Column(
                         children: <Widget>[
-                          ImageProfile(context),
+                          // ImageProfile(context),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                height: getProportionateScreenHeight(160),
+                                width: getProportionateScreenWidth(140),
+                                margin: EdgeInsets.only(top: getProportionateScreenHeight(5)),
+                                child: Stack(
+                                  children: <Widget>[
+                                    _image != null
+                                        ? CircleAvatar(
+                                      radius: getProportionateScreenWidth(80),
+                                      backgroundImage: FileImage(_image!),
+                                    )
+                                        : CircleAvatar(
+                                      radius: getProportionateScreenWidth(80),
+                                      backgroundImage:
+                                      NetworkImage(_profil),
+                                    ),
+
+                                    Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Container(
+                                        height: getProportionateScreenHeight(40),
+                                        width: getProportionateScreenWidth(40),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white70,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: InkWell(
+                                          onTap: () {
+                                            showModalBottomSheet(
+                                              builder: ((builder) => bottomSheet()),
+                                              context: context,
+                                            );
+
+                                          },
+                                          child: Icon(
+                                            Icons.edit_outlined,
+                                            color: Colors.grey,
+                                            size: getProportionateScreenHeight(25),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                           SizedBox(height: getProportionateScreenHeight(20)),
                           //firstName Form
                           TextFormField(
-                            onChanged: (val){
+                            onChanged: (val) {
                               setState(() => _currentfirstName = val);
-                              if(val.isEmpty){
+                              if (val.isEmpty) {
                                 setState(() {
-                                  _currentfirstName=_firstName;
+                                  _currentfirstName = _firstName;
                                 });
                               }
                             },
@@ -120,7 +185,8 @@ class _ProfileInfoState extends State<ProfileInfo> {
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.edit_outlined),
                                 onPressed: () async {
-                                  User? user = FirebaseAuth.instance.currentUser;
+                                  User? user =
+                                      FirebaseAuth.instance.currentUser;
                                   await FirebaseFirestore.instance
                                       .collection('users')
                                       .doc(user!.uid)
@@ -132,6 +198,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                     'height': _height,
                                     'weight': _weight,
                                     'disease': _disease,
+                                    'image':_profil,
                                   });
                                 },
                               ),
@@ -141,11 +208,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
                           //lastName Form
                           TextFormField(
-                            onChanged: (val){
+                            onChanged: (val) {
                               setState(() => _currentlastName = val);
-                              if(val.isEmpty){
+                              if (val.isEmpty) {
                                 setState(() {
-                                  _currentlastName=_lastName;
+                                  _currentlastName = _lastName;
                                 });
                               }
                             },
@@ -155,11 +222,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                   FloatingLabelBehavior.always,
                               contentPadding: EdgeInsets.all(20),
                               hintText: _userData.lastName,
-
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.edit_outlined),
                                 onPressed: () async {
-                                  User? user = FirebaseAuth.instance.currentUser;
+                                  User? user =
+                                      FirebaseAuth.instance.currentUser;
                                   await FirebaseFirestore.instance
                                       .collection('users')
                                       .doc(user!.uid)
@@ -171,6 +238,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                     'height': _height,
                                     'weight': _weight,
                                     'disease': _disease,
+                                    'image':_profil,
                                   });
                                 },
                               ),
@@ -180,11 +248,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
                           // Age form
                           TextFormField(
-                            onChanged: (val){
+                            onChanged: (val) {
                               setState(() => _currentage = val);
-                              if(val.isEmpty){
+                              if (val.isEmpty) {
                                 setState(() {
-                                  _currentage=_age;
+                                  _currentage = _age;
                                 });
                               }
                             },
@@ -194,11 +262,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                   FloatingLabelBehavior.always,
                               contentPadding: EdgeInsets.all(20),
                               hintText: _userData.age,
-
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.edit_outlined),
                                 onPressed: () async {
-                                  User? user = FirebaseAuth.instance.currentUser;
+                                  User? user =
+                                      FirebaseAuth.instance.currentUser;
                                   await FirebaseFirestore.instance
                                       .collection('users')
                                       .doc(user!.uid)
@@ -210,6 +278,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                     'height': _height,
                                     'weight': _weight,
                                     'disease': _disease,
+                                    'image':_profil,
                                   });
                                 },
                               ),
@@ -219,11 +288,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
                           // height form
                           TextFormField(
-                            onChanged: (val){
+                            onChanged: (val) {
                               setState(() => _currentheight = val);
-                              if(val.isEmpty){
+                              if (val.isEmpty) {
                                 setState(() {
-                                  _currentheight=_height;
+                                  _currentheight = _height;
                                 });
                               }
                             },
@@ -236,7 +305,8 @@ class _ProfileInfoState extends State<ProfileInfo> {
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.edit_outlined),
                                 onPressed: () async {
-                                  User? user = FirebaseAuth.instance.currentUser;
+                                  User? user =
+                                      FirebaseAuth.instance.currentUser;
                                   await FirebaseFirestore.instance
                                       .collection('users')
                                       .doc(user!.uid)
@@ -248,6 +318,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                     'height': _currentheight,
                                     'weight': _weight,
                                     'disease': _disease,
+                                    'image':_profil,
                                   });
                                 },
                               ),
@@ -256,12 +327,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
                           SizedBox(height: getProportionateScreenHeight(20)),
                           // weight form
                           TextFormField(
-
-                            onChanged: (val){
+                            onChanged: (val) {
                               setState(() => _currentweight = val);
-                              if(val.isEmpty){
+                              if (val.isEmpty) {
                                 setState(() {
-                                  _currentweight=_weight;
+                                  _currentweight = _weight;
                                 });
                               }
                             },
@@ -271,11 +341,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                   FloatingLabelBehavior.always,
                               contentPadding: EdgeInsets.all(20),
                               hintText: _userData.weight,
-
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.edit_outlined),
                                 onPressed: () async {
-                                  User? user = FirebaseAuth.instance.currentUser;
+                                  User? user =
+                                      FirebaseAuth.instance.currentUser;
                                   await FirebaseFirestore.instance
                                       .collection('users')
                                       .doc(user!.uid)
@@ -287,6 +357,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                     'height': _height,
                                     'weight': _currentweight,
                                     'disease': _disease,
+                                    'image':_profil,
                                   });
                                 },
                               ),
@@ -296,11 +367,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
                           //Disease form
                           TextFormField(
-                            onChanged: (val){
+                            onChanged: (val) {
                               setState(() => _currentdisease = val);
-                              if(val.isEmpty){
+                              if (val.isEmpty) {
                                 setState(() {
-                                  _currentdisease=_disease;
+                                  _currentdisease = _disease;
                                 });
                               }
                             },
@@ -310,11 +381,11 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                   FloatingLabelBehavior.always,
                               contentPadding: EdgeInsets.all(20),
                               hintText: _userData.disease,
-
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.edit_outlined),
                                 onPressed: () async {
-                                  User? user = FirebaseAuth.instance.currentUser;
+                                  User? user =
+                                      FirebaseAuth.instance.currentUser;
                                   await FirebaseFirestore.instance
                                       .collection('users')
                                       .doc(user!.uid)
@@ -326,6 +397,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                     'height': _height,
                                     'weight': _weight,
                                     'disease': _currentdisease,
+                                    'image':_profil,
                                   });
                                 },
                               ),
@@ -377,6 +449,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
         ),
       ),
     );
+
   }
 
   Widget ImageProfile(BuildContext context) {
@@ -392,13 +465,15 @@ class _ProfileInfoState extends State<ProfileInfo> {
             children: <Widget>[
               _image != null
                   ? CircleAvatar(
-                      radius: getProportionateScreenWidth(80),
-                      backgroundImage: FileImage(_image!),
-                    )
+                radius: getProportionateScreenWidth(80),
+                backgroundImage: FileImage(_image!),
+              )
                   : CircleAvatar(
-                      radius: getProportionateScreenWidth(80),
-                      backgroundImage: AssetImage('assets/images/back4.jpg'),
-                    ),
+                radius: getProportionateScreenWidth(80),
+                backgroundImage:
+                NetworkImage('${_currentImage}'),
+              ),
+
               Align(
                 alignment: Alignment.bottomRight,
                 child: Container(
@@ -416,8 +491,8 @@ class _ProfileInfoState extends State<ProfileInfo> {
                       );
                     },
                     child: Icon(
-                      Icons.edit,
-                      color: Colors.black,
+                      Icons.edit_outlined,
+                      color: Colors.grey,
                       size: getProportionateScreenHeight(25),
                     ),
                   ),
@@ -489,4 +564,5 @@ class _ProfileInfoState extends State<ProfileInfo> {
       ),
     );
   }
+
 }

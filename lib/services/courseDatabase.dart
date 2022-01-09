@@ -7,8 +7,10 @@ class CourseDatabase{
 final CollectionReference courseCollection =
 FirebaseFirestore.instance.collection('course');
 
+
+
 Stream<QuerySnapshot> getCourseList() {
-  return courseCollection.snapshots();
+  return courseCollection.orderBy('courseName').snapshots();
 }
 
 List<Course> _courseListFromSnapshot(QuerySnapshot snapshot) {
@@ -23,6 +25,8 @@ List<Course> _courseListFromSnapshot(QuerySnapshot snapshot) {
     );
   }).toList();
 }
+
+
 
 Stream<List<Course>> get courseData {
   return courseCollection.snapshots().map(_courseListFromSnapshot);

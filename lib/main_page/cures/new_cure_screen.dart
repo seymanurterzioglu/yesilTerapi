@@ -224,7 +224,7 @@ class _NewCureScreenState extends State<NewCureScreen> {
                         curesDatabase.addCure(_curesName!,_about!,_recipe!,_pickImage)
                         .then((value) {
                           Fluttertoast.showToast(
-                              msg: "Durum eklendi!",
+                              msg: "Kür eklendi!",
                               timeInSecForIosWeb: 2,
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,

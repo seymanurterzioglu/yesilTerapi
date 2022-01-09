@@ -51,6 +51,7 @@ class UserDatabase {
       height: snapshot['height'],
       weight: snapshot['weight'],
       disease: snapshot['disease'],
+      image: snapshot['image'],
       // //hangisinin işe yaradığı test edilecek
       // firstName: (snapshot.data() as DocumentSnapshot)['firstName'],
       // lastName: (snapshot.data() as DocumentSnapshot)['lastName'],

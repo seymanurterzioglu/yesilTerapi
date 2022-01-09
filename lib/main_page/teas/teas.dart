@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Teas {
   //String? id;
@@ -17,4 +18,11 @@ class Teas {
     required this.image,
   });
 
+  Teas.fromSnapshot(DocumentSnapshot snapshot)
+      : teaName = snapshot['teaName'],
+        useful = snapshot['useful'],
+        info = snapshot['info'],
+        recipe = snapshot['recipe'],
+        warning = snapshot['warning'],
+        image = snapshot['image'];
 }

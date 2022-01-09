@@ -8,7 +8,6 @@ import 'package:fitterapi/main_page/teas/teas_page.dart';
 
 import 'package:flutter/material.dart';
 
-//  later ı will add there
 
 class BottomNavBar extends StatefulWidget {
   @override
@@ -33,10 +32,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
         currentIndex: _selectedIndex,
         onTap: _onItemTap,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(DBIcons.home, color: Colors.black),
-            label: "Anasayfa",
-          ),
+
+          // forum sayfasını dizayn etmedim
+          // edince geri ekleyceğim
+
+          // BottomNavigationBarItem(
+          //   icon: Icon(DBIcons.home, color: Colors.black),
+          //   label: "Anasayfa",
+          // ),
           BottomNavigationBarItem(
             icon: Icon(DBIcons.tea, color: Colors.black),
             label: "Çaylar",
@@ -67,7 +70,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          ForumPage(), //index 0
+          //ForumPage(), //index 0
           TeaPage(), // index 1
           CuresPage(), //index 2
           CoursePage(), //index 3

@@ -1,11 +1,9 @@
 import 'dart:io';
-
-//import 'package:file_picker/file_picker.dart'; we will use this
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:file_picker/file_picker.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
-
-//import 'package:fitterapi/main_page/profile/user_and_datas.dart';
-
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,12 +27,12 @@ class _EditFormState extends State<EditForm> {
     });
 
     //add profile photo to Firebase Storage
+    var userId=FirebaseAuth.instance.currentUser!.email;
     FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref =
-        storage.ref().child("user").child("admin").child("profil.png");
+    UploadTask ref =
+        storage.ref('userPhoto/${userId}').putFile(File(pickedFile!.path));
 
-    //UploadTask uploadTask = ref.putFile(_image!);
-    // var imageUrl = await (await uploadTask).ref.getDownloadURL(); we will use
+    var imageUrl = await (await ref).ref.getDownloadURL();
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -175,7 +173,7 @@ class _EditFormState extends State<EditForm> {
                     )
                   : CircleAvatar(
                       radius: getProportionateScreenWidth(80),
-                      backgroundImage: AssetImage('assets/images/resim_yok.jpg'),
+                      backgroundImage: AssetImage('assets/images/bitki.jpg'),
                     ),
               Align(
                 alignment: Alignment.bottomRight,
@@ -241,19 +239,19 @@ class _EditFormState extends State<EditForm> {
                 onPressed: () async {
                   _getPhoto(ImageSource.gallery);
 
-                  //  resim firebase upload etmek için ama önce hesapla giriş yapmak lazım
+                   //resim firebase upload etmek için ama önce hesapla giriş yapmak lazım
 
-                  // final results = await FilePicker.platform.pickFiles(
-                  //   allowMultiple: false,
-                  //   type: FileType.custom,
-                  //   allowedExtensions: ['png','jpg',],
-                  // );
-                  //
-                  // final path = results!.files.single.path!;
-                  // final fileName = results.files.single.name;
-                  //
-                  // print(path);
-                  // print(fileName);
+                  final results = await FilePicker.platform.pickFiles(
+                    allowMultiple: false,
+                    type: FileType.custom,
+                    allowedExtensions: ['png','jpg',],
+                  );
+
+                  final path = results!.files.single.path!;
+                  final fileName = results.files.single.name;
+
+                  print(path);
+                  print(fileName);
                 },
                 icon: Icon(Icons.image),
                 label: Text('Galeri',

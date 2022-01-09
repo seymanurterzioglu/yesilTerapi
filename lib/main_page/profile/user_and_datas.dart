@@ -12,6 +12,7 @@ class UserData {
   String? height;
   String? weight;
   String? disease;
+  String? image;
 
   UserData({
     this.uid,
@@ -21,5 +22,6 @@ class UserData {
     this.height,
     this.weight,
     this.disease,
+    this.image
   });
 }

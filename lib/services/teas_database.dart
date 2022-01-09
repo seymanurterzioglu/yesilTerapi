@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitterapi/main_page/teas/teas.dart';
-import 'package:flutter/material.dart';
 
 class TeasDatabase {
   String? useful;
@@ -30,7 +29,7 @@ class TeasDatabase {
 
     //Bunu bu dosyyayı çağracağım yere yapacağım.Orada useful pregnancy ise bu fonk pregnancy göndericek.hiçbiri olmaz ise ekran hata yazıcak
     // Tabi ben yeni çay eklemede sadece 3 seçenek koyacağım(pregnacy,stomach,sleep)
-    if(_useful == 'Pregnancy'){
+    if(_useful == 'Hamilelik'){
       var documentRef = await teasPregnancyCollection.add({
         'teaName': _teaName,
         'useful': _useful,
@@ -39,7 +38,7 @@ class TeasDatabase {
         'recipe':_recipe,
         'image':_image,
       });
-    }else if(_useful=='Sleep'){
+    }else if(_useful=='Uyku'){
       var documentRef = await teasSleepCollection.add({
         'teaName': _teaName,
         'useful': _useful,
@@ -49,7 +48,7 @@ class TeasDatabase {
         'image':_image,
       });
 
-    }else if(_useful == 'Stomach'){
+    }else if(_useful == 'Mide'){
       var documentRef = await teasStomachCollection.add({
         'teaName': _teaName,
         'useful': _useful,
@@ -62,12 +61,6 @@ class TeasDatabase {
     }else{
       return null;
     }
-    // var documentRef = await te.add({
-    //   'curesName': _curesName,
-    //   'about': _about,
-    //   'recipe': _recipe,
-    //   'image': _image,
-    // });
   }
 
   Stream<QuerySnapshot> getPregnancyList(){
@@ -76,11 +69,11 @@ class TeasDatabase {
 
   Stream<QuerySnapshot> getTeasList(String useful) {
     if(useful=='Pregnancy'){
-      return teasPregnancyCollection.snapshots();
+      return teasPregnancyCollection.orderBy('teaName').snapshots();
     }else if(useful=='Sleep'){
-      return teasSleepCollection.snapshots();
+      return teasSleepCollection.orderBy('teaName').snapshots();
     }else if (useful== 'Stomach'){
-      return teasStomachCollection.snapshots();
+      return teasStomachCollection.orderBy('teaName').snapshots();
     }else{
       return teasPregnancyCollection.snapshots();  // burasının nasıl yapılacağına tam emin olamadım
     }

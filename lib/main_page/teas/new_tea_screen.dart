@@ -147,9 +147,9 @@ class _NewTeaScreenState extends State<NewTeaScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      customRadio('Pregnancy', 0, pregnancyColor),
-                      customRadio('Stomach', 1, stomachColor),
-                      customRadio('Sleep', 2, sleepColor),
+                      customRadio('Hamilelik', 0, pregnancyColor),
+                      customRadio('Mide', 1, stomachColor),
+                      customRadio('Uyku', 2, sleepColor),
                     ],
                   ),
                 ),
@@ -282,13 +282,6 @@ class _NewTeaScreenState extends State<NewTeaScreen> {
                     text: 'Ekle',
                     press: () async {
                       if (_formKey.currentState!.validate()) {
-                        // if(_useful=='Pregnancy'){
-                        //
-                        // }else if(_useful=='Stomach'){
-                        //
-                        // }else if(_useful=='Sleep'){
-                        //
-                        // }
                         teasDatabase
                             .addTea(_teaName!, _useful, _info, _warning!,
                                 _recipe!, _pickImage)
@@ -327,15 +320,15 @@ class _NewTeaScreenState extends State<NewTeaScreen> {
       _selectedIndex = index;
       if (_selectedIndex == 0) {
         setState(() {
-          _useful = 'Pregnancy';
+          _useful = 'Hamilelik';
         });
       } else if (_selectedIndex == 1) {
         setState(() {
-          _useful = 'Stomach';
+          _useful = 'Mide';
         });
       } else if (_selectedIndex == 2) {
         setState(() {
-          _useful = 'Sleep';
+          _useful = 'Uyku';
         });
       }
     });

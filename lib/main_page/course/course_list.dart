@@ -65,7 +65,7 @@ class _CourseListState extends State<CourseList> {
                                 vertical: getProportionateScreenWidth(10)),
                             child: Text(
                               (listOfDocumentSnapshot[index].data()
-                                      as Map)['teacher'] ??
+                                      as Map)['courseName'] ??
                                   ' ',
                               style: TextStyle(
                                 color: Colors.black,
@@ -82,7 +82,7 @@ class _CourseListState extends State<CourseList> {
                             ),
                             child: Text(
                               (listOfDocumentSnapshot[index].data()
-                                      as Map)['courseName'] ??
+                                      as Map)['teacher'] ??
                                   ' ',
                               style: TextStyle(
                                 color: Colors.black,

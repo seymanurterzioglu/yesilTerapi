@@ -28,7 +28,7 @@ class CuresDatabase {
   }
 
   Stream<QuerySnapshot> getCureList() {
-    return curesCollection.snapshots();
+    return curesCollection.orderBy('curesName').snapshots();
   }
 
 

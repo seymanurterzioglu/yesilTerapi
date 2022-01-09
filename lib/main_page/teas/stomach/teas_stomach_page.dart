@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/main_page/prepared/best_cards.dart';
-import 'package:fitterapi/main_page/teas/stomach/stomach_list.dart';
+import 'package:fitterapi/main_page/teas/tea_detail.dart';
+import 'package:fitterapi/main_page/teas/teas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -12,20 +14,34 @@ class TeasStomachPage extends StatefulWidget {
 }
 
 class _TeasStomachPageState extends State<TeasStomachPage> {
+  List _allResults = [];
+  var showResults = [];
+  late Future resultsLoaded;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    resultsLoaded = getCourseSnapshot();
+  }
+
+  getCourseSnapshot() async {
+    var data = await FirebaseFirestore.instance
+        .collection('teas')
+        .doc('yS1NMBa4dULBEPdpipV8')
+        .collection('Stomach')
+        .orderBy('teaName')
+        .get();
+    setState(() {
+      _allResults = data.docs;
+
+    });
+    showResults = List.from(_allResults);
+    _allResults=showResults;
+    return 'complete';
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   centerTitle: true,
-      //   iconTheme: IconThemeData(color: Colors.black),
-      //   backgroundColor: Colors.white,
-      //   title: Text(
-      //     'Hamilelik',
-      //     style: TextStyle(
-      //       color: Colors.black,
-      //     ),
-      //   ),
-      // ),
       body: Column(
         children: [
           // Title
@@ -117,12 +133,91 @@ class _TeasStomachPageState extends State<TeasStomachPage> {
               ),
             ),
           ),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          StomachList(),
+          // StomachList(),
+          Flexible(
+            child: ListView.builder(
+              itemCount: _allResults.length,
+              itemBuilder: (BuildContext context, int index) =>
+                  listStomach(context, _allResults[index]),
+            ),
+          ),
         ],
       ),
     );
   }
+
+  Widget listStomach(BuildContext context, DocumentSnapshot document){
+    final tea = Teas.fromSnapshot(document);
+    return SizedBox(
+      height: getProportionateScreenHeight(200),
+      width: getProportionateScreenWidth(50),
+      child: ListTile(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => teaDetail(context, document)),
+          );
+        },
+        title: ClipRRect(
+          child: Padding(
+            padding:
+            EdgeInsets.all(getProportionateScreenHeight(10)),
+            child: Container(
+              decoration: BoxDecoration(
+                color: stomachColor,
+                borderRadius: BorderRadius.circular(
+                    getProportionateScreenHeight(50)),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(
+                          getProportionateScreenHeight(20)),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                              height:
+                              getProportionateScreenHeight(
+                                  30)),
+                          Text(
+                            tea.teaName!,
+                            style: TextStyle(
+                              fontSize:
+                              getProportionateScreenHeight(
+                                  20),
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                              height:
+                              getProportionateScreenHeight(
+                                  20)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 100,
+                    width: 100,
+                    child: Image.network(
+                      tea.image!,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  SizedBox(
+                      width: getProportionateScreenWidth(20)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 }
 
 class Title extends StatelessWidget {

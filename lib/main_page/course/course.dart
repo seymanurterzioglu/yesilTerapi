@@ -1,12 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Course {
   //String? id;
-  String? courseName;
-  String? about;
-  String? image;
-  String? price;
-  String? teacher;
-  String? touch;
+  String courseName;
+  String about;
+  String image;
+  String price;
+  String teacher;
+  String touch;
 
   Course({
     //required this.id,
@@ -15,7 +16,14 @@ class Course {
     required this.image,
     required this.price,
     required this.teacher,
-    required this.touch,
+    required this.touch
   });
 
+  Course.fromSnapshot(DocumentSnapshot snapshot)
+      : courseName = snapshot['courseName'],
+        touch = snapshot['touch'],
+        teacher = snapshot['teacher'],
+        price = snapshot['price'],
+        image = snapshot['image'],
+        about = snapshot['about'];
 }
