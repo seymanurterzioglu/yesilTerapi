@@ -1,8 +1,11 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitterapi/button.dart';
+import 'package:fitterapi/complete_profile/complete_profile_screen.dart';
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/error.dart';
 import 'package:fitterapi/main_page/home/home_screen.dart';
+import 'package:fitterapi/main_page/profile/user_and_datas.dart';
 import 'package:fitterapi/modules/user.dart';
 import 'package:fitterapi/services/auth.dart';
 import 'package:fitterapi/sign_in/google_sign_in.dart';
@@ -128,6 +131,8 @@ class _SignInBodyState extends State<SignInBody> {
                       print(password);
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
+                        // User? _currentUser = FirebaseAuth.instance.currentUser;
+                        // String id = _currentUser!.uid;
                         // eğer her şey doğruysa giriş ekranına git
                         //FocusScopeNode currentFocus = FocusScope.of(context);
                         dynamic result = await _auth.signInWithEmailPassword(
@@ -139,10 +144,41 @@ class _SignInBodyState extends State<SignInBody> {
                                 builder: (context) => HomeScreen()),
                           );
                         }
+
+                        // // google giriş için bir şey yapmaya çalışıyorum
+                        // bool barrier = false;
+                        // var userList = [];
+
+                        // getUserSnapshot() async {
+                        //   var data = await FirebaseFirestore.instance.collection('users').get();
+                        //     userList = data.docs;
+                        //   for(var userName in userList){
+                        //     var search= UserData.fromSnapshot(userName).uid;
+                        //     if (search!.contains(id)){
+                        //       barrier=false;
+                        //       print('barrier is false');
+                        //     }else{
+                        //       barrier=true;
+                        //       print('barrier is true');
+                        //     }
+                        //   }
+                        //
+                        //   return 'complete';
+                        // }
+                        // getUserSnapshot();
+
                         if (result == null) {
                           setState(
                               () => error = 'Eposta ya da şifreniz hatalıdır');
-                        }else{
+                        }
+                        // else if (barrier == true) {
+                        //   Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => CompleteProfileScreen()),
+                        //   );
+                        // }
+                        else {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -206,6 +242,7 @@ class _SignInBodyState extends State<SignInBody> {
                           context,
                           listen: false);
                       provider.googleLogin();
+                      // String googleUid=provider.getId();
                     },
                   ),
 
@@ -623,8 +660,6 @@ class _SignInBodyState extends State<SignInBody> {
 //     );
 //   }
 // }
-
-
 
 //
 // StreamBuilder<Object>(

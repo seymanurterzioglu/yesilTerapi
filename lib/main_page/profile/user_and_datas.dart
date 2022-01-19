@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Users{
   final String? uid;
 
@@ -5,7 +7,7 @@ class Users{
 }
 
 class UserData {
-  final String? uid;
+  String? uid;
   String? firstName;
   String? lastName;
   String? age;
@@ -24,4 +26,18 @@ class UserData {
     this.disease,
     this.image
   });
+
+
+  UserData.fromSnapshot(DocumentSnapshot snap)
+      :
+        firstName= snap['firstName'],
+        lastName= snap['lastName'],
+        age= snap['age'],
+        height= snap['height'],
+        weight= snap['weight'],
+        disease= snap['disease'],
+        image= snap['image']
+
+  ;
+
 }

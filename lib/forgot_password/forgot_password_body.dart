@@ -115,7 +115,6 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
           Button(
             text: "Gönder",
             press: () {
-
               //burada hatalar çıksada loginsayfasına gidiyor
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
@@ -124,11 +123,9 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
                 if (!currentFocus.hasPrimaryFocus) {
                   currentFocus.unfocus();
                 }
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => HomeScreen()),
-                );
+                if(email!.isNotEmpty) {
+                  Navigator.pop(context);
+                }
               }
             },
           ),

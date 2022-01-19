@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitterapi/main_page/profile/user_and_datas.dart';
-import 'package:fitterapi/main_page/profile/users_info.dart';
+
 
 class UserDatabase {
   final String? uid;
@@ -26,20 +26,20 @@ class UserDatabase {
   //   }
   // }
 
-  //users list from snapshot
-  List<UsersInfo> _usersListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.docs.map((doc) {
-      return UsersInfo(
-        firstName: doc.get('firstName') ?? '',
-        //?? eğer varsa
-        lastName: doc.get('lastName') ?? '',
-        age: doc.get('age') ?? '',
-        height: doc.get('height') ?? '',
-        weight: doc.get('weight') ?? '',
-        disease: doc.get('disease') ?? '',
-      );
-    }).toList();
-  }
+  // //users list from snapshot
+  // List<UsersInfo> _usersListFromSnapshot(QuerySnapshot snapshot) {
+  //   return snapshot.docs.map((doc) {
+  //     return UsersInfo(
+  //       firstName: doc.get('firstName') ?? '',
+  //       //?? eğer varsa
+  //       lastName: doc.get('lastName') ?? '',
+  //       age: doc.get('age') ?? '',
+  //       height: doc.get('height') ?? '',
+  //       weight: doc.get('weight') ?? '',
+  //       disease: doc.get('disease') ?? '',
+  //     );
+  //   }).toList();
+  // }
 
   //users data from snapshot
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
@@ -62,10 +62,13 @@ class UserDatabase {
     );
   }
 
-  // get stream
-  Stream<List<UsersInfo>> get users {
-    return terapiCollection.snapshots().map(_usersListFromSnapshot);
-  }
+  //
+  // // get stream
+  // Stream<List<UsersInfo>> get users {
+  //   return terapiCollection.snapshots().map(_usersListFromSnapshot);
+  // }
+
+
 
   // get user doc stream
   Stream<UserData> get userData {

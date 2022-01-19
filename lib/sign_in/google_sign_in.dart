@@ -32,6 +32,10 @@ class GoogleSignInProvider extends ChangeNotifier{
 
   }
 
+  // String getId(){
+  //   return _user!.id;
+  // }
+
   Future logOut() async{
     await googleSignIn.disconnect();
     FirebaseAuth.instance.signOut();
