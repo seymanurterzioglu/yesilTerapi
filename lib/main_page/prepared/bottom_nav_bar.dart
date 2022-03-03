@@ -36,10 +36,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
           // forum sayfasını dizayn etmedim
           // edince geri ekleyceğim
 
-          // BottomNavigationBarItem(
-          //   icon: Icon(DBIcons.home, color: Colors.black),
-          //   label: "Anasayfa",
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(DBIcons.home, color: Colors.black),
+            label: "Anasayfa",
+          ),
           BottomNavigationBarItem(
             icon: Icon(DBIcons.tea, color: Colors.black),
             label: "Çaylar",
@@ -70,7 +70,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          //ForumPage(), //index 0
+          ForumPage(), //index 0
           TeaPage(), // index 1
           CuresPage(), //index 2
           CoursePage(), //index 3

@@ -9,11 +9,14 @@ class ForgotPasswordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
+
+        elevation: 0,
         title: Text(
           "Şifremi Unuttum",
         ),
       ),
+      resizeToAvoidBottomInset: false,
       body: ForgotPasswordBody(),
     );
   }

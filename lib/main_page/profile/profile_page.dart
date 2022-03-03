@@ -90,7 +90,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 ProfileListItem(
                   icon: Icons.add_box,
-                  text: 'Bilgilerini Paylaş',
+                  text: 'Forumda Paylaş',
                   onPress: () {
                     Navigator.push(
                       context,

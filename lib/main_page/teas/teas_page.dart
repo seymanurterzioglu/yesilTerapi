@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitterapi/const.dart';
+import 'package:fitterapi/main_page/teas/tea_detail.dart';
 import 'package:fitterapi/main_page/teas/teas.dart';
 import 'sleep/teas_sleep_page.dart';
 import 'pregnancy/teas_pregnancy_page.dart';
@@ -15,6 +16,7 @@ class TeaPage extends StatefulWidget {
 
 class _TeaPageState extends State<TeaPage> {
   TextEditingController _searchController = TextEditingController();
+  bool isSearchOn = false;
 
   late Future resultsLoaded;
   List _allResults = [];
@@ -40,7 +42,7 @@ class _TeaPageState extends State<TeaPage> {
   }
 
   getTeasSnapshot() async {
-    var dataPreg = await FirebaseFirestore.instance
+    var dataPregnancy = await FirebaseFirestore.instance
         .collection('teas')
         .doc('yS1NMBa4dULBEPdpipV8')
         .collection('Pregnancy')
@@ -59,15 +61,21 @@ class _TeaPageState extends State<TeaPage> {
         .orderBy('teaName')
         .get();
     setState(() {
-      _allResults = dataPreg.docs;
-      _allResults = dataSleep.docs;
-      _allResults = dataStomach.docs;
+      _allResults = dataPregnancy.docs + dataSleep.docs + dataStomach.docs;
+      // _allResults=dataPregnancy.docs;
+      // _allResults = dataSleep.docs;
+      // _allResults = dataStomach.docs;
     });
-    //searchResultsList();
+    searchResultsList();
     return 'complete';
   }
 
   _onSearchChanged() {
+    if (_searchController.text != "") {
+      isSearchOn = true;
+    } else {
+      isSearchOn = false;
+    }
     searchResultsList();
   }
 
@@ -75,32 +83,37 @@ class _TeaPageState extends State<TeaPage> {
     var showResults = [];
 
     if (_searchController.text != "") {
-      for (var courseSnapshot in _allResults) {
-        var title = Teas.fromSnapshot(courseSnapshot).teaName!.toLowerCase();
+      for (var teasSnapshot in _allResults) {
+        var title = Teas.fromSnapshot(teasSnapshot).teaName!.toLowerCase();
 
         if (title.contains(_searchController.text.toLowerCase())) {
-          showResults.add(courseSnapshot);
+          showResults.add(teasSnapshot);
         }
       }
     } else {
-
+      Container(
+        child: Text(
+          'Aradığınızı bulamadık. Üzgünüz',
+          style: TextStyle(fontSize: getProportionateScreenHeight(30)),
+        ),
+      );
     }
     setState(() {
       _resultsList = showResults;
     });
   }
 
-  getTags(){
-
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // for to keyboard renderflex problem
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
+      body: Padding(
+        padding: EdgeInsets.only(bottom: 10),
         child: Column(
           children: <Widget>[
+            // Search
             Container(
               padding: EdgeInsets.symmetric(
                   vertical: getProportionateScreenWidth(20),
@@ -126,14 +139,6 @@ class _TeaPageState extends State<TeaPage> {
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: TextField(
-                        // onTap: ()=>
-                        //   Flexible(
-                        //     child: ListView.builder(
-                        //       itemCount: _resultsList.length,
-                        //       itemBuilder: (BuildContext context, int index) =>
-                        //           listSearch(context, _resultsList[index]),
-                        //     ),
-                        //   ),
                         controller: _searchController,
                         decoration: InputDecoration(
                           enabledBorder: InputBorder.none,
@@ -157,106 +162,127 @@ class _TeaPageState extends State<TeaPage> {
                 ),
               ),
             ),
+            SizedBox(height: getProportionateScreenHeight(20)),
             // tags
-
-            ListTile(
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TeasPregnancyList()),
-                  //MaterialPageRoute(builder: (context) => ProfileEdit()),
-                );
-              },
-              title: Tag(
-                color: pregnancyColor,
-                image: 'https://i4.hurimg.com/i/hurriyet/75/750x422/5efd155a45d2a04258b7634e.jpg',
-                text: 'Hamilelik',
-              ),
-            ),
-            ListTile(
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TeasStomachPage()),
-                  //MaterialPageRoute(builder: (context) => ProfileEdit()),
-                );
-              },
-              title: Tag(
-                color: stomachColor,
-                image: 'https://static.daktilo.com/sites/449/uploads/2021/04/01/large/mide-agrisi.jpg',
-                text: 'Mide',
-              ),
-            ),
-            ListTile(
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TeasSleepPage()),
-                  //MaterialPageRoute(builder: (context) => ProfileEdit()),
-                );
-              },
-              title: Tag(
-                color: sleepColor,
-                image: 'https://i.tmgrup.com.tr/gq/original/15-08/23/uykusuzhergece_0_0.jpg',
-                text: 'Uyku',
-              ),
-            ),
-
+            isSearchOn
+                ? Flexible(
+                    child: ListView.builder(
+                      itemCount: _resultsList.length,
+                      itemBuilder: (BuildContext context, int index) =>
+                          listSearch(context, _resultsList[index]),
+                    ),
+                  )
+                : listDisease(),
           ],
         ),
       ),
     );
   }
 
-  Widget listSearch(BuildContext context, DocumentSnapshot document){
+  Widget listDisease() {
+    return Column(
+      children: [
+        ListTile(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TeasPregnancyList(),
+              ),
+              //MaterialPageRoute(builder: (context) => ProfileEdit()),
+            );
+          },
+          title: Tag(
+            color: pregnancyColor,
+            image:
+                'https://i4.hurimg.com/i/hurriyet/75/750x422/5efd155a45d2a04258b7634e.jpg',
+            text: 'Hamilelik',
+          ),
+        ),
+        ListTile(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => TeasStomachPage()),
+              //MaterialPageRoute(builder: (context) => ProfileEdit()),
+            );
+          },
+          title: Tag(
+            color: stomachColor,
+            image:
+                'https://static.daktilo.com/sites/449/uploads/2021/04/01/large/mide-agrisi.jpg',
+            text: 'Mide',
+          ),
+        ),
+        ListTile(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => TeasSleepPage()),
+              //MaterialPageRoute(builder: (context) => ProfileEdit()),
+            );
+          },
+          title: Tag(
+            color: sleepColor,
+            image:
+                'https://i.tmgrup.com.tr/gq/original/15-08/23/uykusuzhergece_0_0.jpg',
+            text: 'Uyku',
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget listSearch(BuildContext context, DocumentSnapshot document) {
     final tea = Teas.fromSnapshot(document);
     return SizedBox(
       height: getProportionateScreenHeight(200),
       width: getProportionateScreenWidth(50),
       child: ListTile(
         onTap: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => teaDetail(context, document)),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => teaDetail(context, document)),
+          );
         },
         title: ClipRRect(
           child: Padding(
-            padding:
-            EdgeInsets.all(getProportionateScreenHeight(10)),
+            padding: EdgeInsets.all(getProportionateScreenHeight(10)),
             child: Container(
               decoration: BoxDecoration(
-                color: pregnancyColor,
-                borderRadius: BorderRadius.circular(
-                    getProportionateScreenHeight(50)),
+                color: tea.useful == 'Hamilelik'
+                    ? pregnancyColor
+                    : tea.useful == 'Uyku'
+                        ? sleepColor
+                        : stomachColor,
+                borderRadius:
+                    BorderRadius.circular(getProportionateScreenHeight(50)),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 10),
+                    blurRadius: 3,
+                    color: kPrimaryColor.withOpacity(0.6),
+                  ),
+                ],
               ),
               child: Row(
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.all(
-                          getProportionateScreenHeight(20)),
+                      padding: EdgeInsets.all(getProportionateScreenHeight(20)),
                       child: Column(
                         children: [
-                          SizedBox(
-                              height:
-                              getProportionateScreenHeight(
-                                  30)),
+                          SizedBox(height: getProportionateScreenHeight(30)),
                           Text(
                             tea.teaName!,
                             style: TextStyle(
-                              fontSize:
-                              getProportionateScreenHeight(
-                                  20),
+                              fontSize: getProportionateScreenHeight(20),
                               fontWeight: FontWeight.bold,
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(
-                              height:
-                              getProportionateScreenHeight(
-                                  20)),
+                          SizedBox(height: getProportionateScreenHeight(20)),
                         ],
                       ),
                     ),
@@ -269,8 +295,7 @@ class _TeaPageState extends State<TeaPage> {
                       fit: BoxFit.fill,
                     ),
                   ),
-                  SizedBox(
-                      width: getProportionateScreenWidth(20)),
+                  SizedBox(width: getProportionateScreenWidth(20)),
                 ],
               ),
             ),
@@ -279,10 +304,7 @@ class _TeaPageState extends State<TeaPage> {
       ),
     );
   }
-
 }
-
-
 
 class Tag extends StatelessWidget {
   final Color color;

@@ -52,6 +52,7 @@ dependencies:
   fluttertoast: ^8.0.8
   flutter_rating_bar: ^4.0.0
   like_button: ^2.0.4
+  email_validator: ^2.0.1
 
 
 

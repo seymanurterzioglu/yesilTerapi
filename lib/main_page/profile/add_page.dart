@@ -19,6 +19,7 @@ class AddPage extends StatelessWidget {
           ),
         ),
       ),
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Padding(
