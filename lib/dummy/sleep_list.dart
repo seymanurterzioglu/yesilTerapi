@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitterapi/const.dart';
-import '../tea_detail.dart';
+import '../main_page/teas/tea_detail.dart';
 import 'package:fitterapi/services/teas_database.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/material.dart';

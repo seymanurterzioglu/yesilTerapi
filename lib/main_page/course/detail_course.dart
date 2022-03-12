@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 
 Widget detailCourse(BuildContext context, DocumentSnapshot document) {
   final course = Course.fromSnapshot(document);
+
   Future addtoFavorites() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
     CollectionReference _collectionRef =
-    FirebaseFirestore.instance.collection('users-favorites');
+        FirebaseFirestore.instance.collection('users-favorites');
     return _collectionRef
         .doc(currentUser!.email)
         .collection("courses")
@@ -90,30 +91,39 @@ Widget detailCourse(BuildContext context, DocumentSnapshot document) {
                           child: StreamBuilder(
                             stream: FirebaseFirestore.instance
                                 .collection('users-favorites')
-                                .doc(FirebaseAuth
-                                .instance.currentUser!.email)
+                                .doc(FirebaseAuth.instance.currentUser!.email)
                                 .collection('courses')
                                 .where('courseName',
-                                isEqualTo: course.courseName)
+                                    isEqualTo: course.courseName)
                                 .snapshots(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot snapshot) {
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
                               if (snapshot.data == null) {
                                 return Text(' ');
                               }
                               return IconButton(
-                                onPressed: () =>
-                                snapshot.data.docs.length == 0
-                                    ? addtoFavorites()
-                                    : print('Already added'),
+                                onPressed: () {
+                                  if (snapshot.data.docs.length != 0) {
+                                    // delete
+                                    FirebaseFirestore.instance
+                                        .collection('users-favorites')
+                                        .doc(FirebaseAuth
+                                            .instance.currentUser!.email)
+                                        .collection('courses')
+                                        .doc(document
+                                            .id) // document=snapshot.data!.docs[index]
+                                        .delete();
+                                    print('Deleted from favorites');
+                                  } else {
+                                    addtoFavorites();
+                                  }
+                                },
                                 icon: snapshot.data.docs.length == 0
                                     ? Icon(Icons.star_border_outlined,
-                                    size:
-                                    getProportionateScreenHeight(
+                                    size: getProportionateScreenHeight(
                                         45))
                                     : Icon(Icons.star,
-                                    size:
-                                    getProportionateScreenHeight(
+                                    size: getProportionateScreenHeight(
                                         45),
                                     color: Colors.red),
                               );
@@ -133,37 +143,37 @@ Widget detailCourse(BuildContext context, DocumentSnapshot document) {
                       children: [
                         Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Text(
-                                    course.courseName,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      //fontStyle: FontStyle.italic,
-                                      fontSize: getProportionateScreenHeight(20),
-                                      fontFamily: 'muli',
-                                    ),
-                                  ),
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Text(
+                                course.courseName,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  //fontStyle: FontStyle.italic,
+                                  fontSize: getProportionateScreenHeight(20),
+                                  fontFamily: 'muli',
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: getProportionateScreenHeight(5),
-                                  ),
-                                  child: Text(
-                                    course.teacher,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontStyle: FontStyle.italic,
-                                      fontSize: getProportionateScreenHeight(16),
-                                      fontFamily: 'muli',
-                                    ),
-                                  ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: getProportionateScreenHeight(5),
+                              ),
+                              child: Text(
+                                course.teacher,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: getProportionateScreenHeight(16),
+                                  fontFamily: 'muli',
                                 ),
-                              ],
-                            )),
+                              ),
+                            ),
+                          ],
+                        )),
                       ],
                     ),
                   ),

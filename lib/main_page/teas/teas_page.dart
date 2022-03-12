@@ -17,6 +17,7 @@ class TeaPage extends StatefulWidget {
 class _TeaPageState extends State<TeaPage> {
   TextEditingController _searchController = TextEditingController();
   bool isSearchOn = false;
+  bool _isSearching = false;
 
   late Future resultsLoaded;
   List _allResults = [];
@@ -109,69 +110,98 @@ class _TeaPageState extends State<TeaPage> {
       // for to keyboard renderflex problem
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        centerTitle: true,
+        toolbarHeight: getProportionateScreenHeight(95),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
+        ),
+        backgroundColor: kPrimaryColor,
+        title: !_isSearching
+            ? Text(
+                'Bitkisel Çaylar',
+                style: TextStyle(
+                    fontSize: getProportionateScreenHeight(25),
+                    fontWeight: FontWeight.bold),
+              )
+            : TextField(
+                controller: _searchController,
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+                  hintText: 'Sen sor biz arayalım',
+                  hintStyle: TextStyle(color: Colors.white),
+                ),
+              ),
+        actions: [
+          //search
+          _isSearching
+              ? Padding(
+                  padding: EdgeInsets.only(top: 3, right: 45),
+                  child: IconButton(
+                    icon: Icon(Icons.cancel),
+                    onPressed: () {
+                      setState(() {
+                        this._isSearching = false;
+                        _searchController.clear();
+                      });
+                    },
+                  ),
+                )
+              : Padding(
+                  padding: EdgeInsets.only(top: 3, right: 45),
+                  child: IconButton(
+                    icon: Icon(Icons.search, color: Colors.white),
+                    onPressed: () {
+                      setState(() {
+                        this._isSearching = true;
+                      });
+                    },
+                  ),
+                ),
+        ],
+      ),
       body: Padding(
         padding: EdgeInsets.only(bottom: 10),
         child: Column(
           children: <Widget>[
-            // Search
-            Container(
-              padding: EdgeInsets.symmetric(
-                  vertical: getProportionateScreenWidth(20),
-                  horizontal: getProportionateScreenHeight(20)),
-              decoration: BoxDecoration(
-                color: kPrimaryColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50),
-                  bottomRight: Radius.circular(50),
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: getProportionateScreenWidth(10),
-                    horizontal: getProportionateScreenHeight(30)),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: getProportionateScreenWidth(250),
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          hintText: "Sen sor biz arayalım",
-                          hintStyle: TextStyle(color: Colors.black38),
-                          prefixIcon: Icon(
-                            Icons.search_sharp,
-                            color: Colors.black,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: getProportionateScreenHeight(5),
-                            vertical: getProportionateScreenWidth(15),
-                          ),
-                        ),
-                        style: TextStyle(color: Colors.black54),
-                      ),
-                    ),
-                    SizedBox(width: getProportionateScreenWidth(10)),
-                  ],
-                ),
-              ),
-            ),
             SizedBox(height: getProportionateScreenHeight(20)),
             // tags
             isSearchOn
-                ? Flexible(
-                    child: ListView.builder(
-                      itemCount: _resultsList.length,
-                      itemBuilder: (BuildContext context, int index) =>
-                          listSearch(context, _resultsList[index]),
-                    ),
-                  )
+                ? _resultsList.length > 0
+                    ? Flexible(
+                        child: ListView.builder(
+                          itemCount: _resultsList.length,
+                          itemBuilder: (BuildContext context, int index) =>
+                              listSearch(context, _resultsList[index]),
+                        ),
+                      )
+                    : Container(
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.error,
+                                color: Colors.grey[700],
+                                size: 64,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(14.0),
+                                child: Text(
+                                  'Aradığınız konuda çay bulunamadı',
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.grey[700]),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
                 : listDisease(),
           ],
         ),

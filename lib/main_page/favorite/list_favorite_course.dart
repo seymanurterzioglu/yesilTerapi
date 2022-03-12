@@ -193,7 +193,7 @@ Widget detailCourse(BuildContext context, DocumentSnapshot document) {
                                             .instance.currentUser!.email)
                                         .collection('courses')
                                         .doc(document
-                                            .id) // document=snapshot.data!.docs[index]
+                                            .id)
                                         .delete();
                                     print('Deleted from favorites');
                                   }

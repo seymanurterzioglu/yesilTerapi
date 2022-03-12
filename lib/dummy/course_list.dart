@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitterapi/const.dart';
-import 'package:fitterapi/main_page/course/course_detail.dart';
+import 'course_detail.dart';
 import 'package:fitterapi/services/courseDatabase.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/cupertino.dart';

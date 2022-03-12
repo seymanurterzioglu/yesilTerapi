@@ -13,6 +13,7 @@ class CoursePage extends StatefulWidget {
 class _CoursePageState extends State<CoursePage> {
   TextEditingController _searchController = TextEditingController();
 
+  bool _isSearching = false;
   late Future resultsLoaded;
   List _allResults = [];
   List _resultsList = [];
@@ -59,13 +60,11 @@ class _CoursePageState extends State<CoursePage> {
       for (var courseSnapshot in _allResults) {
         var title =
             Course.fromSnapshot(courseSnapshot).courseName.toLowerCase();
-        var title2 =
-        Course.fromSnapshot(courseSnapshot).teacher.toLowerCase();
+        var title2 = Course.fromSnapshot(courseSnapshot).teacher.toLowerCase();
 
         if (title.contains(_searchController.text.toLowerCase())) {
           showResults.add(courseSnapshot);
-        }
-        else if (title2.contains(_searchController.text.toLowerCase())) {
+        } else if (title2.contains(_searchController.text.toLowerCase())) {
           showResults.add(courseSnapshot);
         }
       }
@@ -81,61 +80,116 @@ class _CoursePageState extends State<CoursePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        centerTitle: true,
+        toolbarHeight: getProportionateScreenHeight(95),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
+        ),
+        backgroundColor: kPrimaryColor,
+        title: !_isSearching
+            ? Text(
+                'Tavsiye Kurslar',
+                style: TextStyle(
+                    fontSize: getProportionateScreenHeight(25),
+                    fontWeight: FontWeight.bold),
+              )
+            : TextField(
+                controller: _searchController,
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+                  hintText: 'Sen sor biz arayalım',
+                  hintStyle: TextStyle(color: Colors.white),
+                ),
+              ),
+        actions: [
+          //search
+          _isSearching
+              ? Padding(
+                  padding: EdgeInsets.only(top: 3, right: 45),
+                  child: IconButton(
+                    icon: Icon(Icons.cancel),
+                    onPressed: () {
+                      setState(() {
+                        this._isSearching = false;
+                        _searchController.clear();
+                      });
+                    },
+                  ),
+                )
+              : Padding(
+                  padding: EdgeInsets.only(top: 3, right: 45),
+                  child: IconButton(
+                    icon: Icon(Icons.search, color: Colors.white),
+                    onPressed: () {
+                      setState(() {
+                        this._isSearching = true;
+                      });
+                    },
+                  ),
+                ),
+        ],
+      ),
       body: Padding(
         padding: EdgeInsets.only(bottom: 10),
         child: Column(
           children: <Widget>[
             // search real
-            Container(
-              padding: EdgeInsets.symmetric(
-                  vertical: getProportionateScreenWidth(20),
-                  horizontal: getProportionateScreenHeight(20)),
-              decoration: BoxDecoration(
-                color: kPrimaryColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50),
-                  bottomRight: Radius.circular(50),
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    vertical: getProportionateScreenWidth(10),
-                    horizontal: getProportionateScreenHeight(30)),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: getProportionateScreenWidth(250),
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          hintText: "Sen sor biz arayalım",
-                          hintStyle: TextStyle(color: Colors.black38),
-                          prefixIcon: Icon(
-                            Icons.search_sharp,
-                            color: Colors.black,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: getProportionateScreenHeight(5),
-                            vertical: getProportionateScreenWidth(15),
-                          ),
-                        ),
-                        style: TextStyle(color: Colors.black54),
-                      ),
-                    ),
-                    SizedBox(width: getProportionateScreenWidth(10)),
-                  ],
-                ),
-              ),
-            ),
+            // Container(
+            //   padding: EdgeInsets.symmetric(
+            //       vertical: getProportionateScreenWidth(20),
+            //       horizontal: getProportionateScreenHeight(20)),
+            //   decoration: BoxDecoration(
+            //     color: kPrimaryColor,
+            //     borderRadius: BorderRadius.only(
+            //       bottomLeft: Radius.circular(50),
+            //       bottomRight: Radius.circular(50),
+            //     ),
+            //   ),
+            //   child: Padding(
+            //     padding: EdgeInsets.symmetric(
+            //         vertical: getProportionateScreenWidth(10),
+            //         horizontal: getProportionateScreenHeight(30)),
+            //     child: Row(
+            //       children: <Widget>[
+            //         Container(
+            //           width: getProportionateScreenWidth(250),
+            //           height: 50,
+            //           decoration: BoxDecoration(
+            //             color: Colors.white,
+            //             borderRadius: BorderRadius.circular(15),
+            //           ),
+            //           child: TextField(
+            //             controller: _searchController,
+            //             decoration: InputDecoration(
+            //               enabledBorder: InputBorder.none,
+            //               focusedBorder: InputBorder.none,
+            //               hintText: "Sen sor biz arayalım",
+            //               hintStyle: TextStyle(color: Colors.black38),
+            //               prefixIcon: Icon(
+            //                 Icons.search_sharp,
+            //                 color: Colors.black,
+            //               ),
+            //               contentPadding: EdgeInsets.symmetric(
+            //                 horizontal: getProportionateScreenHeight(5),
+            //                 vertical: getProportionateScreenWidth(15),
+            //               ),
+            //             ),
+            //             style: TextStyle(color: Colors.black54),
+            //           ),
+            //         ),
+            //         SizedBox(width: getProportionateScreenWidth(10)),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: getProportionateScreenHeight(20)),
-            Expanded(
+            _resultsList.length>0
+            ? Expanded(
               child: GridView.builder(
                 itemCount: _resultsList.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -145,6 +199,28 @@ class _CoursePageState extends State<CoursePage> {
                 itemBuilder: (BuildContext context, int index) =>
                     listCourse(context, _resultsList[index]),
               ),
+            )
+            : Container(
+              child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.error,
+                        color: Colors.grey[700],
+                        size: 64,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: Text(
+                          'Aradığınız konuda kurs bulunamadı',
+                          style:
+                          TextStyle(fontSize: 16, color: Colors.grey[700]),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  )),
             ),
           ],
         ),
@@ -210,7 +286,6 @@ class _CoursePageState extends State<CoursePage> {
       ),
     );
   }
-
 }
 
 //   Widget build(BuildContext context) {

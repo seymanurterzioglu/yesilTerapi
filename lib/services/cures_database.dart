@@ -6,15 +6,6 @@ class CuresDatabase {
   final CollectionReference curesCollection =
   FirebaseFirestore.instance.collection('cures');
 
-  // Stream<List<Cures>> getCures() {
-  //   return _firebaseFirestore
-  //       .collection('cures')
-  //       .snapshots()
-  //       .map((snapshot) {
-  //     return snapshot.docs.map((doc) => Cures.fromSnapshot(doc)).toList();
-  //   });
-  // }
-
   Future<Cures?> addCure(String _curesName,String _about,String _recipe,String _image)async {
     var documentRef = await curesCollection.add({
       'curesName': _curesName,
@@ -22,8 +13,6 @@ class CuresDatabase {
       'recipe': _recipe,
       'image': _image,
     });
-
-
 
   }
 

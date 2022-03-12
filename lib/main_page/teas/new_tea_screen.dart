@@ -79,8 +79,6 @@ class _NewTeaScreenState extends State<NewTeaScreen> {
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
-                // buray pregnancy ,sleep , stomach seçenekleri verilecek o seçilince useful=seçenek olucak
-
                 // image
                 Padding(
                   padding: EdgeInsets.only(

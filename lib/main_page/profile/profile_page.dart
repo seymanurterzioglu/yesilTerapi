@@ -68,7 +68,7 @@ class ProfilePage extends StatelessWidget {
               children: <Widget>[
                 ProfileListItem(
                   icon: Icons.person_add_alt_1,
-                  text: 'Profil',
+                  text: 'Profil Düzenle',
                   onPress: () {
                     Navigator.push(
                       context,

@@ -128,16 +128,7 @@ class _SignUpFormState extends State<SignUpForm> {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
         hintText: "Şifrenizi yeniden Giriniz.",
-        // enabledBorder: OutlineInputBorder(
-        //   borderRadius: BorderRadius.circular(28),
-        //   borderSide: BorderSide(color: Colors.black45),
-        //   gapPadding: 2,
-        // ),
-        // focusedBorder: OutlineInputBorder(
-        //   borderRadius: BorderRadius.circular(28),
-        //   borderSide: BorderSide(color: Colors.black45),
-        //   gapPadding: 2,
-        // ),
+
         suffixIcon: IconButton(
           icon: isConfirmPasswordVisible
               ? Icon(
@@ -235,16 +226,7 @@ class _SignUpFormState extends State<SignUpForm> {
         floatingLabelBehavior: FloatingLabelBehavior.always,
         contentPadding: EdgeInsets.all(20),
         hintText: "Emailinizi Giriniz.",
-        // enabledBorder: OutlineInputBorder(
-        //   borderRadius: BorderRadius.circular(28),
-        //   borderSide: BorderSide(color: Colors.black45),
-        //   gapPadding: 2,
-        // ),
-        // focusedBorder: OutlineInputBorder(
-        //   borderRadius: BorderRadius.circular(28),
-        //   borderSide: BorderSide(color: Colors.black45),
-        //   gapPadding: 2,
-        // ),
+
       ),
     );
   }
