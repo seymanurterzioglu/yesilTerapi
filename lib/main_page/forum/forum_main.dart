@@ -4,7 +4,6 @@ import 'package:fitterapi/main_page/forum/share/share_info.dart';
 import 'package:fitterapi/main_page/forum/share/shares.dart';
 import 'package:fitterapi/main_page/prepared/idb_icons.dart';
 import 'package:fitterapi/main_page/prepared/utils.dart';
-import 'package:fitterapi/services/sharesDatabase.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +15,8 @@ class ForumMain extends StatefulWidget {
   _ForumMainState createState() => _ForumMainState();
 }
 
-class _ForumMainState extends State<ForumMain> {
+class _ForumMainState extends State<ForumMain>
+    with SingleTickerProviderStateMixin {
   TextEditingController _searchController = TextEditingController();
   bool _isLoading = false;
   bool _isSearching = false;
@@ -25,10 +25,29 @@ class _ForumMainState extends State<ForumMain> {
   List _resultsList = [];
   late Future resultsLoaded;
 
+  late TabController _controller;
+  late int defaultChoiceIndex;
+  final List<String> choice = [
+    'Hepsi',
+    'Çaylar',
+    'Kürler',
+    'Sorular',
+    'Bilgiler'
+  ];
+  final List<String> bottomChoice = [
+    'Hepsi',
+    'Çay',
+    'Kür',
+    'Soru',
+    'Bilgi'
+  ];
+
   @override
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
+    defaultChoiceIndex = 0;
+    _controller = new TabController(length: choice.length, vsync: this);
   }
 
   @override
@@ -56,7 +75,6 @@ class _ForumMainState extends State<ForumMain> {
   //   });
   // }
 
-  //  arama yaparken lazım olucak
   getSharesSnapshot() async {
     var data = await FirebaseFirestore.instance
         .collection('shares')
@@ -172,6 +190,115 @@ class _ForumMainState extends State<ForumMain> {
         child: Column(
           children: [
             SizedBox(height: getProportionateScreenHeight(10)),
+            Wrap(
+              spacing: 8,
+              children: List.generate(choice.length, (index) {
+                return ChoiceChip(
+                  labelPadding: EdgeInsets.all(2.0),
+                  label: Text(
+                    choice[index],
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2!
+                        .copyWith(color: Colors.white, fontSize: 14),
+                  ),
+                  selected: defaultChoiceIndex == index,
+                  selectedColor: kPrimaryColor,
+                  onSelected: (value) {
+                    setState(() {
+                      defaultChoiceIndex = value ? index : defaultChoiceIndex;
+                    });
+                    choiceListIndex(index);
+                  },
+                  // backgroundColor: color,
+                  elevation: 1,
+                  padding: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenHeight(14)),
+                );
+              }),
+            ),
+
+            // DefaultTabController(
+            //   length: choice.length,
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: Container(
+            //       decoration: BoxDecoration(
+            //           color: Colors.white.withOpacity(0.2),
+            //           border: Border(
+            //               bottom: BorderSide(color: Colors.black, width: 0.8))),
+            //       child: TabBar(
+            //         controller: _controller,
+            //         unselectedLabelColor: kPrimaryColor,
+            //         indicatorSize: TabBarIndicatorSize.tab,
+            //         labelColor: kPrimaryColor,
+            //         isScrollable: true,
+            //         indicator: BoxDecoration(
+            //           gradient: LinearGradient(
+            //               colors: [Colors.black12, Colors.white12],
+            //               begin: Alignment.center),
+            //           borderRadius: BorderRadius.circular(10),
+            //           // boxShadow: [
+            //           //   BoxShadow(
+            //           //     offset: Offset(0, 4),
+            //           //     blurRadius: 10,
+            //           //     color: Colors.black38.withOpacity(0.6),
+            //           //   ),
+            //           // ],
+            //           color: Colors.white70,
+            //           //border: Border.all(color: kPrimaryColor,width: 170)
+            //         ),
+            //         tabs: [
+            //           Tab(
+            //             child: Align(
+            //               alignment: Alignment.center,
+            //               child: Text(choice[0]),
+            //             ),
+            //           ),
+            //           Tab(
+            //             child: Align(
+            //               alignment: Alignment.center,
+            //               child: Text(choice[1]),
+            //             ),
+            //           ),
+            //           Tab(
+            //             child: Align(
+            //               alignment: Alignment.center,
+            //               child: Text(choice[2]),
+            //             ),
+            //           ),
+            //           Tab(
+            //             child: Align(
+            //               alignment: Alignment.center,
+            //               child: Text(choice[3]),
+            //             ),
+            //           ),
+            //           Tab(
+            //             child: Align(
+            //               alignment: Alignment.center,
+            //               child: Text(choice[4]),
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // // tab controller nereyi gösterecek
+            // Expanded(
+            //   child: TabBarView(
+            //     controller: _controller,
+            //     children: [
+            //       listChoiceAll(),
+            //       listChoiceTeas(),
+            //       listChoiceCures(),
+            //       listChoiceAll(),
+            //       listChoiceAll(),
+            //     ],
+            //   ),
+            // ),
+
+            SizedBox(height: getProportionateScreenHeight(10)),
             _resultsList.length > 0
                 ? Expanded(
                  //refresh firebase data- when add new one, cant load quickly
@@ -219,12 +346,263 @@ class _ForumMainState extends State<ForumMain> {
                       ),
                     ),
                   )
-                : Container()
+                : Container(),
           ],
         ),
       ),
     );
   }
+  choiceListIndex(int index) {
+    var result = [];
+    if (index == 0) {
+      result = _allResults;
+    } else if (index == 1) {
+
+      for (var shareSnapshot in _allResults) {
+        var title = Shares.fromSnapshot(shareSnapshot).about.toLowerCase();
+
+        if (title.contains(bottomChoice[index].toLowerCase())) {
+          result.add(shareSnapshot);
+        }
+      }
+    } else if (index == 2) {
+      for (var shareSnapshot in _allResults) {
+        var title = Shares.fromSnapshot(shareSnapshot).about.toLowerCase();
+
+        if (title.contains(bottomChoice[index].toLowerCase())) {
+          result.add(shareSnapshot);
+        }
+      }
+    }
+    setState(() {
+      _resultsList = result;
+    });
+  }
+
+  // choiceList(String choice) {
+  //   var result = [];
+  //   if (choice == "Hepsi") {
+  //     result = _allResults;
+  //   } else if (choice == 'Çay') {
+  //     for (var shareSnapshot in _allResults) {
+  //       var title = Shares.fromSnapshot(shareSnapshot).about.toLowerCase();
+  //
+  //       if (title.contains(choice.toLowerCase())) {
+  //         result.add(shareSnapshot);
+  //       }
+  //     }
+  //   } else if (choice == 'Kür') {
+  //     for (var shareSnapshot in _allResults) {
+  //       var title = Shares.fromSnapshot(shareSnapshot).about.toLowerCase();
+  //
+  //       if (title.contains(choice.toLowerCase())) {
+  //         result.add(shareSnapshot);
+  //       }
+  //     }
+  //   } else if (choice == 'Soru') {
+  //     for (var shareSnapshot in _allResults) {
+  //       var title = Shares.fromSnapshot(shareSnapshot).about.toLowerCase();
+  //
+  //       if (title.contains(choice.toLowerCase())) {
+  //         result.add(shareSnapshot);
+  //       }
+  //     }
+  //   } else if (choice == 'Bilgi') {
+  //     for (var shareSnapshot in _allResults) {
+  //       var title = Shares.fromSnapshot(shareSnapshot).about.toLowerCase();
+  //       if (title.contains(choice.toLowerCase())) {
+  //         result.add(shareSnapshot);
+  //       }
+  //     }
+  //   }
+  //   setState(() {
+  //     _resultsList = result;
+  //   });
+  // }
+
+
+
+  Widget listChoiceAll() {
+    // choiceList('Hepsi');
+    return Scaffold(
+      body: Column(
+        children: [
+          SizedBox(height: getProportionateScreenHeight(10)),
+          _resultsList.length > 0
+              ? Expanded(
+                  //refresh firebase data- when add new one, cant load quickly
+                  child: RefreshIndicator(
+                    color: kPrimaryColor,
+                    onRefresh: () async {
+                      await getSharesSnapshot();
+                    },
+                    child: ListView.builder(
+                      itemCount: _resultsList.length,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) =>
+                          listShare(context, _resultsList[index]),
+                    ),
+                  ),
+                )
+              // eğer veri yoksa paylaşım yok uyarısı
+              : Container(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.error,
+                          color: Colors.grey[700],
+                          size: 64,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(14.0),
+                          child: Text(
+                            'Paylaşım Yok',
+                            style: TextStyle(
+                                fontSize: 16, color: Colors.grey[700]),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+          _isLoading
+              ? Positioned(
+                  child: Container(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                )
+              : Container(),
+        ],
+      ),
+    );
+  }
+
+  Widget listChoiceTeas() {
+    // choiceList('Çay');
+    return Scaffold(
+      body: Column(
+        children: [
+          SizedBox(height: getProportionateScreenHeight(10)),
+          _resultsList.length > 0
+              ? Expanded(
+                  //refresh firebase data- when add new one, cant load quickly
+                  child: RefreshIndicator(
+                    color: kPrimaryColor,
+                    onRefresh: () async {
+                      await getSharesSnapshot();
+                    },
+                    child: ListView.builder(
+                      itemCount: _resultsList.length,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) =>
+                          listShare(context, _resultsList[index]),
+                    ),
+                  ),
+                )
+              // eğer veri yoksa paylaşım yok uyarısı
+              : Container(
+                  child: Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.error,
+                        color: Colors.grey[700],
+                        size: 64,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: Text(
+                          'Paylaşım Yok',
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.grey[700]),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  )),
+                ),
+          _isLoading
+              ? Positioned(
+                  child: Container(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                )
+              : Container(),
+        ],
+      ),
+    );
+  }
+
+  Widget listChoiceCures() {
+    // choiceList('Kür');
+    return Scaffold(
+      body: Column(
+        children: [
+          SizedBox(height: getProportionateScreenHeight(10)),
+          _resultsList.length > 0
+              ? Expanded(
+                  //refresh firebase data- when add new one, cant load quickly
+                  child: RefreshIndicator(
+                    color: kPrimaryColor,
+                    onRefresh: () async {
+                      await getSharesSnapshot();
+                    },
+                    child: ListView.builder(
+                      itemCount: _resultsList.length,
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) =>
+                          listShare(context, _resultsList[index]),
+                    ),
+                  ),
+                )
+              // eğer veri yoksa paylaşım yok uyarısı
+              : Container(
+                  child: Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.error,
+                        color: Colors.grey[700],
+                        size: 64,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: Text(
+                          'Paylaşım Yok',
+                          style:
+                              TextStyle(fontSize: 16, color: Colors.grey[700]),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  )),
+                ),
+          _isLoading
+              ? Positioned(
+                  child: Container(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                )
+              : Container(),
+        ],
+      ),
+    );
+  }
+
+
+
+
 
   void _moveToShareDetail(DocumentSnapshot document) {
     Navigator.push(
@@ -411,141 +789,3 @@ class _ForumMainState extends State<ForumMain> {
     );
   }
 }
-
-//
-// StreamBuilder<QuerySnapshot>(
-// stream: _sharesDatabase.getSharesList(),
-// builder: (context, snapshot) {
-// List<DocumentSnapshot> listOfDocumentSnapshot = snapshot.data!.docs;
-// if (!snapshot.hasData) return LinearProgressIndicator();
-// return Stack(
-// children: [
-// snapshot.data!.docs.length > 0
-// ? ListView.builder(
-// itemCount: listOfDocumentSnapshot.length,
-// shrinkWrap: true,
-// itemBuilder: (context, index) {
-// return Padding(
-// padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-// child: Card(
-// elevation: 2.0,
-// child: Padding(
-// padding: EdgeInsets.all(10.0),
-// child: Column(
-// crossAxisAlignment: CrossAxisAlignment.start,
-// children: <Widget>[
-// Row(
-// children: [
-// Column(
-// children: [
-// Text(
-// (listOfDocumentSnapshot[index].data()
-// as Map)['userName'] ??
-// ' ',
-// style: TextStyle(
-// fontSize: getProportionateScreenHeight(20)),
-// ),
-// Text(
-// readTimestamp((listOfDocumentSnapshot[index].data()
-// as Map)['shareTime'] ??
-// ' '),
-// style: TextStyle(
-// fontSize: getProportionateScreenHeight(20)),
-// ),
-// ],
-// ),
-// ],
-// ),
-// Divider(height: 4, color: Colors.black26),
-// Padding(
-// padding: const EdgeInsets.fromLTRB(4, 10, 4, 10),
-// child: Text(
-// (listOfDocumentSnapshot[index].data()
-// as Map)['shareContent'] ??
-// ' ',
-// style: TextStyle(fontSize: getProportionateScreenHeight(20)),
-// ),
-// ),
-// Divider(height: 4, color: Colors.black26),
-// // Beğen-Yorum
-// Padding(
-// padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-// child: Row(
-// mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-// children: [
-// // Beğen
-// Row(
-// children: [
-// Icon(Icons.thumb_up_alt_outlined),
-// SizedBox(width: getProportionateScreenWidth(5)),
-// Text(
-// "Beğen (${(listOfDocumentSnapshot[index].data()
-// as Map)['shareLikeCount'] ??
-// ' '})",
-// style: TextStyle(
-// color: kPrimaryColor,
-// fontSize: getProportionateScreenHeight(18),
-// fontWeight: FontWeight.bold),
-// ),
-// ],
-// ),
-// // Yorum
-// Row(
-// children: [
-// Icon(Icons.comment_outlined),
-// SizedBox(width: getProportionateScreenWidth(5)),
-// Text(
-// "Yorum (${(listOfDocumentSnapshot[index].data()
-// as Map)['shareCommentCount'] ??
-// ' '})",
-// style: TextStyle(
-// color: kPrimaryColor,
-// fontSize: getProportionateScreenHeight(18),
-// fontWeight: FontWeight.bold),
-// ),
-// ],
-// ),
-// ],
-// ),
-// ),
-// ],
-// ),
-// ),
-// ),
-// );
-// })
-//     : Container(
-// child: Center(
-// child: Column(
-// mainAxisAlignment: MainAxisAlignment.center,
-// children: <Widget>[
-// Icon(
-// Icons.error,
-// color: Colors.grey[700],
-// size: 64,
-// ),
-// Padding(
-// padding: const EdgeInsets.all(14.0),
-// child: Text(
-// 'Paylaşım Yok',
-// style: TextStyle(
-// fontSize: 16, color: Colors.grey[700]),
-// textAlign: TextAlign.center,
-// ),
-// ),
-// ],
-// )),
-// ),
-// _isLoading
-// ? Positioned(
-// child: Container(
-// child: Center(
-// child: CircularProgressIndicator(),
-// ),
-// ),
-// )
-//     : Container()
-// ],
-// );
-// },
-// ),
