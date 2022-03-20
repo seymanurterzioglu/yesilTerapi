@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitterapi/main_page/forum/share/shares.dart';
+import 'package:fitterapi/main_page/prepared/idb_icons.dart';
 import 'package:fitterapi/main_page/prepared/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -46,6 +47,7 @@ class _ShareDetailState extends State<ShareDetail> {
             child: Padding(
               padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Card(
                     elevation: 2.0,
@@ -56,19 +58,56 @@ class _ShareDetailState extends State<ShareDetail> {
                         children: <Widget>[
                           Row(
                             children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  share.about == 'Çay'
+                                      ? DBIcons.tea
+                                      : share.about == 'Kür'
+                                      ? DBIcons.mortar
+                                      : share.about == 'Soru'
+                                      ? Icons.announcement_rounded
+                                      : Icons.insert_drive_file,
+                                  size: getProportionateScreenHeight(32),
+                                  color: kPrimaryColor,
+                                ),
+                              ),
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    share.userName,
-                                    style: TextStyle(
-                                        fontSize: getProportionateScreenHeight(20)),
+                                  //  kullanıcı ismine tıklandığında kullanıcının profil sayfasını götürecek
+                                  GestureDetector(
+                                    onTap: (){},
+                                    child: Text(
+                                      share.userName,
+                                      style: TextStyle(
+                                        fontSize: getProportionateScreenHeight(20),),
+                                    ),
                                   ),
+                                  SizedBox(height: getProportionateScreenHeight(2)),
                                   Text(
                                     Utils().readTimestamp(share.shareTime),
                                     style: TextStyle(
-                                        fontSize: getProportionateScreenHeight(20)),
+                                        fontSize: getProportionateScreenHeight(15)),
                                   ),
                                 ],
+                              ),
+                            ],
+                          ),
+                          // paylaşımın başlığı
+                          SizedBox(height: getProportionateScreenHeight(5),),
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Padding(
+                                  padding:EdgeInsets.fromLTRB(7, 4, 10, 2),
+                                  child: Text(
+                                    share.shareTitle,
+                                    style: TextStyle(
+                                        fontSize: getProportionateScreenHeight(22),
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -93,13 +132,31 @@ class _ShareDetailState extends State<ShareDetail> {
                                   children: [
                                     Icon(Icons.thumb_up_alt_outlined),
                                     SizedBox(width: getProportionateScreenWidth(5)),
-                                    Text(
-                                      "Beğen (${share.shareLikeCount})",
-                                      style: TextStyle(
-                                          color: kPrimaryColor,
-                                          fontSize: getProportionateScreenHeight(18),
-                                          fontWeight: FontWeight.bold),
+
+                                    // farklı renklerde metinler yazabilmek için
+                                    RichText(
+                                      text: TextSpan(children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Beğen ',
+                                            style: TextStyle(
+                                              color: kPrimaryColor,
+                                              fontSize: getProportionateScreenHeight(18),
+                                            )),
+                                        TextSpan(
+                                            text: '(${share.shareLikeCount})',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: getProportionateScreenHeight(18),
+                                            )),
+                                      ]),
                                     ),
+                                    // Text(
+                                    //   "Beğen (${share.shareLikeCount})",
+                                    //   style: TextStyle(
+                                    //       color: kPrimaryColor,
+                                    //       fontSize: getProportionateScreenHeight(18),
+                                    //       fontWeight: FontWeight.bold),
+                                    // ),
                                   ],
                                 ),
                                 // Yorum
@@ -107,13 +164,29 @@ class _ShareDetailState extends State<ShareDetail> {
                                   children: [
                                     Icon(Icons.comment_outlined),
                                     SizedBox(width: getProportionateScreenWidth(5)),
-                                    Text(
-                                      "Yorum (${share.shareCommentCount})",
-                                      style: TextStyle(
-                                          color: kPrimaryColor,
-                                          fontSize: getProportionateScreenHeight(18),
-                                          fontWeight: FontWeight.bold),
+                                    RichText(
+                                      text: TextSpan(children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Yorum ',
+                                            style: TextStyle(
+                                              color: kPrimaryColor,
+                                              fontSize: getProportionateScreenHeight(18),
+                                            )),
+                                        TextSpan(
+                                            text: '(${share.shareCommentCount})',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: getProportionateScreenHeight(18),
+                                            )),
+                                      ]),
                                     ),
+                                    // Text(
+                                    //   "Yorum (${share.shareCommentCount})",
+                                    //   style: TextStyle(
+                                    //       color: kPrimaryColor,
+                                    //       fontSize: getProportionateScreenHeight(18),
+                                    //       fontWeight: FontWeight.bold),
+                                    // ),
                                   ],
                                 ),
                               ],
@@ -123,6 +196,7 @@ class _ShareDetailState extends State<ShareDetail> {
                       ),
                     ),
                   ),
+                  Text('sfsdf'),
                 ],
               ),
             ),

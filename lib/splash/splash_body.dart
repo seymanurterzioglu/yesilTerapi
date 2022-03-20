@@ -2,8 +2,8 @@ import 'package:fitterapi/button.dart';
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/sign_in/sign_in_screen.dart';
 import 'package:fitterapi/size_config.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 
 class SplashBody extends StatefulWidget {
   @override
@@ -19,12 +19,12 @@ class _SplashBodyState extends State<SplashBody> {
     },
     {
       "text":
-      "Memleketimizde büyüyen doğal \nilaçları öğrenelim ve iyileşelim.",
+          "Memleketimizde büyüyen doğal \nilaçları öğrenelim ve iyileşelim.",
       "image": "assets/images/papatya.jpg",
     },
     {
       "text":
-      "Bildiklerimizi birbirimizle paylaşalım. \nKürler, bitki çayları ve seminerlerle \nbilgilerimizi genişletelim.",
+          "Bildiklerimizi birbirimizle paylaşalım. \nKürler, bitki çayları ve seminerlerle \nbilgilerimizi genişletelim.",
       "image": "assets/images/bitki.jpg",
     },
   ];
@@ -45,11 +45,10 @@ class _SplashBodyState extends State<SplashBody> {
                   });
                 },
                 itemCount: splashData.length,
-                itemBuilder: (context, index) =>
-                    SplashContent(
-                      text: splashData[index]["text"],
-                      image: splashData[index]["image"],
-                    ),
+                itemBuilder: (context, index) => SplashContent(
+                  text: splashData[index]["text"],
+                  image: splashData[index]["image"],
+                ),
               ),
             ),
             Expanded(
@@ -64,22 +63,52 @@ class _SplashBodyState extends State<SplashBody> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
                         splashData.length,
-                            (index) => buildDot(index: index),
+                        (index) => buildDot(index: index),
                       ),
                     ),
                     Spacer(),
                     Button(
                       text: "İleri",
                       press: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context)
-                        =>
-                            SignInScreen()),
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0)),
+                            title: Text(
+                              'Bilgiler öneri amaçlıdır. Önemli bir sıkıntınız var ise '
+                              '\n lütfen doktor ile temasa geçiniz.',
+                              textAlign: TextAlign.center,
+                            ),
+                            content: Image.asset(
+                              "assets/images/giphy.gif",
+                              height: 125.0,
+                              width: 125.0,
+                            ),
+                            actions: [
+                              Divider(height: 4, color: Colors.black),
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SignInScreen()),
+                                    );
+                                  },
+                                  child: Center(
+                                    child: Text(
+                                      'Tamam',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                  ))
+                            ],
+                          ),
+                          barrierDismissible: false,
                         );
                         // Navigator.pushNamed(context, SignInScreen.routeName);
                       },
-
                     ),
                     Spacer(),
                   ],
@@ -105,7 +134,6 @@ class _SplashBodyState extends State<SplashBody> {
     );
   }
 }
-
 
 class SplashContent extends StatelessWidget {
   const SplashContent({

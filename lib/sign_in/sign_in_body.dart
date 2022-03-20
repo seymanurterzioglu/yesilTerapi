@@ -1,22 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitterapi/button.dart';
-import 'package:fitterapi/complete_profile/complete_profile_screen.dart';
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/error.dart';
 import 'package:fitterapi/main_page/home/home_screen.dart';
-import 'package:fitterapi/main_page/profile/user_and_datas.dart';
 import 'package:fitterapi/modules/user.dart';
 import 'package:fitterapi/services/auth.dart';
 import 'package:fitterapi/sign_in/google_sign_in.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:fitterapi/sign_up/dart/sign_up_screen.dart';
-
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../forgot_password/forgot_password_screen.dart';
 
 class SignInBody extends StatefulWidget {
@@ -24,7 +18,7 @@ class SignInBody extends StatefulWidget {
   State<SignInBody> createState() => _SignInBodyState();
 }
 
-// ===denemeden önceki hali
+
 
 class _SignInBodyState extends State<SignInBody> {
   final _formKey = GlobalKey<FormState>();

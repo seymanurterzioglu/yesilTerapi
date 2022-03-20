@@ -6,6 +6,7 @@ import 'package:fitterapi/main_page/prepared/idb_icons.dart';
 import 'package:fitterapi/main_page/prepared/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../const.dart';
 import '../../size_config.dart';
@@ -25,8 +26,8 @@ class _ForumMainState extends State<ForumMain>
   List _resultsList = [];
   late Future resultsLoaded;
 
-  late TabController _controller;
   late int defaultChoiceIndex;
+  late int newChoice;
   final List<String> choice = [
     'Hepsi',
     'Çaylar',
@@ -34,20 +35,13 @@ class _ForumMainState extends State<ForumMain>
     'Sorular',
     'Bilgiler'
   ];
-  final List<String> bottomChoice = [
-    'Hepsi',
-    'Çay',
-    'Kür',
-    'Soru',
-    'Bilgi'
-  ];
+  final List<String> bottomChoice = ['Hepsi', 'Çay', 'Kür', 'Soru', 'Bilgi'];
 
   @override
   void initState() {
     super.initState();
     _searchController.addListener(_onSearchChanged);
     defaultChoiceIndex = 0;
-    _controller = new TabController(length: choice.length, vsync: this);
   }
 
   @override
@@ -108,6 +102,7 @@ class _ForumMainState extends State<ForumMain>
         }
       }
     } else {
+      defaultChoiceIndex = 0;
       showResults = List.from(_allResults);
     }
     setState(() {
@@ -153,6 +148,7 @@ class _ForumMainState extends State<ForumMain>
                   icon: Icon(Icons.cancel),
                   onPressed: () {
                     setState(() {
+                      defaultChoiceIndex = 0;
                       this._isSearching = false;
                       _searchController.clear();
                     });
@@ -162,6 +158,8 @@ class _ForumMainState extends State<ForumMain>
                   icon: Icon(Icons.search, color: Colors.white),
                   onPressed: () {
                     setState(() {
+                      defaultChoiceIndex = 0;
+                      searchResultsList();
                       this._isSearching = true;
                     });
                   },
@@ -191,8 +189,9 @@ class _ForumMainState extends State<ForumMain>
           children: [
             SizedBox(height: getProportionateScreenHeight(10)),
             Wrap(
-              spacing: 8,
+              spacing: 5,
               children: List.generate(choice.length, (index) {
+                newChoice = index;
                 return ChoiceChip(
                   labelPadding: EdgeInsets.all(2.0),
                   label: Text(
@@ -217,104 +216,23 @@ class _ForumMainState extends State<ForumMain>
                 );
               }),
             ),
-
-            // DefaultTabController(
-            //   length: choice.length,
-            //   child: Padding(
-            //     padding: const EdgeInsets.all(8.0),
-            //     child: Container(
-            //       decoration: BoxDecoration(
-            //           color: Colors.white.withOpacity(0.2),
-            //           border: Border(
-            //               bottom: BorderSide(color: Colors.black, width: 0.8))),
-            //       child: TabBar(
-            //         controller: _controller,
-            //         unselectedLabelColor: kPrimaryColor,
-            //         indicatorSize: TabBarIndicatorSize.tab,
-            //         labelColor: kPrimaryColor,
-            //         isScrollable: true,
-            //         indicator: BoxDecoration(
-            //           gradient: LinearGradient(
-            //               colors: [Colors.black12, Colors.white12],
-            //               begin: Alignment.center),
-            //           borderRadius: BorderRadius.circular(10),
-            //           // boxShadow: [
-            //           //   BoxShadow(
-            //           //     offset: Offset(0, 4),
-            //           //     blurRadius: 10,
-            //           //     color: Colors.black38.withOpacity(0.6),
-            //           //   ),
-            //           // ],
-            //           color: Colors.white70,
-            //           //border: Border.all(color: kPrimaryColor,width: 170)
-            //         ),
-            //         tabs: [
-            //           Tab(
-            //             child: Align(
-            //               alignment: Alignment.center,
-            //               child: Text(choice[0]),
-            //             ),
-            //           ),
-            //           Tab(
-            //             child: Align(
-            //               alignment: Alignment.center,
-            //               child: Text(choice[1]),
-            //             ),
-            //           ),
-            //           Tab(
-            //             child: Align(
-            //               alignment: Alignment.center,
-            //               child: Text(choice[2]),
-            //             ),
-            //           ),
-            //           Tab(
-            //             child: Align(
-            //               alignment: Alignment.center,
-            //               child: Text(choice[3]),
-            //             ),
-            //           ),
-            //           Tab(
-            //             child: Align(
-            //               alignment: Alignment.center,
-            //               child: Text(choice[4]),
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // // tab controller nereyi gösterecek
-            // Expanded(
-            //   child: TabBarView(
-            //     controller: _controller,
-            //     children: [
-            //       listChoiceAll(),
-            //       listChoiceTeas(),
-            //       listChoiceCures(),
-            //       listChoiceAll(),
-            //       listChoiceAll(),
-            //     ],
-            //   ),
-            // ),
-
-            SizedBox(height: getProportionateScreenHeight(10)),
+            SizedBox(height: getProportionateScreenHeight(5)),
             _resultsList.length > 0
                 ? Expanded(
-                 //refresh firebase data- when add new one, cant load quickly
-                  child: RefreshIndicator(
-                    color: kPrimaryColor,
-                    onRefresh: () async {
-                      await getSharesSnapshot();
-                    },
-                    child: ListView.builder(
-                      itemCount: _resultsList.length,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) =>
-                          listShare(context, _resultsList[index]),
+                    //refresh firebase data- when add new one, cant load quickly
+                    child: RefreshIndicator(
+                      color: kPrimaryColor,
+                      onRefresh: () async {
+                        await getSharesSnapshot();
+                      },
+                      child: ListView.builder(
+                        itemCount: _resultsList.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) =>
+                            listShare(context, _resultsList[index]),
+                      ),
                     ),
-                  ),
-                )
+                  )
                 // eğer veri yoksa paylaşım yok uyarısı
                 : Container(
                     child: Center(
@@ -352,12 +270,12 @@ class _ForumMainState extends State<ForumMain>
       ),
     );
   }
+
   choiceListIndex(int index) {
     var result = [];
     if (index == 0) {
       result = _allResults;
     } else if (index == 1) {
-
       for (var shareSnapshot in _allResults) {
         var title = Shares.fromSnapshot(shareSnapshot).about.toLowerCase();
 
@@ -373,236 +291,27 @@ class _ForumMainState extends State<ForumMain>
           result.add(shareSnapshot);
         }
       }
+    } else if (index == 3) {
+      for (var shareSnapshot in _allResults) {
+        var title = Shares.fromSnapshot(shareSnapshot).about.toLowerCase();
+
+        if (title.contains(bottomChoice[index].toLowerCase())) {
+          result.add(shareSnapshot);
+        }
+      }
+    } else if (index == 4) {
+      for (var shareSnapshot in _allResults) {
+        var title = Shares.fromSnapshot(shareSnapshot).about.toLowerCase();
+
+        if (title.contains(bottomChoice[index].toLowerCase())) {
+          result.add(shareSnapshot);
+        }
+      }
     }
     setState(() {
       _resultsList = result;
     });
   }
-
-  // choiceList(String choice) {
-  //   var result = [];
-  //   if (choice == "Hepsi") {
-  //     result = _allResults;
-  //   } else if (choice == 'Çay') {
-  //     for (var shareSnapshot in _allResults) {
-  //       var title = Shares.fromSnapshot(shareSnapshot).about.toLowerCase();
-  //
-  //       if (title.contains(choice.toLowerCase())) {
-  //         result.add(shareSnapshot);
-  //       }
-  //     }
-  //   } else if (choice == 'Kür') {
-  //     for (var shareSnapshot in _allResults) {
-  //       var title = Shares.fromSnapshot(shareSnapshot).about.toLowerCase();
-  //
-  //       if (title.contains(choice.toLowerCase())) {
-  //         result.add(shareSnapshot);
-  //       }
-  //     }
-  //   } else if (choice == 'Soru') {
-  //     for (var shareSnapshot in _allResults) {
-  //       var title = Shares.fromSnapshot(shareSnapshot).about.toLowerCase();
-  //
-  //       if (title.contains(choice.toLowerCase())) {
-  //         result.add(shareSnapshot);
-  //       }
-  //     }
-  //   } else if (choice == 'Bilgi') {
-  //     for (var shareSnapshot in _allResults) {
-  //       var title = Shares.fromSnapshot(shareSnapshot).about.toLowerCase();
-  //       if (title.contains(choice.toLowerCase())) {
-  //         result.add(shareSnapshot);
-  //       }
-  //     }
-  //   }
-  //   setState(() {
-  //     _resultsList = result;
-  //   });
-  // }
-
-
-
-  Widget listChoiceAll() {
-    // choiceList('Hepsi');
-    return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(height: getProportionateScreenHeight(10)),
-          _resultsList.length > 0
-              ? Expanded(
-                  //refresh firebase data- when add new one, cant load quickly
-                  child: RefreshIndicator(
-                    color: kPrimaryColor,
-                    onRefresh: () async {
-                      await getSharesSnapshot();
-                    },
-                    child: ListView.builder(
-                      itemCount: _resultsList.length,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) =>
-                          listShare(context, _resultsList[index]),
-                    ),
-                  ),
-                )
-              // eğer veri yoksa paylaşım yok uyarısı
-              : Container(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(
-                          Icons.error,
-                          color: Colors.grey[700],
-                          size: 64,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(14.0),
-                          child: Text(
-                            'Paylaşım Yok',
-                            style: TextStyle(
-                                fontSize: 16, color: Colors.grey[700]),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-          _isLoading
-              ? Positioned(
-                  child: Container(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                )
-              : Container(),
-        ],
-      ),
-    );
-  }
-
-  Widget listChoiceTeas() {
-    // choiceList('Çay');
-    return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(height: getProportionateScreenHeight(10)),
-          _resultsList.length > 0
-              ? Expanded(
-                  //refresh firebase data- when add new one, cant load quickly
-                  child: RefreshIndicator(
-                    color: kPrimaryColor,
-                    onRefresh: () async {
-                      await getSharesSnapshot();
-                    },
-                    child: ListView.builder(
-                      itemCount: _resultsList.length,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) =>
-                          listShare(context, _resultsList[index]),
-                    ),
-                  ),
-                )
-              // eğer veri yoksa paylaşım yok uyarısı
-              : Container(
-                  child: Center(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.error,
-                        color: Colors.grey[700],
-                        size: 64,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(14.0),
-                        child: Text(
-                          'Paylaşım Yok',
-                          style:
-                              TextStyle(fontSize: 16, color: Colors.grey[700]),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  )),
-                ),
-          _isLoading
-              ? Positioned(
-                  child: Container(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                )
-              : Container(),
-        ],
-      ),
-    );
-  }
-
-  Widget listChoiceCures() {
-    // choiceList('Kür');
-    return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(height: getProportionateScreenHeight(10)),
-          _resultsList.length > 0
-              ? Expanded(
-                  //refresh firebase data- when add new one, cant load quickly
-                  child: RefreshIndicator(
-                    color: kPrimaryColor,
-                    onRefresh: () async {
-                      await getSharesSnapshot();
-                    },
-                    child: ListView.builder(
-                      itemCount: _resultsList.length,
-                      shrinkWrap: true,
-                      itemBuilder: (BuildContext context, int index) =>
-                          listShare(context, _resultsList[index]),
-                    ),
-                  ),
-                )
-              // eğer veri yoksa paylaşım yok uyarısı
-              : Container(
-                  child: Center(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.error,
-                        color: Colors.grey[700],
-                        size: 64,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(14.0),
-                        child: Text(
-                          'Paylaşım Yok',
-                          style:
-                              TextStyle(fontSize: 16, color: Colors.grey[700]),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  )),
-                ),
-          _isLoading
-              ? Positioned(
-                  child: Container(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ),
-                )
-              : Container(),
-        ],
-      ),
-    );
-  }
-
-
-
-
 
   void _moveToShareDetail(DocumentSnapshot document) {
     Navigator.push(
@@ -618,38 +327,77 @@ class _ForumMainState extends State<ForumMain>
     final share = Shares.fromSnapshot(document);
     return Padding(
       padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-      child: Card(
-        elevation: 2.0,
-        child: Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () => _moveToShareDetail(document),
-                child: Row(
+      child: GestureDetector(
+        onTap: () => _moveToShareDetail(document),
+        child: Card(
+          elevation: 2.0,
+          child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
                   children: [
-                    Column(
+                    Row(
                       children: [
-                        Text(
-                          share.userName,
-                          style: TextStyle(
-                              fontSize: getProportionateScreenHeight(20)),
+                        // kür-soru... icon
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(
+                            share.about == 'Çay'
+                                ? DBIcons.tea
+                                : share.about == 'Kür'
+                                    ? DBIcons.mortar
+                                    : share.about == 'Soru'
+                                        ? Icons.announcement_rounded
+                                        : Icons.insert_drive_file,
+                            size: getProportionateScreenHeight(32),
+                            color: kPrimaryColor,
+                          ),
                         ),
-                        Text(
-                          Utils().readTimestamp(share.shareTime),
-                          style: TextStyle(
-                              fontSize: getProportionateScreenHeight(20)),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                             //  kullanıcı ismine tıklandığında kullanıcının profil sayfasını götürecek
+                            GestureDetector(
+                              onTap: (){},
+                              child: Text(
+                                share.userName,
+                                style: TextStyle(
+                                    fontSize: getProportionateScreenHeight(20),),
+                              ),
+                            ),
+                            SizedBox(height: getProportionateScreenHeight(2)),
+                            Text(
+                              Utils().readTimestamp(share.shareTime),
+                              style: TextStyle(
+                                  fontSize: getProportionateScreenHeight(15)),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ],
                 ),
-              ),
-              Divider(height: 4, color: Colors.black26),
-              GestureDetector(
-                onTap: () => _moveToShareDetail(document),
-                child: Padding(
+                // paylaşımın başlığı
+                SizedBox(height: getProportionateScreenHeight(5),),
+               Row(
+                 children: [
+                   Flexible(
+                     child: Padding(
+                       padding:EdgeInsets.fromLTRB(7, 4, 10, 2),
+                       child: Text(
+                         share.shareTitle,
+                         style: TextStyle(
+                             fontSize: getProportionateScreenHeight(22),
+                             fontWeight: FontWeight.bold),
+                       ),
+                     ),
+                   ),
+                 ],
+               ),
+                Divider(height: 4, color: Colors.black26),
+                Padding(
                   padding: const EdgeInsets.fromLTRB(4, 10, 4, 10),
                   child: Text(
                     share.shareContent,
@@ -657,49 +405,80 @@ class _ForumMainState extends State<ForumMain>
                         TextStyle(fontSize: getProportionateScreenHeight(20)),
                   ),
                 ),
-              ),
-              Divider(height: 4, color: Colors.black26),
-              // Beğen-Yorum
-              Padding(
-                padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // Beğen
-                    Row(
-                      children: [
-                        Icon(Icons.thumb_up_alt_outlined),
-                        SizedBox(width: getProportionateScreenWidth(5)),
-                        Text(
-                          "Beğen (${share.shareLikeCount})",
-                          style: TextStyle(
-                              color: kPrimaryColor,
-                              fontSize: getProportionateScreenHeight(18),
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    // Yorum
-                    GestureDetector(
-                      onTap: () => _moveToShareDetail(document),
-                      child: Row(
+                Divider(height: 4, color: Colors.black26),
+                // Beğen-Yorum
+                Padding(
+                  padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // Beğen
+                      Row(
+                        children: [
+                          Icon(Icons.thumb_up_alt_outlined),
+                          SizedBox(width: getProportionateScreenWidth(5)),
+
+                          // farklı renklerde metinler yazabilmek için
+                          RichText(
+                            text: TextSpan(children: <TextSpan>[
+                              TextSpan(
+                                  text: 'Beğen ',
+                                  style: TextStyle(
+                                    color: kPrimaryColor,
+                                    fontSize: getProportionateScreenHeight(18),
+                                  )),
+                              TextSpan(
+                                  text: '(${share.shareLikeCount})',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: getProportionateScreenHeight(18),
+                                  )),
+                            ]),
+                          ),
+                          // Text(
+                          //   "Beğen (${share.shareLikeCount})",
+                          //   style: TextStyle(
+                          //       color: kPrimaryColor,
+                          //       fontSize: getProportionateScreenHeight(18),
+                          //       fontWeight: FontWeight.bold),
+                          // ),
+                        ],
+                      ),
+                      // Yorum
+                      Row(
                         children: [
                           Icon(Icons.comment_outlined),
                           SizedBox(width: getProportionateScreenWidth(5)),
-                          Text(
-                            "Yorum (${share.shareCommentCount})",
-                            style: TextStyle(
-                                color: kPrimaryColor,
-                                fontSize: getProportionateScreenHeight(18),
-                                fontWeight: FontWeight.bold),
+                          RichText(
+                            text: TextSpan(children: <TextSpan>[
+                              TextSpan(
+                                  text: 'Yorum ',
+                                  style: TextStyle(
+                                    color: kPrimaryColor,
+                                    fontSize: getProportionateScreenHeight(18),
+                                  )),
+                              TextSpan(
+                                  text: '(${share.shareCommentCount})',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: getProportionateScreenHeight(18),
+                                  )),
+                            ]),
                           ),
+                          // Text(
+                          //   "Yorum (${share.shareCommentCount})",
+                          //   style: TextStyle(
+                          //       color: kPrimaryColor,
+                          //       fontSize: getProportionateScreenHeight(18),
+                          //       fontWeight: FontWeight.bold),
+                          // ),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

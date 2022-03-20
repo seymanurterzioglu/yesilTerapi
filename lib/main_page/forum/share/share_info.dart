@@ -97,7 +97,7 @@ class _ShareInfoState extends State<ShareInfo> {
             UserData? _userData = snapshot.data;
             String? _firstName = _userData!.firstName;
             String? _lastName = _userData.lastName;
-            user=(_firstName!+_lastName!);
+            user=(_firstName!+' '+_lastName!);
             id = _userData.uid;
             return Stack(
               children: [

@@ -115,3 +115,86 @@ class _StomachListState extends State<StomachList> {
     );
   }
 }
+
+         ///////////////////////Forum tabBar dummy code
+
+// DefaultTabController(
+//   length: choice.length,
+//   child: Padding(
+//     padding: const EdgeInsets.all(8.0),
+//     child: Container(
+//       decoration: BoxDecoration(
+//           color: Colors.white.withOpacity(0.2),
+//           border: Border(
+//               bottom: BorderSide(color: Colors.black, width: 0.8))),
+//       child: TabBar(
+//         controller: _controller,
+//         unselectedLabelColor: kPrimaryColor,
+//         indicatorSize: TabBarIndicatorSize.tab,
+//         labelColor: kPrimaryColor,
+//         isScrollable: true,
+//         indicator: BoxDecoration(
+//           gradient: LinearGradient(
+//               colors: [Colors.black12, Colors.white12],
+//               begin: Alignment.center),
+//           borderRadius: BorderRadius.circular(10),
+//           // boxShadow: [
+//           //   BoxShadow(
+//           //     offset: Offset(0, 4),
+//           //     blurRadius: 10,
+//           //     color: Colors.black38.withOpacity(0.6),
+//           //   ),
+//           // ],
+//           color: Colors.white70,
+//           //border: Border.all(color: kPrimaryColor,width: 170)
+//         ),
+//         tabs: [
+//           Tab(
+//             child: Align(
+//               alignment: Alignment.center,
+//               child: Text(choice[0]),
+//             ),
+//           ),
+//           Tab(
+//             child: Align(
+//               alignment: Alignment.center,
+//               child: Text(choice[1]),
+//             ),
+//           ),
+//           Tab(
+//             child: Align(
+//               alignment: Alignment.center,
+//               child: Text(choice[2]),
+//             ),
+//           ),
+//           Tab(
+//             child: Align(
+//               alignment: Alignment.center,
+//               child: Text(choice[3]),
+//             ),
+//           ),
+//           Tab(
+//             child: Align(
+//               alignment: Alignment.center,
+//               child: Text(choice[4]),
+//             ),
+//           ),
+//         ],
+//       ),
+//     ),
+//   ),
+// ),
+// // tab controller nereyi gösterecek
+// Expanded(
+//   child: TabBarView(
+//     controller: _controller,
+//     children: [
+//       listChoiceAll(),
+//       listChoiceTeas(),
+//       listChoiceCures(),
+//       listChoiceAll(),
+//       listChoiceAll(),
+//     ],
+//   ),
+// ),
+         ///////////////////////
