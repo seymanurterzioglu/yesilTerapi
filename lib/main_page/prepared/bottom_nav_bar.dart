@@ -2,6 +2,7 @@ import 'package:fitterapi/main_page/course/course_page.dart';
 import 'package:fitterapi/main_page/cures/cures_page.dart';
 import 'package:fitterapi/main_page/favorite/favorite_page.dart';
 import 'package:fitterapi/main_page/forum/forum_page.dart';
+import 'package:fitterapi/main_page/forum/profil_data.dart';
 import 'package:fitterapi/main_page/prepared/idb_icons.dart';
 import 'package:fitterapi/main_page/profile/profile_page.dart';
 import 'package:fitterapi/main_page/teas/teas_page.dart';

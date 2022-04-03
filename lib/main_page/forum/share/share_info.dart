@@ -35,7 +35,7 @@ class _ShareInfoState extends State<ShareInfo> {
     setState(() {
       _isLoading = true;
     });
-    String shareId= Utils().generateRandomString();
+    String shareId= Utils().generateRandomString(20);
     FirebaseFirestore.instance.collection('shares').doc(shareId).set({
       'userName': user,
       'userId': id,
@@ -97,7 +97,8 @@ class _ShareInfoState extends State<ShareInfo> {
             UserData? _userData = snapshot.data;
             String? _firstName = _userData!.firstName;
             String? _lastName = _userData.lastName;
-            user=(_firstName!+' '+_lastName!);
+            String? _nickname =_userData.nickname;
+            user=_nickname;
             id = _userData.uid;
             return Stack(
               children: [
@@ -139,7 +140,7 @@ class _ShareInfoState extends State<ShareInfo> {
                                   GestureDetector(
                                     onTap: () {},
                                     child: Text(
-                                      '${_firstName} ${_lastName}',
+                                      user!,
                                       style: TextStyle(
                                           fontSize:
                                               getProportionateScreenHeight(22),

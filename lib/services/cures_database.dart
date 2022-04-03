@@ -21,14 +21,14 @@ class CuresDatabase {
   }
 
 
-  Cures _curesFromSnapshot(DocumentSnapshot snapshot) {
-    return Cures(
-      curesName: snapshot['curesName'],
-      about: snapshot['about'],
-      recipe:snapshot['recipe'],
-      image:snapshot['image'],
-    );
-  }
+  // Cures _curesFromSnapshot(DocumentSnapshot snapshot) {
+  //   return Cures(
+  //     curesName: snapshot['curesName'],
+  //     about: snapshot['about'],
+  //     recipe:snapshot['recipe'],
+  //     image:snapshot['image'],
+  //   );
+  // }
 
   List<Cures> _curesListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {

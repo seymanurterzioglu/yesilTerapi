@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fitterapi/main_page/forum/profil_data.dart';
 import 'package:fitterapi/main_page/forum/share/share_detail.dart';
 import 'package:fitterapi/main_page/forum/share/share_info.dart';
 import 'package:fitterapi/main_page/forum/share/shares.dart';
 import 'package:fitterapi/main_page/prepared/idb_icons.dart';
 import 'package:fitterapi/main_page/prepared/utils.dart';
+import 'package:fitterapi/main_page/profile/user_and_datas.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -12,6 +14,7 @@ import '../../const.dart';
 import '../../size_config.dart';
 
 class ForumMain extends StatefulWidget {
+
   @override
   _ForumMainState createState() => _ForumMainState();
 }
@@ -36,6 +39,8 @@ class _ForumMainState extends State<ForumMain>
     'Bilgiler'
   ];
   final List<String> bottomChoice = ['Hepsi', 'Çay', 'Kür', 'Soru', 'Bilgi'];
+
+  UserData userData = UserData();
 
   @override
   void initState() {
@@ -358,13 +363,14 @@ class _ForumMainState extends State<ForumMain>
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                             //  kullanıcı ismine tıklandığında kullanıcının profil sayfasını götürecek
+                            //  kullanıcı ismine tıklandığında kullanıcının profil sayfasını götürecek
                             GestureDetector(
-                              onTap: (){},
+                              onTap: () {},
                               child: Text(
                                 share.userName,
                                 style: TextStyle(
-                                    fontSize: getProportionateScreenHeight(20),),
+                                  fontSize: getProportionateScreenHeight(20),
+                                ),
                               ),
                             ),
                             SizedBox(height: getProportionateScreenHeight(2)),
@@ -380,22 +386,24 @@ class _ForumMainState extends State<ForumMain>
                   ],
                 ),
                 // paylaşımın başlığı
-                SizedBox(height: getProportionateScreenHeight(5),),
-               Row(
-                 children: [
-                   Flexible(
-                     child: Padding(
-                       padding:EdgeInsets.fromLTRB(7, 4, 10, 2),
-                       child: Text(
-                         share.shareTitle,
-                         style: TextStyle(
-                             fontSize: getProportionateScreenHeight(22),
-                             fontWeight: FontWeight.bold),
-                       ),
-                     ),
-                   ),
-                 ],
-               ),
+                SizedBox(
+                  height: getProportionateScreenHeight(5),
+                ),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(7, 4, 10, 2),
+                        child: Text(
+                          share.shareTitle,
+                          style: TextStyle(
+                              fontSize: getProportionateScreenHeight(22),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 Divider(height: 4, color: Colors.black26),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(4, 10, 4, 10),

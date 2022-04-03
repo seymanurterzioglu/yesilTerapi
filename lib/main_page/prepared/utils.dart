@@ -37,8 +37,7 @@ class Utils{
     return time;
   }
 
-  String generateRandomString() {
-    int length=20;
+  String generateRandomString(int length) {
     final _random = Random();
     const _availableChars =
         'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';

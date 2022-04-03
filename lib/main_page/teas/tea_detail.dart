@@ -7,6 +7,7 @@ import 'package:fitterapi/main_page/teas/teas.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 
 Widget teaDetail(BuildContext context, DocumentSnapshot document) {
   final tea = Teas.fromSnapshot(document);
@@ -66,39 +67,43 @@ Widget teaDetail(BuildContext context, DocumentSnapshot document) {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(width: getProportionateScreenWidth(10)),
-                        Container(
-                          height: getProportionateScreenHeight(200),
-                          width: getProportionateScreenWidth(250),
+                        FullScreenWidget(
+                          backgroundColor: Colors.black,
+                          backgroundIsTransparent: true,
+                          child: Container(
+                            height: getProportionateScreenHeight(200),
+                            width: getProportionateScreenWidth(250),
 
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                tea.image!,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  tea.image!,
+                                ),
+                                fit: BoxFit.contain,
                               ),
-                              fit: BoxFit.cover,
+                              //borderRadius: BorderRadius.all(Radius.circular(70)),
+                              // boxShadow: [
+                              //   BoxShadow(
+                              //     offset: Offset(0, 4),
+                              //     blurRadius: 15,
+                              //     color: Colors.white.withOpacity(0.7),
+                              //   ),
+                              // ],
                             ),
-                            borderRadius: BorderRadius.all(Radius.circular(70)),
-                            boxShadow: [
-                              BoxShadow(
-                                offset: Offset(0, 4),
-                                blurRadius: 15,
-                                color: kPrimaryColor.withOpacity(0.7),
-                              ),
-                            ],
-                          ),
-                          margin: EdgeInsets.only(
-                              top: getProportionateScreenHeight(30)),
+                            margin: EdgeInsets.only(
+                                top: getProportionateScreenHeight(30)),
 
-                          // child: Stack(
-                          //   children: <Widget>[
-                          //     CircleAvatar(
-                          //       radius: getProportionateScreenWidth(100),
-                          //       backgroundImage: NetworkImage(
-                          //         (tea[index].data() as Map)['image'] ?? ' ',
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
+                            // child: Stack(
+                            //   children: <Widget>[
+                            //     CircleAvatar(
+                            //       radius: getProportionateScreenWidth(100),
+                            //       backgroundImage: NetworkImage(
+                            //         (tea[index].data() as Map)['image'] ?? ' ',
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                          ),
                         ),
                       ],
                     ),

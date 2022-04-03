@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileInfo extends StatefulWidget {
+
   @override
   State<ProfileInfo> createState() => _ProfileInfoState();
 }
@@ -54,6 +54,8 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
   final _formKey = GlobalKey<FormState>();
 
+  String? _currentNickname;
+
   String? _currentfirstName;
 
   String? _currentlastName;
@@ -67,6 +69,26 @@ class _ProfileInfoState extends State<ProfileInfo> {
   String? _currentdisease;
 
   String? _currentImage;
+
+  TextEditingController _changeNameTextController = TextEditingController();
+
+  // Future<void> _updateMyData(String newName) async{
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setString('myName',newName);
+  //   setState(() {
+  //     _currentNickname = newName;
+  //   });
+  //   MyProfileData newMyData = MyProfileData(
+  //       myName: newName,
+  //   );
+  //   widget.updateMyData(newMyData);
+  // }
+  //
+  // @override
+  // void initState() {
+  //   _currentNickname = widget.myData.myName;
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +126,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                     String? _height = _userData.height;
                     String? _weight = _userData.weight;
                     String? _disease = _userData.disease;
+                    String? _nickname=_userData.nickname;
                     String? _profil=_userData.image;
                     if(_profil==null){
                       _profil='https://coflex.com.tr/wp-content/uploads/2021/01/resim-yok.jpg';
@@ -166,6 +189,48 @@ class _ProfileInfoState extends State<ProfileInfo> {
                             ],
                           ),
                           SizedBox(height: getProportionateScreenHeight(20)),
+
+                          //user nickname
+                          TextFormField(
+                            onChanged: (val) {
+                              setState(() => _currentNickname = val);
+                              if (val.isEmpty) {
+                                setState(() {
+                                  _currentNickname = _nickname;
+                                });
+                              }
+                            },
+                            decoration: InputDecoration(
+                              labelText: "Kullanıcı ismi",
+                              floatingLabelBehavior:
+                              FloatingLabelBehavior.always,
+                              contentPadding: EdgeInsets.all(20),
+                              hintText:_userData.nickname,
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.edit_outlined),
+                                onPressed: () async {
+                                  User? user =
+                                      FirebaseAuth.instance.currentUser;
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(user!.uid)
+                                      .set({
+                                    'uid': user.uid,
+                                    'firstName': _firstName,
+                                    'lastName': _lastName,
+                                    'age': _age,
+                                    'height': _height,
+                                    'weight': _weight,
+                                    'disease': _disease,
+                                    'image':_profil,
+                                    'nickname':_currentNickname,
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(height: getProportionateScreenHeight(20)),
                           //firstName Form
                           TextFormField(
                             onChanged: (val) {
@@ -199,6 +264,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                     'weight': _weight,
                                     'disease': _disease,
                                     'image':_profil,
+                                    'nickname':_nickname
                                   });
                                 },
                               ),
@@ -239,6 +305,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                     'weight': _weight,
                                     'disease': _disease,
                                     'image':_profil,
+                                    'nickname':_nickname,
                                   });
                                 },
                               ),
@@ -279,6 +346,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                     'weight': _weight,
                                     'disease': _disease,
                                     'image':_profil,
+                                    'nickname':_nickname,
                                   });
                                 },
                               ),
@@ -319,6 +387,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                     'weight': _weight,
                                     'disease': _disease,
                                     'image':_profil,
+                                    'nickname':_nickname,
                                   });
                                 },
                               ),
@@ -358,6 +427,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                     'weight': _currentweight,
                                     'disease': _disease,
                                     'image':_profil,
+                                    'nickname':_nickname,
                                   });
                                 },
                               ),
@@ -398,6 +468,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                                     'weight': _weight,
                                     'disease': _currentdisease,
                                     'image':_profil,
+                                    'nickname':_nickname,
                                   });
                                 },
                               ),

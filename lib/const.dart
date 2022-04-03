@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitterapi/services/user_database.dart';
 import 'package:flutter/material.dart';
 
 //const kPrimaryColor=Color(0xFF339000);
@@ -24,6 +27,9 @@ const String kHeightNullError="Lütfen boyunuzu giriniz";
 const String kWeightNullError="Lütfen kilonuzu giriniz";
 const String kDiseaseNullError ="Lütfen hastalığınızı giriniz";
 const String kDiscomfortNullError ="Lütfen rahatsızlığınızı giriniz";
+
+
+
 
 
 

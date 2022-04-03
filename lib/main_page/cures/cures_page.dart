@@ -8,6 +8,8 @@ import 'package:fitterapi/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
+
 
 class CuresPage extends StatefulWidget {
   @override
@@ -332,15 +334,11 @@ class _CuresPageState extends State<CuresPage> {
                             ),
                             margin: EdgeInsets.only(
                                 top: getProportionateScreenHeight(30)),
-                            child: Stack(
-                              children: <Widget>[
-                                CircleAvatar(
-                                  radius: getProportionateScreenWidth(100),
-                                  backgroundImage: NetworkImage(
-                                    cures.image!,
-                                  ),
-                                ),
-                              ],
+                            child: CircleAvatar(
+                              radius: getProportionateScreenWidth(50),
+                              backgroundImage: NetworkImage(
+                                cures.image!,
+                              ),
                             ),
                           ),
                         ],

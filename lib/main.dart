@@ -12,6 +12,8 @@ import 'package:get/get.dart';
 
 import 'main_page/cures/new_cure_screen.dart';
 
+import 'package:flutter/services.dart';
+
 // void main() {
 //   runApp(MyApp());
 // }
@@ -20,7 +22,9 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
-
+  // belki trenasparent yapıyor statusbar ı. saat ve şarj bildiri bölgesi
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
   runApp(MyApp());
 }
 

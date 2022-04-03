@@ -15,6 +15,7 @@ class UserData {
   String? weight;
   String? disease;
   String? image;
+  String? nickname;
 
   UserData({
     this.uid,
@@ -24,7 +25,8 @@ class UserData {
     this.height,
     this.weight,
     this.disease,
-    this.image
+    this.image,
+    this.nickname
   });
 
 
@@ -36,8 +38,8 @@ class UserData {
         height= snap['height'],
         weight= snap['weight'],
         disease= snap['disease'],
-        image= snap['image']
-
+        image= snap['image'],
+        nickname= snap['nickname']
   ;
 
 }

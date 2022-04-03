@@ -1,4 +1,5 @@
 import 'package:fitterapi/const.dart';
+import 'package:fitterapi/main_page/forum/profil_data.dart';
 import 'package:fitterapi/main_page/profile/add_page.dart';
 
 import 'package:fitterapi/main_page/profile/profile_info.dart';
@@ -16,7 +17,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   final AuthService _auth = AuthService();
 
   @override

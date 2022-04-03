@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:fitterapi/main_page/home/home_screen.dart';
+import 'package:fitterapi/main_page/prepared/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../main_page/home/home_screen.dart';
@@ -30,6 +31,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   String? height;
   String? weight;
   String? disease; // hastalık
+  String? nickname=Utils().generateRandomString(6);
 
   void addError({String? error}) {
     if (!errors.contains(error))
@@ -106,6 +108,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                   'weight': weight,
                   'disease': disease,
                   'image': _pickImage,
+                  'nickname':nickname,
                 });
                 _formKey.currentState!.save();
                 // eğer her şey doğruysa giriş ekranına git
