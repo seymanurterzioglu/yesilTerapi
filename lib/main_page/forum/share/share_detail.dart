@@ -6,13 +6,13 @@ import 'package:fitterapi/services/cloud_store.dart';
 import 'package:flutter/material.dart';
 import '../../../const.dart';
 import '../../../size_config.dart';
-import '../profil_data.dart';
+import 'comment.dart';
+
 
 class ShareDetail extends StatefulWidget {
   DocumentSnapshot document;
 
-  ShareDetail(
-      {required this.document});
+  ShareDetail({required this.document});
 
   @override
   _ShareDetailState createState() => _ShareDetailState();
@@ -21,15 +21,20 @@ class ShareDetail extends StatefulWidget {
 class _ShareDetailState extends State<ShareDetail> {
   late DocumentSnapshot data;
   late Shares share = Shares.fromSnapshot(widget.document);
+  late int newCommentCount=share.shareCommentCount;
 
   final TextEditingController _msgTextController = new TextEditingController();
   FocusNode _writingTextFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       backgroundColor: Colors.white,
+      // klavyeden oluşan renderflex hatası için
+       //resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
         toolbarHeight: getProportionateScreenHeight(95),
@@ -44,193 +49,223 @@ class _ShareDetailState extends State<ShareDetail> {
               fontWeight: FontWeight.bold),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Card(
-                    elevation: 2.0,
-                    child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  share.about == 'Çay'
-                                      ? DBIcons.tea
-                                      : share.about == 'Kür'
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('shares').doc(share.shareId)
+            .collection('comment').orderBy('commentTime',descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return LinearProgressIndicator();
+          newCommentCount=snapshot.data!.docs.length;
+          return Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Card(
+                        elevation: 2.0,
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      share.about == 'Çay'
+                                          ? DBIcons.tea
+                                          : share.about == 'Kür'
                                           ? DBIcons.mortar
                                           : share.about == 'Soru'
-                                              ? Icons.announcement_rounded
-                                              : Icons.insert_drive_file,
-                                  size: getProportionateScreenHeight(32),
-                                  color: kPrimaryColor,
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  //  kullanıcı ismine tıklandığında kullanıcının profil sayfasını götürecek
-                                  GestureDetector(
-                                    onTap: () {},
-                                    child: Text(
-                                      share.userName,
-                                      style: TextStyle(
-                                        fontSize:
-                                            getProportionateScreenHeight(20),
-                                      ),
+                                          ? Icons.announcement_rounded
+                                          : Icons.insert_drive_file,
+                                      size: getProportionateScreenHeight(32),
+                                      color: kPrimaryColor,
                                     ),
                                   ),
-                                  SizedBox(
-                                      height: getProportionateScreenHeight(2)),
-                                  Text(
-                                    Utils().readTimestamp(share.shareTime),
-                                    style: TextStyle(
-                                        fontSize:
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    children: [
+                                      //  kullanıcı ismine tıklandığında kullanıcının profil sayfasını götürecek
+                                      GestureDetector(
+                                        onTap: () {},
+                                        child: Text(
+                                          share.userName,
+                                          style: TextStyle(
+                                            fontSize:
+                                            getProportionateScreenHeight(20),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          height: getProportionateScreenHeight(
+                                              2)),
+                                      Text(
+                                        Utils().readTimestamp(share.shareTime),
+                                        style: TextStyle(
+                                            fontSize:
                                             getProportionateScreenHeight(15)),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                          // paylaşımın başlığı
-                          SizedBox(
-                            height: getProportionateScreenHeight(5),
-                          ),
-                          Row(
-                            children: [
-                              Flexible(
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(7, 4, 10, 2),
-                                  child: Text(
-                                    share.shareTitle,
-                                    style: TextStyle(
-                                        fontSize:
+                              // paylaşımın başlığı
+                              SizedBox(
+                                height: getProportionateScreenHeight(5),
+                              ),
+                              Row(
+                                children: [
+                                  Flexible(
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(7, 4, 10, 2),
+                                      child: Text(
+                                        share.shareTitle,
+                                        style: TextStyle(
+                                            fontSize:
                                             getProportionateScreenHeight(22),
-                                        fontWeight: FontWeight.bold),
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
                                   ),
+                                ],
+                              ),
+                              Divider(height: 4, color: Colors.black26),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    4, 10, 4, 10),
+                                child: Text(
+                                  share.shareContent,
+                                  style: TextStyle(
+                                      fontSize: getProportionateScreenHeight(
+                                          20)),
+                                ),
+                              ),
+                              Divider(height: 4, color: Colors.black26),
+                              // Beğen-Yorum
+                              Padding(
+                                padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceEvenly,
+                                  children: [
+                                    // Beğen
+                                    Row(
+                                      children: [
+                                        Icon(Icons.thumb_up_alt_outlined),
+                                        SizedBox(
+                                            width: getProportionateScreenWidth(
+                                                5)),
+
+                                        // farklı renklerde metinler yazabilmek için
+                                        RichText(
+                                          text: TextSpan(children: <TextSpan>[
+                                            TextSpan(
+                                                text: 'Beğen ',
+                                                style: TextStyle(
+                                                  color: kPrimaryColor,
+                                                  fontSize:
+                                                  getProportionateScreenHeight(
+                                                      18),
+                                                )),
+                                            TextSpan(
+                                                text: '(${share
+                                                    .shareLikeCount})',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize:
+                                                  getProportionateScreenHeight(
+                                                      18),
+                                                )),
+                                          ]),
+                                        ),
+                                        // Text(
+                                        //   "Beğen (${share.shareLikeCount})",
+                                        //   style: TextStyle(
+                                        //       color: kPrimaryColor,
+                                        //       fontSize: getProportionateScreenHeight(18),
+                                        //       fontWeight: FontWeight.bold),
+                                        // ),
+                                      ],
+                                    ),
+                                    // Yorum
+                                    Row(
+                                      children: [
+                                        Icon(Icons.comment_outlined),
+                                        SizedBox(
+                                            width: getProportionateScreenWidth(
+                                                5)),
+                                        RichText(
+                                          text: TextSpan(children: <TextSpan>[
+                                            TextSpan(
+                                                text: 'Yorum ',
+                                                style: TextStyle(
+                                                  color: kPrimaryColor,
+                                                  fontSize:
+                                                  getProportionateScreenHeight(
+                                                      18),
+                                                )),
+                                            TextSpan(
+                                                text:
+                                                '(${newCommentCount})',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize:
+                                                  getProportionateScreenHeight(
+                                                      18),
+                                                )),
+                                          ]),
+                                        ),
+                                        // Text(
+                                        //   "Yorum (${share.shareCommentCount})",
+                                        //   style: TextStyle(
+                                        //       color: kPrimaryColor,
+                                        //       fontSize: getProportionateScreenHeight(18),
+                                        //       fontWeight: FontWeight.bold),
+                                        // ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
-                          Divider(height: 4, color: Colors.black26),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(4, 10, 4, 10),
-                            child: Text(
-                              share.shareContent,
-                              style: TextStyle(
-                                  fontSize: getProportionateScreenHeight(20)),
-                            ),
-                          ),
-                          Divider(height: 4, color: Colors.black26),
-                          // Beğen-Yorum
-                          Padding(
-                            padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                // Beğen
-                                Row(
-                                  children: [
-                                    Icon(Icons.thumb_up_alt_outlined),
-                                    SizedBox(
-                                        width: getProportionateScreenWidth(5)),
-
-                                    // farklı renklerde metinler yazabilmek için
-                                    RichText(
-                                      text: TextSpan(children: <TextSpan>[
-                                        TextSpan(
-                                            text: 'Beğen ',
-                                            style: TextStyle(
-                                              color: kPrimaryColor,
-                                              fontSize:
-                                                  getProportionateScreenHeight(
-                                                      18),
-                                            )),
-                                        TextSpan(
-                                            text: '(${share.shareLikeCount})',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize:
-                                                  getProportionateScreenHeight(
-                                                      18),
-                                            )),
-                                      ]),
-                                    ),
-                                    // Text(
-                                    //   "Beğen (${share.shareLikeCount})",
-                                    //   style: TextStyle(
-                                    //       color: kPrimaryColor,
-                                    //       fontSize: getProportionateScreenHeight(18),
-                                    //       fontWeight: FontWeight.bold),
-                                    // ),
-                                  ],
-                                ),
-                                // Yorum
-                                Row(
-                                  children: [
-                                    Icon(Icons.comment_outlined),
-                                    SizedBox(
-                                        width: getProportionateScreenWidth(5)),
-                                    RichText(
-                                      text: TextSpan(children: <TextSpan>[
-                                        TextSpan(
-                                            text: 'Yorum ',
-                                            style: TextStyle(
-                                              color: kPrimaryColor,
-                                              fontSize:
-                                                  getProportionateScreenHeight(
-                                                      18),
-                                            )),
-                                        TextSpan(
-                                            text:
-                                                '(${share.shareCommentCount})',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize:
-                                                  getProportionateScreenHeight(
-                                                      18),
-                                            )),
-                                      ]),
-                                    ),
-                                    // Text(
-                                    //   "Yorum (${share.shareCommentCount})",
-                                    //   style: TextStyle(
-                                    //       color: kPrimaryColor,
-                                    //       fontSize: getProportionateScreenHeight(18),
-                                    //       fontWeight: FontWeight.bold),
-                                    // ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
+                      SizedBox(height: getProportionateScreenHeight(10)),
+                      snapshot.data!.docs.length > 0 ? Expanded(
+                        child: ListView(
+                          shrinkWrap: true,
+                          children: snapshot.data!.docs.map((document) {
+                            return commentListItem(document, size);
+                          }).toList(),
+                        ),
+                      )
+                      : Container(child: Text('Yorum yok')),
+                    ],
                   ),
-                  SizedBox(height: getProportionateScreenHeight(10)),
-                  commentListItem(size),
-                  commentListItem(size),
-                ],
+                ),
               ),
-            ),
-          ),
-          _buildTextComposer(),
-        ],
+              _buildTextComposer(),
+            ],
+          );
+        },
       ),
     );
+
   }
 
-  Widget commentListItem(Size size) {
+  // firebase de ki share comment count günceller
+  updateCommentCount(){
+    FirebaseFirestore.instance.collection('shares').doc(share.shareId).update({'shareCommentCount': (newCommentCount)});
+  }
+
+  Widget commentListItem(DocumentSnapshot data, Size size) {
     return Padding(
       padding: const EdgeInsets.all(6.0),
       child: Row(
@@ -239,7 +274,7 @@ class _ShareDetailState extends State<ShareDetail> {
           Container(
             width: getProportionateScreenWidth(48),
             height: getProportionateScreenHeight(48),
-            child: Image.asset('assets/images/back2.jpg'),
+            child: Image.network(share.userImage),
           ),
           SizedBox(width: getProportionateScreenWidth(15)),
           Column(
@@ -262,7 +297,7 @@ class _ShareDetailState extends State<ShareDetail> {
                         height: getProportionateScreenHeight(5),
                       ),
                       Text(
-                        'sfsdfrfejlfkjdslkjflksdjflkjsdlfkjdslkfjlsdkjflksdjlfkj',
+                        data['commentContent'],
                         maxLines: null,
                       ),
                     ],
@@ -283,7 +318,7 @@ class _ShareDetailState extends State<ShareDetail> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(Utils().readTimestamp(share.shareTime)),
+                        Text(Utils().readTimestamp(data['commentTime'])),
                         Text(
                           'Beğen',
                           style: TextStyle(
@@ -305,6 +340,8 @@ class _ShareDetailState extends State<ShareDetail> {
   }
 
   Widget _buildTextComposer() {
+    // sadece burada düzgün bir şekilde update işlemini yerine getiriyor
+    updateCommentCount();
     return IconTheme(
       data: IconThemeData(color: kPrimaryColor),
       child: Container(
@@ -317,7 +354,7 @@ class _ShareDetailState extends State<ShareDetail> {
                 elevation: 4.0,
                 shape: RoundedRectangleBorder(
                   borderRadius:
-                      BorderRadius.circular(getProportionateScreenHeight(12)),
+                  BorderRadius.circular(getProportionateScreenHeight(12)),
                 ),
                 child: Container(
                   child: Padding(
@@ -371,7 +408,10 @@ class _ShareDetailState extends State<ShareDetail> {
   // Şimdiki kullanıcın ismini buraya göndermem gerek
   Future<void> _handleSubmitted(String text) async {
     try {
-      CloudStore.commentToShare(share.shareId, _msgTextController.text,share.userName);
+      CloudStore.commentToShare(
+          share.shareId, _msgTextController.text, share.userName);
+      FocusScope.of(context).requestFocus(FocusNode());
+      _msgTextController.text = '';
     } catch (e) {
       print('Yorum göndermede sorun oldu');
     }

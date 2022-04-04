@@ -16,6 +16,7 @@ class CloudStore{
       'commentTime': DateTime.now().millisecondsSinceEpoch,
       'commentContent': commentContent,
       'commentLikeCount': 0,
+      // 'userImage':
     });
   }
 

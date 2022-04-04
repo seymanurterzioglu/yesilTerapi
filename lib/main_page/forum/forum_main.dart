@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fitterapi/main_page/forum/profil_data.dart';
 import 'package:fitterapi/main_page/forum/share/share_detail.dart';
 import 'package:fitterapi/main_page/forum/share/share_info.dart';
 import 'package:fitterapi/main_page/forum/share/shares.dart';
@@ -14,7 +13,6 @@ import '../../const.dart';
 import '../../size_config.dart';
 
 class ForumMain extends StatefulWidget {
-
   @override
   _ForumMainState createState() => _ForumMainState();
 }

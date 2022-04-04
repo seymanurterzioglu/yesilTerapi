@@ -28,10 +28,11 @@ class _ShareInfoState extends State<ShareInfo> {
   String? title;
   String? id;
   String? user;
+  String? image;
 
   bool _isLoading = false;
 
-  Future<void> _sendShareInFirebase(String shContent, String id,String title,String user) async {
+  Future<void> _sendShareInFirebase(String shContent, String id,String title,String user,String image) async {
     setState(() {
       _isLoading = true;
     });
@@ -39,6 +40,7 @@ class _ShareInfoState extends State<ShareInfo> {
     FirebaseFirestore.instance.collection('shares').doc(shareId).set({
       'userName': user,
       'userId': id,
+      'userImage':image,
       'shareTime': DateTime.now().millisecondsSinceEpoch,
       'shareContent': shContent,
       'shareLikeCount': 2,
@@ -76,7 +78,7 @@ class _ShareInfoState extends State<ShareInfo> {
               primary: Colors.white,
             ),
             onPressed: () {
-              _sendShareInFirebase(content!, id!,title!,user!);
+              _sendShareInFirebase(content!, id!,title!,user!,image!);
             },
             child: Padding(
               padding: const EdgeInsets.all(12.0),
@@ -98,6 +100,7 @@ class _ShareInfoState extends State<ShareInfo> {
             String? _firstName = _userData!.firstName;
             String? _lastName = _userData.lastName;
             String? _nickname =_userData.nickname;
+            image=_userData.image;
             user=_nickname;
             id = _userData.uid;
             return Stack(

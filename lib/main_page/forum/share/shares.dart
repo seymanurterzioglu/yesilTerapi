@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Shares {
   final String userName;
+  final String userImage;
   final int shareTime;
   final String shareId;
   final String shareContent;
@@ -12,6 +13,7 @@ class Shares {
 
   Shares(
       {required this.userName,
+        required this.userImage,
       required this.shareTime,
       required this.shareContent,
       required this.shareLikeCount,
@@ -22,6 +24,7 @@ class Shares {
 
   Shares.fromSnapshot(DocumentSnapshot snapshot)
       : userName = snapshot['userName'],
+        userImage = snapshot['userImage'],
         shareTime = snapshot['shareTime'],
         shareContent = snapshot['shareContent'],
         shareLikeCount = snapshot['shareLikeCount'],

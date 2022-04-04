@@ -14,6 +14,7 @@ class SharesDatabase{
     return snapshot.docs.map((doc) {
       return Shares(
         userName: doc.get('userName') ?? '',
+        userImage: doc.get('userImage') ?? '',
         shareTime: doc.get('shareTime') ?? '',
         shareContent: doc.get('shareContent') ?? '',
         shareLikeCount: doc.get('shareLikeCount') ?? '',
