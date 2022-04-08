@@ -43,8 +43,8 @@ class _ShareInfoState extends State<ShareInfo> {
       'userImage':image,
       'shareTime': DateTime.now().millisecondsSinceEpoch,
       'shareContent': shContent,
-      'shareLikeCount': 2,
-      'shareCommentCount': 4,
+      'shareLikeCount': 0,
+      'shareCommentCount': 0,
       'about': widget.choice,
       'shareTitle':title,
       'shareId':shareId

@@ -209,6 +209,9 @@ class _ProfileInfoState extends State<ProfileInfo> {
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.edit_outlined),
                                 onPressed: () async {
+                                  if(_currentNickname==null){
+                                    _currentNickname=_nickname;
+                                  }
                                   User? user =
                                       FirebaseAuth.instance.currentUser;
                                   await FirebaseFirestore.instance
@@ -250,6 +253,9 @@ class _ProfileInfoState extends State<ProfileInfo> {
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.edit_outlined),
                                 onPressed: () async {
+                                  if(_currentfirstName==null){
+                                    _currentfirstName=_firstName;
+                                  }
                                   User? user =
                                       FirebaseAuth.instance.currentUser;
                                   await FirebaseFirestore.instance
@@ -291,6 +297,9 @@ class _ProfileInfoState extends State<ProfileInfo> {
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.edit_outlined),
                                 onPressed: () async {
+                                  if(_currentlastName==null){
+                                    _currentlastName=_lastName;
+                                  }
                                   User? user =
                                       FirebaseAuth.instance.currentUser;
                                   await FirebaseFirestore.instance
@@ -332,6 +341,9 @@ class _ProfileInfoState extends State<ProfileInfo> {
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.edit_outlined),
                                 onPressed: () async {
+                                  if(_currentage==null){
+                                    _currentage=_age;
+                                  }
                                   User? user =
                                       FirebaseAuth.instance.currentUser;
                                   await FirebaseFirestore.instance
@@ -373,6 +385,9 @@ class _ProfileInfoState extends State<ProfileInfo> {
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.edit_outlined),
                                 onPressed: () async {
+                                  if(_currentheight==null){
+                                    _currentheight=_height;
+                                  }
                                   User? user =
                                       FirebaseAuth.instance.currentUser;
                                   await FirebaseFirestore.instance
@@ -413,6 +428,9 @@ class _ProfileInfoState extends State<ProfileInfo> {
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.edit_outlined),
                                 onPressed: () async {
+                                  if(_currentweight==null){
+                                    _currentweight=_weight;
+                                  }
                                   User? user =
                                       FirebaseAuth.instance.currentUser;
                                   await FirebaseFirestore.instance
@@ -454,6 +472,9 @@ class _ProfileInfoState extends State<ProfileInfo> {
                               suffixIcon: IconButton(
                                 icon: Icon(Icons.edit_outlined),
                                 onPressed: () async {
+                                  if(_currentdisease==null){
+                                    _currentdisease=_disease;
+                                  }
                                   User? user =
                                       FirebaseAuth.instance.currentUser;
                                   await FirebaseFirestore.instance
@@ -475,29 +496,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                             ),
                           ),
                           SizedBox(height: getProportionateScreenHeight(20)),
-                          // Padding(
-                          //   padding: EdgeInsets.symmetric(
-                          //       horizontal: getProportionateScreenHeight(50),
-                          //       vertical: getProportionateScreenWidth(10)),
-                          //   child: Button(
-                          //     text: "Düzenle",
-                          //     press: () async {
-                          //       User? user = FirebaseAuth.instance.currentUser;
-                          //       await FirebaseFirestore.instance
-                          //           .collection('users')
-                          //           .doc(user!.uid)
-                          //           .set({
-                          //         'uid': user.uid,
-                          //         'firstName': _firstName,
-                          //         'lastName': _lastName,
-                          //         'age': _age,
-                          //         'height': _height,
-                          //         'weight': _weight,
-                          //         'disease': _disease,
-                          //       });
-                          //     },
-                          //   ),
-                          // ),
+
                         ],
                       ),
                     );
@@ -506,15 +505,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
                   }
                 },
               ),
-              // Button(
-              //   text: 'Profili Düzenle',
-              //   press: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(builder: (context) => ProfileEdit()),
-              //     );
-              //   },
-              // ),
+
             ],
           ),
         ),

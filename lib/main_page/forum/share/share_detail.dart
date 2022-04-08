@@ -6,13 +6,14 @@ import 'package:fitterapi/services/cloud_store.dart';
 import 'package:flutter/material.dart';
 import '../../../const.dart';
 import '../../../size_config.dart';
+import '../profil_data.dart';
 import 'comment.dart';
 
 
 class ShareDetail extends StatefulWidget {
   DocumentSnapshot document;
-
-  ShareDetail({required this.document});
+  final MyProfileData myData;
+  ShareDetail({required this.document,required this.myData});
 
   @override
   _ShareDetailState createState() => _ShareDetailState();
@@ -22,12 +23,25 @@ class _ShareDetailState extends State<ShareDetail> {
   late DocumentSnapshot data;
   late Shares share = Shares.fromSnapshot(widget.document);
   late int newCommentCount=share.shareCommentCount;
+  String? nickname;
+  String? image;
+
+
+
+  @override
+  void initState() {
+
+    super.initState();
+  }
+
 
   final TextEditingController _msgTextController = new TextEditingController();
   FocusNode _writingTextFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
+    nickname=widget.myData.myName;
+    image=widget.myData.image;
     final size = MediaQuery
         .of(context)
         .size;
@@ -274,7 +288,7 @@ class _ShareDetailState extends State<ShareDetail> {
           Container(
             width: getProportionateScreenWidth(48),
             height: getProportionateScreenHeight(48),
-            child: Image.network(share.userImage),
+            child: Image.network(data['userImage']),
           ),
           SizedBox(width: getProportionateScreenWidth(15)),
           Column(
@@ -288,7 +302,7 @@ class _ShareDetailState extends State<ShareDetail> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        share.userName,
+                        data['userName'],
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: getProportionateScreenHeight(18)),
@@ -324,11 +338,11 @@ class _ShareDetailState extends State<ShareDetail> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.grey),
                         ),
-                        Text(
-                          'Cevap Ver',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.grey),
-                        ),
+                        // Text(
+                        //   'Cevap Ver',
+                        //   style: TextStyle(
+                        //       fontWeight: FontWeight.bold, color: Colors.grey),
+                        // ),
                       ],
                     )),
               ),
@@ -408,8 +422,9 @@ class _ShareDetailState extends State<ShareDetail> {
   // Şimdiki kullanıcın ismini buraya göndermem gerek
   Future<void> _handleSubmitted(String text) async {
     try {
+      //print('nickname: ${widget.myData.myName}');
       CloudStore.commentToShare(
-          share.shareId, _msgTextController.text, share.userName);
+          share.shareId, _msgTextController.text, nickname!,image!);
       FocusScope.of(context).requestFocus(FocusNode());
       _msgTextController.text = '';
     } catch (e) {

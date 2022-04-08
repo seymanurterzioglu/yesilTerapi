@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../prepared/bottom_nav_bar.dart';
 
-
 class HomeScreen extends StatefulWidget {
   static String routeName = "/login";
 
@@ -16,38 +15,30 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // çözümünü bulamadım
-  // late yapınca LateInitializationError: Field 'myName' has not been initialized. hatası
-  // String? yapınca null ceck used on  null veriable hatası
-    MyProfileData? myData;
-  final currentUser = FirebaseAuth.instance.currentUser;
+  // final currentUser = FirebaseAuth.instance.currentUser;
+  // late MyProfileData myData = MyProfileData(myName: ' ', image: ' ');
   //
-  // @override
-  // void initState(){
-  //   _takeMyData();
-  //   super.initState();
+  // Future<void> _takeMyData(String myName, String image) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //
+  //   if (prefs.get('myName') == null) {
+  //     String tempName = Utils().generateRandomString(6);
+  //     prefs.setString('myName', tempName);
+  //     myName = tempName;
+  //   }
+  //   setState(() {
+  //     myData = MyProfileData(
+  //       myName: myName,
+  //       image: image,
+  //     );
+  //   });
   // }
-
-  Future<void> _takeMyData(String myName) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    if (prefs.get('myName') == null) {
-      String tempName = Utils().generateRandomString(6);
-      prefs.setString('myName',tempName);
-      myName = tempName;
-    }
-    setState(() {
-      myData = MyProfileData(
-        myName: myName,
-      );
-    });
-  }
-
-  void updateMyData(MyProfileData newMyData) {
-    setState(() {
-      myData = newMyData;
-    });
-  }
+  //
+  // void updateMyData(MyProfileData newMyData) {
+  //   setState(() {
+  //     myData = newMyData;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -55,24 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: BottomNavBar(),
-
-
     );
   }
 }
-//
-// StreamBuilder<UserData>(
-// stream: userDatabase.userData,
-// builder: (context, snapshot) {
-// if (snapshot.hasData) {
-// UserData? _userData = snapshot.data;
-// _takeMyData(_userData!.nickname!);
-// return BottomNavBar();
-// }
-// return Container(
-// child: Center(
-// child: CircularProgressIndicator(),
-// ),
-// );
-// }
-// ),

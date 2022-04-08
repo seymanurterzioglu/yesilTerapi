@@ -474,7 +474,7 @@ class _CuresPageState extends State<CuresPage> {
                                             builder: (BuildContext context,
                                                 AsyncSnapshot snapshot) {
                                               if (snapshot.data == null) {
-                                                return Text(' ');
+                                                return Text('');
                                               }
                                               return IconButton(
                                                 onPressed: () => snapshot

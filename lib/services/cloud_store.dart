@@ -8,7 +8,7 @@ class CloudStore{
   //
   // }
 
-  static Future<void> commentToShare(String shareId,String commentContent, String userName) async {
+  static Future<void> commentToShare(String shareId,String commentContent, String userName,String image) async {
     String commentId = Utils().generateRandomString(20);
     FirebaseFirestore.instance.collection('shares').doc(shareId).collection('comment').doc(commentId).set({
       'shareId':shareId,
@@ -16,6 +16,7 @@ class CloudStore{
       'commentTime': DateTime.now().millisecondsSinceEpoch,
       'commentContent': commentContent,
       'commentLikeCount': 0,
+      'userImage':image,
       // 'userImage':
     });
   }

@@ -121,7 +121,8 @@ Widget detailCourse(BuildContext context, DocumentSnapshot document) {
                                 icon: snapshot.data.docs.length == 0
                                     ? Icon(Icons.star_border_outlined,
                                     size: getProportionateScreenHeight(
-                                        45))
+                                        45),
+                                color:Colors.grey)
                                     : Icon(Icons.star,
                                     size: getProportionateScreenHeight(
                                         45),

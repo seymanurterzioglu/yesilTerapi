@@ -11,8 +11,11 @@ import 'package:flutter/widgets.dart';
 
 import '../../const.dart';
 import '../../size_config.dart';
+import 'profil_data.dart';
 
 class ForumMain extends StatefulWidget {
+  final MyProfileData myData;
+  ForumMain({required this.myData});
   @override
   _ForumMainState createState() => _ForumMainState();
 }
@@ -322,6 +325,7 @@ class _ForumMainState extends State<ForumMain>
       MaterialPageRoute(
           builder: (context) => ShareDetail(
                 document: document,
+            myData: widget.myData,
               )),
     );
   }
@@ -441,13 +445,6 @@ class _ForumMainState extends State<ForumMain>
                                   )),
                             ]),
                           ),
-                          // Text(
-                          //   "Beğen (${share.shareLikeCount})",
-                          //   style: TextStyle(
-                          //       color: kPrimaryColor,
-                          //       fontSize: getProportionateScreenHeight(18),
-                          //       fontWeight: FontWeight.bold),
-                          // ),
                         ],
                       ),
                       // Yorum
@@ -471,13 +468,6 @@ class _ForumMainState extends State<ForumMain>
                                   )),
                             ]),
                           ),
-                          // Text(
-                          //   "Yorum (${share.shareCommentCount})",
-                          //   style: TextStyle(
-                          //       color: kPrimaryColor,
-                          //       fontSize: getProportionateScreenHeight(18),
-                          //       fontWeight: FontWeight.bold),
-                          // ),
                         ],
                       ),
                     ],
