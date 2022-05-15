@@ -312,8 +312,8 @@ Widget detailCures(BuildContext context, DocumentSnapshot document) {
                                               .doc(FirebaseAuth
                                                   .instance.currentUser!.email)
                                               .collection('cures')
-                                              .where('curesName',
-                                                  isEqualTo: cures.curesName)
+                                              .where('curesId',
+                                                  isEqualTo: cures.curesId)
                                               .snapshots(),
                                           builder: (BuildContext context,
                                               AsyncSnapshot snapshot) {
@@ -336,6 +336,7 @@ Widget detailCures(BuildContext context, DocumentSnapshot document) {
                                                       .delete();
                                                   print('Deleted from favorites');
                                                 }
+                                                Navigator.of(context).pop();
                                               },
                                               icon: snapshot.data.docs.length == 0
                                                   ? Icon(

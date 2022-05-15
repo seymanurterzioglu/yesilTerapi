@@ -61,6 +61,7 @@ class TeasDatabase {
     }else{
       return null;
     }
+    return null;
   }
 
   Stream<QuerySnapshot> getPregnancyList(){

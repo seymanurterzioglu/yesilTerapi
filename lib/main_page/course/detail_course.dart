@@ -102,10 +102,10 @@ Widget detailCourse(BuildContext context, DocumentSnapshot document) {
                                 return Text(' ');
                               }
                               return IconButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   if (snapshot.data.docs.length != 0) {
                                     // delete
-                                    FirebaseFirestore.instance
+                                    await FirebaseFirestore.instance
                                         .collection('users-favorites')
                                         .doc(FirebaseAuth
                                             .instance.currentUser!.email)

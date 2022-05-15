@@ -2,7 +2,6 @@ import 'package:fitterapi/button.dart';
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/sign_in/sign_in_screen.dart';
 import 'package:fitterapi/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SplashBody extends StatefulWidget {

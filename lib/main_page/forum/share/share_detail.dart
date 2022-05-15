@@ -7,13 +7,15 @@ import 'package:flutter/material.dart';
 import '../../../const.dart';
 import '../../../size_config.dart';
 import '../profil_data.dart';
-import 'comment.dart';
 
 
+
+// ignore: must_be_immutable
 class ShareDetail extends StatefulWidget {
   DocumentSnapshot document;
   final MyProfileData myData;
-  ShareDetail({required this.document,required this.myData});
+  final ValueChanged<MyProfileData> updateMyData;
+  ShareDetail({required this.document,required this.myData,required this.updateMyData});
 
   @override
   _ShareDetailState createState() => _ShareDetailState();
@@ -160,73 +162,65 @@ class _ShareDetailState extends State<ShareDetail> {
                                           20)),
                                 ),
                               ),
-                              Divider(height: 4, color: Colors.black26),
+                              //Divider(height: 4, color: Colors.black26),
                               // Beğen-Yorum
                               Padding(
                                 padding: EdgeInsets.only(top: 8.0, bottom: 8.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment
-                                      .spaceEvenly,
+                                      .end,
                                   children: [
                                     // Beğen
-                                    Row(
-                                      children: [
-                                        Icon(Icons.thumb_up_alt_outlined),
-                                        SizedBox(
-                                            width: getProportionateScreenWidth(
-                                                5)),
-
-                                        // farklı renklerde metinler yazabilmek için
-                                        RichText(
-                                          text: TextSpan(children: <TextSpan>[
-                                            TextSpan(
-                                                text: 'Beğen ',
-                                                style: TextStyle(
-                                                  color: kPrimaryColor,
-                                                  fontSize:
-                                                  getProportionateScreenHeight(
-                                                      18),
-                                                )),
-                                            TextSpan(
-                                                text: '(${share
-                                                    .shareLikeCount})',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize:
-                                                  getProportionateScreenHeight(
-                                                      18),
-                                                )),
-                                          ]),
-                                        ),
-                                        // Text(
-                                        //   "Beğen (${share.shareLikeCount})",
-                                        //   style: TextStyle(
-                                        //       color: kPrimaryColor,
-                                        //       fontSize: getProportionateScreenHeight(18),
-                                        //       fontWeight: FontWeight.bold),
-                                        // ),
-                                      ],
-                                    ),
+                                    // Row(
+                                    //   children: [
+                                    //     Icon(Icons.thumb_up_alt_outlined),
+                                    //     SizedBox(
+                                    //         width: getProportionateScreenWidth(
+                                    //             5)),
+                                    //
+                                    //     // farklı renklerde metinler yazabilmek için
+                                    //     RichText(
+                                    //       text: TextSpan(children: <TextSpan>[
+                                    //         TextSpan(
+                                    //             text: 'Beğen ',
+                                    //             style: TextStyle(
+                                    //               color: kPrimaryColor,
+                                    //               fontSize:
+                                    //               getProportionateScreenHeight(
+                                    //                   18),
+                                    //             )),
+                                    //         TextSpan(
+                                    //             text: '(${share
+                                    //                 .shareLikeCount})',
+                                    //             style: TextStyle(
+                                    //               color: Colors.black,
+                                    //               fontSize:
+                                    //               getProportionateScreenHeight(
+                                    //                   18),
+                                    //             )),
+                                    //       ]),
+                                    //     ),
+                                    //     // Text(
+                                    //     //   "Beğen (${share.shareLikeCount})",
+                                    //     //   style: TextStyle(
+                                    //     //       color: kPrimaryColor,
+                                    //     //       fontSize: getProportionateScreenHeight(18),
+                                    //     //       fontWeight: FontWeight.bold),
+                                    //     // ),
+                                    //   ],
+                                    // ),
                                     // Yorum
                                     Row(
                                       children: [
-                                        Icon(Icons.comment_outlined),
+                                        Icon(Icons.comment_outlined,color: kPrimaryColor,),
                                         SizedBox(
                                             width: getProportionateScreenWidth(
                                                 5)),
                                         RichText(
                                           text: TextSpan(children: <TextSpan>[
                                             TextSpan(
-                                                text: 'Yorum ',
-                                                style: TextStyle(
-                                                  color: kPrimaryColor,
-                                                  fontSize:
-                                                  getProportionateScreenHeight(
-                                                      18),
-                                                )),
-                                            TextSpan(
                                                 text:
-                                                '(${newCommentCount})',
+                                                '${newCommentCount}',
                                                 style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize:
@@ -260,7 +254,7 @@ class _ShareDetailState extends State<ShareDetail> {
                           }).toList(),
                         ),
                       )
-                      : Container(child: Text('Yorum yok')),
+                      : Container(child: Center(child: Text('İlk yorumu siz yapabilirsiniz'))),
                     ],
                   ),
                 ),
@@ -401,25 +395,7 @@ class _ShareDetailState extends State<ShareDetail> {
     );
   }
 
-  // Widget makeGridTale(String userImagePath) {
-  //   return GridTile(
-  //     child: GestureDetector(
-  //       onTap: () {
-  //         setState(() {});
-  //       },
-  //       child: Container(
-  //         decoration: BoxDecoration(
-  //           color: Colors.grey,
-  //           borderRadius: BorderRadius.all(
-  //             Radius.circular(25.0),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Şimdiki kullanıcın ismini buraya göndermem gerek
+    // Şimdiki kullanıcın ismini buraya göndermem gerek
   Future<void> _handleSubmitted(String text) async {
     try {
       //print('nickname: ${widget.myData.myName}');

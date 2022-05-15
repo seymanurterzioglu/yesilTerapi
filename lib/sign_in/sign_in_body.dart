@@ -9,7 +9,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:fitterapi/sign_up/dart/sign_up_screen.dart';
 import 'package:fitterapi/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../forgot_password/forgot_password_screen.dart';
 

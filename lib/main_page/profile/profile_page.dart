@@ -1,18 +1,12 @@
 import 'package:fitterapi/const.dart';
-import 'package:fitterapi/main_page/forum/profil_data.dart';
 import 'package:fitterapi/main_page/profile/add_page.dart';
-
 import 'package:fitterapi/main_page/profile/profile_info.dart';
-
 import 'package:fitterapi/main_page/profile/settings.dart';
 import 'package:fitterapi/main_page/profile/suggestion_page.dart';
-
 import 'package:fitterapi/services/auth.dart';
-
 import 'package:fitterapi/sign_in/google_sign_in.dart';
 import 'package:fitterapi/sign_in/sign_in_screen.dart';
 import 'package:fitterapi/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

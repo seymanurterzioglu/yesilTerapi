@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
 
-class CuresModel extends Equatable {
+
+class CuresModel {
   final String curesName;
   final String about;
   final String recipe;
@@ -16,16 +16,16 @@ class CuresModel extends Equatable {
     required this.image,
   });
 
-  @override
-  List<Object?> get props {
-    //props equatable da şart
-    return [
-      curesName,
-      about,
-      recipe,
-      image,
-    ];
-  }
+  // @override
+  // List<Object?> get props {
+  //   //props equatable da şart
+  //   return [
+  //     curesName,
+  //     about,
+  //     recipe,
+  //     image,
+  //   ];
+  // }
 
   CuresModel copyWith({
     String? curesName,

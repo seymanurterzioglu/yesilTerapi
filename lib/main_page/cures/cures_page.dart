@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/main_page/cures/cures.dart';
+import 'package:fitterapi/main_page/cures/cures_comment_page.dart';
 import 'package:fitterapi/main_page/prepared/idb_icons.dart';
 import 'package:fitterapi/main_page/prepared/pricer_cliper.dart';
 import 'package:fitterapi/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
-
+import 'package:share_plus/share_plus.dart';
+//import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 
 class CuresPage extends StatefulWidget {
   @override
@@ -256,10 +256,17 @@ class _CuresPageState extends State<CuresPage> {
         ));
   }
 
+  void shareCure(BuildContext context, String message) {
+    RenderBox? box = context.findRenderObject() as RenderBox;
+    Share.share(message,
+        subject: 'Deneme',
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
+  }
+
   Widget detailCures(BuildContext context, DocumentSnapshot document) {
     final cures = Cures.fromSnapshot(document);
 
-    Future addtoFavorites() async {
+    Future addToFavorites() async {
       final FirebaseAuth _auth = FirebaseAuth.instance;
       var currentUser = _auth.currentUser;
       CollectionReference _collectionRef =
@@ -270,6 +277,7 @@ class _CuresPageState extends State<CuresPage> {
           .doc()
           .set({
         "curesName": cures.curesName,
+        "curesId":cures.curesId,
         "about": cures.about,
         "image": cures.image,
         "recipe": cures.recipe,
@@ -290,11 +298,16 @@ class _CuresPageState extends State<CuresPage> {
         actions: [
           IconButton(
             icon: Icon(Icons.share),
-            onPressed: () {},
+            onPressed: () async {
+              shareCure(context, cures.recipe!);
+            },
           ),
           IconButton(
-            icon: Icon(Icons.more_vert),
-            onPressed: () {},
+            icon: Icon(Icons.comment_outlined),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CureCommentPage(document: document,)),
+            ),
           ),
         ],
       ),
@@ -480,7 +493,7 @@ class _CuresPageState extends State<CuresPage> {
                                                 onPressed: () => snapshot
                                                             .data.docs.length ==
                                                         0
-                                                    ? addtoFavorites()
+                                                    ? addToFavorites()
                                                     : print('Already added'),
                                                 icon: snapshot
                                                             .data.docs.length ==

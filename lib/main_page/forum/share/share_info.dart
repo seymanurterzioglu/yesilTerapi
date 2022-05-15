@@ -8,6 +8,7 @@ import 'package:fitterapi/services/user_database.dart';
 import 'package:flutter/material.dart';
 import '../../../size_config.dart';
 
+// ignore: must_be_immutable
 class ShareInfo extends StatefulWidget {
   String choice;
 
@@ -31,6 +32,22 @@ class _ShareInfoState extends State<ShareInfo> {
   String? image;
 
   bool _isLoading = false;
+
+  // daha sonra resim eklemeyi ekleyebilirim
+  // static Future<String?> uploadPostImages({required String postID,required File postImageFile}) async {
+  //   try {
+  //     String fileName = 'images/$postID/postImage';
+  //     String? postImageURL;
+  //     Reference reference = FirebaseStorage.instance.ref().child(fileName);
+  //     UploadTask uploadTask = reference.putFile(postImageFile);
+  //     uploadTask.whenComplete(() {
+  //       postImageURL = reference.getDownloadURL() as String;
+  //     });
+  //     return postImageURL;
+  //   }catch(e) {
+  //     return null;
+  //   }
+  // }
 
   Future<void> _sendShareInFirebase(String shContent, String id,String title,String user,String image) async {
     setState(() {
@@ -97,9 +114,7 @@ class _ShareInfoState extends State<ShareInfo> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData? _userData = snapshot.data;
-            String? _firstName = _userData!.firstName;
-            String? _lastName = _userData.lastName;
-            String? _nickname =_userData.nickname;
+            String? _nickname =_userData!.nickname;
             image=_userData.image;
             user=_nickname;
             id = _userData.uid;

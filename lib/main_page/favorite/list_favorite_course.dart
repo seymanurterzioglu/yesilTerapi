@@ -195,8 +195,9 @@ Widget detailCourse(BuildContext context, DocumentSnapshot document) {
                                         .doc(document
                                             .id)
                                         .delete();
-                                    print('Deleted from favorites');
+                                    print('Favorilerden silindi');
                                   }
+                                  Navigator.of(context).pop();
                                 },
                                 icon: snapshot.data.docs.length == 0
                                     ? Icon(Icons.star_border_outlined,

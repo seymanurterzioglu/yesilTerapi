@@ -6,7 +6,6 @@ import 'sleep/teas_sleep_page.dart';
 import 'pregnancy/teas_pregnancy_page.dart';
 import 'stomach/teas_stomach_page.dart';
 import 'package:fitterapi/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TeaPage extends StatefulWidget {
@@ -240,7 +239,7 @@ class _TeaPageState extends State<TeaPage> {
           title: Tag(
             color: stomachColor,
             image:
-                'https://static.daktilo.com/sites/449/uploads/2021/04/01/large/mide-agrisi.jpg',
+                'https://cdn.yemek.com/mncrop/940/625/uploads/2018/05/mide-siskinligi-neden-olur-yeni.jpg',
             text: 'Mide',
           ),
         ),

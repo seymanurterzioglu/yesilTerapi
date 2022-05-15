@@ -8,9 +8,11 @@ import 'package:fitterapi/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
+import 'package:share_plus/share_plus.dart';
 
 Widget teaDetail(BuildContext context, DocumentSnapshot document) {
   final tea = Teas.fromSnapshot(document);
+
   Future addtoFavorites() async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     var currentUser = _auth.currentUser;
@@ -24,6 +26,11 @@ Widget teaDetail(BuildContext context, DocumentSnapshot document) {
       "recipe": tea.recipe,
       "warning": tea.warning,
     }).then((value) => print("Added to favourite"));
+  }
+
+  void shareTea(BuildContext context,String message){
+    RenderBox? box= context.findRenderObject() as RenderBox;
+    Share.share(message, subject: 'Deneme', sharePositionOrigin: box.localToGlobal(Offset.zero)& box.size);
   }
 
   return Scaffold(
@@ -40,11 +47,9 @@ Widget teaDetail(BuildContext context, DocumentSnapshot document) {
       actions: [
         IconButton(
           icon: Icon(Icons.share),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: Icon(Icons.more_vert),
-          onPressed: () {},
+          onPressed: () async{
+            shareTea(context,tea.recipe!);
+          },
         ),
       ],
     ),

@@ -357,6 +357,7 @@ Widget detailTea(BuildContext context, DocumentSnapshot document) {
                                                   print(
                                                       'Deleted from favorites');
                                                 }
+                                                Navigator.of(context).pop();
                                               },
                                               icon: snapshot.data.docs.length ==
                                                       0

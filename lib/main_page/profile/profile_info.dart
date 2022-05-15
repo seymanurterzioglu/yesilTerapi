@@ -70,9 +70,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
 
   String? _currentImage;
 
-  TextEditingController _changeNameTextController = TextEditingController();
-
-  // Future<void> _updateMyData(String newName) async{
+   // Future<void> _updateMyData(String newName) async{
   //   SharedPreferences prefs = await SharedPreferences.getInstance();
   //   prefs.setString('myName',newName);
   //   setState(() {

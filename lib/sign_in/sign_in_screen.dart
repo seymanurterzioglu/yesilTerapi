@@ -9,20 +9,21 @@ class SignInScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.white,
-      //   automaticallyImplyLeading: false,
-      //   centerTitle: true,
-      //   title: Text(
-      //     "Giriş",
-      //     style: TextStyle(
-      //       color: Colors.black12,
-      //     ),
-      //   ),
-      // ),
+
+
       body: StreamBuilder(
+
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
+          FirebaseAuth.instance
+              .userChanges()
+              .listen((User? user) {
+            if (user == null) {
+              print('User is currently signed out!');
+            } else {
+              print('User is signed in!');
+            }
+          });
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {

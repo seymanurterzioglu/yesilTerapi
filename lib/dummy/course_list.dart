@@ -3,7 +3,6 @@ import 'package:fitterapi/const.dart';
 import 'course_detail.dart';
 import 'package:fitterapi/services/courseDatabase.dart';
 import 'package:fitterapi/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CourseList extends StatefulWidget {
