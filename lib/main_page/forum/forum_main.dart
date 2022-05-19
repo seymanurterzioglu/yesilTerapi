@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitterapi/main_page/forum/share/share_detail.dart';
 import 'package:fitterapi/main_page/forum/share/share_info.dart';
+import 'package:fitterapi/main_page/forum/visit_user_profile.dart';
 import 'package:fitterapi/main_page/prepared/idb_icons.dart';
 import 'package:fitterapi/main_page/prepared/localTempDB.dart';
 import 'package:fitterapi/main_page/prepared/utils.dart';
@@ -339,132 +340,136 @@ class _ForumMainState extends State<ForumMain>
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    GestureDetector(
-                                      onTap: () => _moveToShareDetail(
-                                          listOfDocumentSnapshot[index]),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  //kür-soru... icon
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Icon(
-                                                      icon == 'Çay'
-                                                          ? DBIcons.tea
-                                                          : icon == 'Kür'
-                                                              ? DBIcons.mortar
-                                                              : icon == 'Soru'
-                                                                  ? Icons
-                                                                      .announcement_rounded
-                                                                  : Icons
-                                                                      .insert_drive_file,
-                                                      size:
-                                                          getProportionateScreenHeight(
-                                                              32),
-                                                      color: kPrimaryColor,
-                                                    ),
-                                                  ),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      //  kullanıcı ismine tıklandığında kullanıcının profil sayfasını götürecek
-                                                      GestureDetector(
-                                                        onTap: () {},
-                                                        child: Text(
-                                                          (listOfDocumentSnapshot[
-                                                                              index]
-                                                                          .data()
-                                                                      as Map)[
-                                                                  'userName'] ??
-                                                              ' ',
-                                                          style: TextStyle(
-                                                            fontSize:
-                                                                getProportionateScreenHeight(
-                                                                    20),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                          height:
-                                                              getProportionateScreenHeight(
-                                                                  2)),
-                                                      Text(
-                                                        Utils().readTimestamp(
-                                                            (listOfDocumentSnapshot[index]
-                                                                            .data()
-                                                                        as Map)[
-                                                                    'shareTime'] ??
-                                                                ' '),
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                getProportionateScreenHeight(
-                                                                    15)),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          // paylaşımın başlığı
-                                          SizedBox(
-                                            height:
-                                                getProportionateScreenHeight(5),
-                                          ),
-                                          Row(
-                                            children: [
-                                              Flexible(
-                                                child: Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      7, 4, 10, 2),
-                                                  child: Text(
-                                                    (listOfDocumentSnapshot[
-                                                                    index]
-                                                                .data() as Map)[
-                                                            'shareTitle'] ??
-                                                        ' ',
-                                                    style: TextStyle(
-                                                        fontSize:
-                                                            getProportionateScreenHeight(
-                                                                22),
-                                                        fontWeight:
-                                                            FontWeight.bold),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                //kür-soru... icon
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(
+                                                          8.0),
+                                                  child: Icon(
+                                                    icon == 'Çay'
+                                                        ? DBIcons.tea
+                                                        : icon == 'Kür'
+                                                            ? DBIcons.mortar
+                                                            : icon == 'Soru'
+                                                                ? Icons
+                                                                    .announcement_rounded
+                                                                : Icons
+                                                                    .insert_drive_file,
+                                                    size:
+                                                        getProportionateScreenHeight(
+                                                            32),
+                                                    color: kPrimaryColor,
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          Divider(
-                                              height: 4, color: Colors.black26),
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                4, 10, 4, 10),
-                                            child: Text(
-                                              (listOfDocumentSnapshot[index]
-                                                          .data()
-                                                      as Map)['shareContent'] ??
-                                                  ' ',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                      getProportionateScreenHeight(
-                                                          20)),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .start,
+                                                  children: [
+                                                    //  kullanıcı ismine tıklandığında kullanıcının profil sayfasını götürecek
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) => VisitUserProfile()),
+                                                        );
+
+                                                      },
+                                                      child: Text(
+                                                        (listOfDocumentSnapshot[
+                                                                            index]
+                                                                        .data()
+                                                                    as Map)[
+                                                                'userName'] ??
+                                                            ' ',
+                                                        style: TextStyle(
+                                                          decoration: TextDecoration.underline,
+                                                          fontSize:
+                                                              getProportionateScreenHeight(
+                                                                  20),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                        height:
+                                                            getProportionateScreenHeight(
+                                                                2)),
+                                                    Text(
+                                                      Utils().readTimestamp(
+                                                          (listOfDocumentSnapshot[index]
+                                                                          .data()
+                                                                      as Map)[
+                                                                  'shareTime'] ??
+                                                              ' '),
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              getProportionateScreenHeight(
+                                                                  15)),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
+                                          ],
+                                        ),
+                                        // paylaşımın başlığı
+                                        SizedBox(
+                                          height:
+                                              getProportionateScreenHeight(5),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    7, 4, 10, 2),
+                                                child: Text(
+                                                  (listOfDocumentSnapshot[
+                                                                  index]
+                                                              .data() as Map)[
+                                                          'shareTitle'] ??
+                                                      ' ',
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          getProportionateScreenHeight(
+                                                              22),
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                            height: 4, color: Colors.black26),
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              4, 10, 4, 10),
+                                          child: Text(
+                                            (listOfDocumentSnapshot[index]
+                                                        .data()
+                                                    as Map)['shareContent'] ??
+                                                ' ',
+                                            style: TextStyle(
+                                                fontSize:
+                                                    getProportionateScreenHeight(
+                                                        20)),
                                           ),
-                                          Divider(
-                                              height: 4, color: Colors.black26),
-                                        ],
-                                      ),
+                                        ),
+                                        Divider(
+                                            height: 4, color: Colors.black26),
+                                      ],
                                     ),
                                     // Beğen-Yorum
                                     Padding(
@@ -541,40 +546,44 @@ class _ForumMainState extends State<ForumMain>
                                             ),
                                           ),
                                           // Yorum
-                                          Padding(
-                                            padding: const EdgeInsets.all(5.0),
-                                            child: Row(
-                                              children: [
-                                                Icon(Icons.comment_outlined),
-                                                SizedBox(
-                                                    width:
-                                                        getProportionateScreenWidth(
-                                                            5)),
-                                                RichText(
-                                                  text: TextSpan(
-                                                      children: <TextSpan>[
-                                                        TextSpan(
-                                                            text: 'Yorum ',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize:
-                                                                  getProportionateScreenHeight(
-                                                                      18),
-                                                            )),
-                                                        TextSpan(
-                                                            text:
-                                                                '(${(listOfDocumentSnapshot[index].data() as Map)['shareCommentCount'] ?? ' '})',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize:
-                                                                  getProportionateScreenHeight(
-                                                                      18),
-                                                            )),
-                                                      ]),
-                                                ),
-                                              ],
+                                          GestureDetector(
+                                            onTap: () => _moveToShareDetail(
+                                                listOfDocumentSnapshot[index]),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(5.0),
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.comment_outlined),
+                                                  SizedBox(
+                                                      width:
+                                                          getProportionateScreenWidth(
+                                                              5)),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                        children: <TextSpan>[
+                                                          TextSpan(
+                                                              text: 'Yorum ',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.black,
+                                                                fontSize:
+                                                                    getProportionateScreenHeight(
+                                                                        18),
+                                                              )),
+                                                          TextSpan(
+                                                              text:
+                                                                  '(${(listOfDocumentSnapshot[index].data() as Map)['shareCommentCount'] ?? ' '})',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.black,
+                                                                fontSize:
+                                                                    getProportionateScreenHeight(
+                                                                        18),
+                                                              )),
+                                                        ]),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ],

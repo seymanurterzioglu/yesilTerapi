@@ -32,6 +32,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   String? weight;
   String? disease; // hastalık
   String? nickname=Utils().generateRandomString(6);
+  //List<String>? isLikeList=[];
 
   void addError({String? error}) {
     if (!errors.contains(error))
@@ -109,6 +110,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                   'disease': disease,
                   'image': _pickImage,
                   'nickname':nickname,
+
                 });
                 _formKey.currentState!.save();
                 // eğer her şey doğruysa giriş ekranına git

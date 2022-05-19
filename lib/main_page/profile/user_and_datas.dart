@@ -16,6 +16,7 @@ class UserData {
   String? disease;
   String? image;
   String? nickname;
+  //List<String>? isLikeList;
 
   UserData({
     this.uid,
@@ -26,7 +27,8 @@ class UserData {
     this.weight,
     this.disease,
     this.image,
-    this.nickname
+    this.nickname,
+    //this.isLikeList
   });
 
 
@@ -40,6 +42,7 @@ class UserData {
         disease= snap['disease'],
         image= snap['image'],
         nickname= snap['nickname']
+        //isLikeList= snap['isLikeList']
   ;
 
 }

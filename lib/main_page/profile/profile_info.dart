@@ -499,7 +499,33 @@ class _ProfileInfoState extends State<ProfileInfo> {
                       ),
                     );
                   } else {
-                    return Text('Something wrong');
+                    Container(
+                      child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.error,
+                                color: Colors.grey[700],
+                                size: 64,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(14.0),
+                                child: Text(
+                                  'Bir hata ile karşılaşıldı. Lütfen\n internetinizi kontrol ediniz.',
+                                  style: TextStyle(
+                                      fontSize: 16, color: Colors.grey[700]),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          )),
+                    );
+                    return Container(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
                   }
                 },
               ),

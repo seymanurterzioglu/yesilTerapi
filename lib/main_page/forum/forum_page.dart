@@ -26,11 +26,15 @@ class _ForumPageState extends State<ForumPage> {
       prefs.setString('myName', tempName);
       myName = tempName;
     }
+    if (prefs.get('isLikeList') == null) {
+      prefs.setStringList('isLikeList', []);
+      
+    }
     setState(() {
       myData = MyProfileData(
         myName: myName,
         image: image,
-        myLikeList: prefs.getStringList('likeList'),
+        myLikeList:prefs.getStringList('likeList')
       );
     });
   }
@@ -54,6 +58,7 @@ class _ForumPageState extends State<ForumPage> {
             if (snapshot.hasData) {
               UserData? _userData = snapshot.data;
               _takeMyData(_userData!.nickname!, _userData.image!);
+              //_takeMyData(_userData!.nickname!, _userData.image!, _userData.isLikeList!);
               return ForumMain(myData: myData,updateMyData: updateMyData,);
             }
             else
