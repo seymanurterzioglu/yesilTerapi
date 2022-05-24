@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitterapi/main_page/forum/share/share_detail.dart';
 import 'package:fitterapi/main_page/forum/share/share_info.dart';
 import 'package:fitterapi/main_page/forum/visit_user_profile.dart';
@@ -35,6 +36,10 @@ class _ForumMainState extends State<ForumMain>
   List<DocumentSnapshot> listOfDocumentSnapshot = [];
 
   late Future resultsLoaded;
+
+ //isLikeList for
+  final currentUser = FirebaseAuth.instance.currentUser;
+
 
   int defaultChoiceIndex = 0;
   late int newChoice;
@@ -159,6 +164,7 @@ class _ForumMainState extends State<ForumMain>
         isLikeShare
     );
   }
+
 
   void _moveToShareDetail(DocumentSnapshot document) {
     Navigator.push(
@@ -382,7 +388,12 @@ class _ForumMainState extends State<ForumMain>
                                                         Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
-                                                              builder: (context) => VisitUserProfile()),
+                                                              builder: (context) => VisitUserProfile(user:  (listOfDocumentSnapshot[
+                                                              index]
+                                                                  .data()
+                                                              as Map)[
+                                                              'userId'] ??
+                                                                  ' ')),
                                                         );
 
                                                       },

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/main_page/profile/add_page.dart';
@@ -21,6 +22,8 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final currentUser = FirebaseAuth.instance.currentUser;
   UserData userData = UserData();
+  int? share_count;
+  List<DocumentSnapshot> listOfDocumentSnapshot = [];
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +65,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               image: AssetImage("assets/images/circle.jpg"),
                               fit: BoxFit.cover),
                         ),
-                        margin: EdgeInsets.only(top: getProportionateScreenHeight(5)),
+                        margin: EdgeInsets.only(
+                            top: getProportionateScreenHeight(5)),
                         child: Stack(
-
                           children: <Widget>[
                             Positioned(
                               top: 19,
@@ -72,7 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               child: CircleAvatar(
                                 radius: getProportionateScreenWidth(80),
                                 backgroundImage:
-                                NetworkImage(_userData!.image!),
+                                    NetworkImage(_userData!.image!),
                               ),
                             ),
                           ],
@@ -90,12 +93,24 @@ class _ProfilePageState extends State<ProfilePage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            Text(_userData.nickname!, style: TextStyle(color: Colors.grey[800], fontFamily: "Roboto",
-                                fontSize: getProportionateScreenHeight(35), fontWeight: FontWeight.w700
-                            ),),
-                            Text("${_userData.firstName!}"+" "+"${_userData.lastName!}", style: TextStyle(color: Colors.grey[500], fontFamily: "Roboto",
-                                fontSize:getProportionateScreenHeight(18), fontWeight: FontWeight.w400
-                            ),),
+                            Text(
+                              _userData.nickname!,
+                              style: TextStyle(
+                                  color: Colors.grey[800],
+                                  fontFamily: "Roboto",
+                                  fontSize: getProportionateScreenHeight(35),
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            Text(
+                              "${_userData.firstName!}" +
+                                  " " +
+                                  "${_userData.lastName!}",
+                              style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontFamily: "Roboto",
+                                  fontSize: getProportionateScreenHeight(18),
+                                  fontWeight: FontWeight.w400),
+                            ),
                           ],
                         ),
                         // IconButton(
@@ -105,11 +120,71 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                   ),
+                  // paylasım sayısı
+                  SizedBox(height: getProportionateScreenHeight(20)),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: getProportionateScreenHeight(80),
+                      width: getProportionateScreenWidth(300),
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: StreamBuilder<dynamic>(
+                          stream: FirebaseFirestore.instance
+                              .collection('shares')
+                              .where('userId',
+                              isEqualTo:currentUser?.uid)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              listOfDocumentSnapshot = snapshot.data!.docs;
+                              share_count = listOfDocumentSnapshot.length;
+                              return Padding(
+                                padding: EdgeInsets.all(20.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.add_box_outlined,color: Colors.white,size: getProportionateScreenHeight(27)),
+                                    SizedBox(
+                                        width: getProportionateScreenWidth(
+                                            5)),
+                                    RichText(
+                                      text: TextSpan(children: <TextSpan>[
+                                                TextSpan(
+                                                    text: 'Yapılan Paylaşım : ',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize:
+                                                      getProportionateScreenHeight(
+                                                          22),
+                                                    )),
+                                        TextSpan(
+                                            text:
+                                            '${share_count.toString()}',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              getProportionateScreenHeight(
+                                                  22),
+                                            )),
+                                      ]),
+                                    ),
+
+                                  ],
+                                ),
+                              );
+                            }
+                            return Text('HATA');
+                          }),
+                    ),
+                  ),
 
                 ],
               );
             } else {
-              Container(
+              return Container(
                 child: Center(
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -130,16 +205,32 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 )),
               );
-              return Container(
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
             }
           }),
     );
   }
 }
+
+// int? share_count_func(String currentUserId) {
+//   List<DocumentSnapshot> listOfDocumentSnapshot = [];
+//   int? count;
+//   StreamBuilder<dynamic>(
+//       stream: FirebaseFirestore.instance
+//           .collection('shares')
+//           .where('userId', isEqualTo: '5sjkeNu3PQdBvkGzWPm6z6vBodf1')
+//           .snapshots(),
+//       builder: (context, snapshot) {
+//         if (snapshot.hasData) {
+//           listOfDocumentSnapshot = snapshot.data!.docs;
+//           count = listOfDocumentSnapshot.length;
+//           return Text('');
+//         }
+//         return Text('');
+//       });
+//   print(listOfDocumentSnapshot.length);
+//   print(currentUserId);
+//   return count;
+// }
 
 class ProfileSideBar extends StatelessWidget {
   final AuthService _auth = AuthService();

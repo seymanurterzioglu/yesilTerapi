@@ -28,7 +28,7 @@ class UserData {
     this.disease,
     this.image,
     this.nickname,
-    //this.isLikeList
+   //this.isLikeList
   });
 
 

@@ -1,16 +1,32 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fitterapi/main_page/profile/user_and_datas.dart';
+import 'package:fitterapi/services/user_database.dart';
 import 'package:flutter/material.dart';
-
 import '../../const.dart';
 import '../../size_config.dart';
 
+class VisitUserProfile extends StatefulWidget {
+  final String user;
 
-class VisitUserProfile extends StatelessWidget {
+  VisitUserProfile({required this.user});
+
+  @override
+  State<VisitUserProfile> createState() => _VisitUserProfileState();
+}
+
+class _VisitUserProfileState extends State<VisitUserProfile> {
+  UserData userData = UserData();
+
+  int? share_count;
+  List<DocumentSnapshot> listOfDocumentSnapshot = [];
+
   @override
   Widget build(BuildContext context) {
+    UserDatabase userDatabase = UserDatabase(uid: widget.user);
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          '-------  Profil',
+          'Profil',
           style: TextStyle(
               fontSize: getProportionateScreenHeight(25),
               fontWeight: FontWeight.bold),
@@ -22,68 +38,178 @@ class VisitUserProfile extends StatelessWidget {
         ),
         backgroundColor: kPrimaryColor,
       ),
-      body: Column(
-        children: [
-          SizedBox(height: getProportionateScreenHeight(20)),
-          // image
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+      body: StreamBuilder<UserData>(
+          stream: userDatabase.userData,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              UserData? _userData = snapshot.data;
+              return Column(
+                children: [
+                  SizedBox(height: getProportionateScreenHeight(20)),
+                  // image
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        height: getProportionateScreenHeight(250),
+                        width: getProportionateScreenWidth(230),
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/images/circle.jpg"),
+                              fit: BoxFit.cover),
+                        ),
+                        margin: EdgeInsets.only(
+                            top: getProportionateScreenHeight(5)),
+                        child: Stack(
+                          children: <Widget>[
+                            Positioned(
+                              top: 19,
+                              left: 53,
+                              child: CircleAvatar(
+                                radius: getProportionateScreenWidth(80),
+                                backgroundImage:
+                                    NetworkImage(_userData!.image!),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  //user name -surname
+                  SizedBox(height: getProportionateScreenHeight(20)),
+                  Container(
+                    color: Colors.white10,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              _userData.nickname!,
+                              style: TextStyle(
+                                  color: Colors.grey[800],
+                                  fontFamily: "Roboto",
+                                  fontSize: getProportionateScreenHeight(35),
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            Text(
+                              "${_userData.firstName!}" +
+                                  " " +
+                                  "${_userData.lastName!}",
+                              style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontFamily: "Roboto",
+                                  fontSize: getProportionateScreenHeight(18),
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                        // IconButton(
+                        //   icon: Icon(Icons.sms,color: kPrimaryColor,size: getProportionateScreenHeight(40)),
+                        //   onPressed: (){},
+                        // ),
+                        SizedBox(width: getProportionateScreenWidth(25)),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.chat_bubble_outlined,
+                              color: kPrimaryColor,
+                            size: getProportionateScreenHeight(35),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // paylasım sayısı
+                  SizedBox(height: getProportionateScreenHeight(20)),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: getProportionateScreenHeight(80),
+                      width: getProportionateScreenWidth(300),
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: StreamBuilder<dynamic>(
+                          stream: FirebaseFirestore.instance
+                              .collection('shares')
+                              .where('userId', isEqualTo: _userData.uid)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              listOfDocumentSnapshot = snapshot.data!.docs;
+                              share_count = listOfDocumentSnapshot.length;
+                              return Padding(
+                                padding: EdgeInsets.all(20.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(Icons.add_box_outlined,
+                                        color: Colors.white,
+                                        size: getProportionateScreenHeight(27)),
+                                    SizedBox(
+                                        width: getProportionateScreenWidth(5)),
+                                    RichText(
+                                      text: TextSpan(children: <TextSpan>[
+                                        TextSpan(
+                                            text: 'Yapılan Paylaşım : ',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                                  getProportionateScreenHeight(
+                                                      22),
+                                            )),
+                                        TextSpan(
+                                            text: '${share_count.toString()}',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                                  getProportionateScreenHeight(
+                                                      22),
+                                            )),
+                                      ]),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+                            return Text('HATA');
+                          }),
+                    ),
+                  ),
+                ],
+              );
+            } else {
               Container(
-                height: getProportionateScreenHeight(250),
-                width: getProportionateScreenWidth(230),
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/images/circle.jpg"),
-                      fit: BoxFit.cover),
-                ),
-                margin: EdgeInsets.only(top: getProportionateScreenHeight(5)),
-                child: Stack(
-
+                child: Center(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Positioned(
-                      top: 19,
-                      left: 53,
-                      child: CircleAvatar(
-                        radius: getProportionateScreenWidth(80),
-                        backgroundImage:
-                        AssetImage("assets/images/g5.png"),
+                    Icon(
+                      Icons.error,
+                      color: Colors.grey[700],
+                      size: 64,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(14.0),
+                      child: Text(
+                        'Bir hata ile karşılaşıldı. Lütfen\n internetinizi kontrol ediniz.',
+                        style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ],
+                )),
+              );
+              return Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
                 ),
-              ),
-            ],
-          ),
-          //user name -surname
-          SizedBox(height: getProportionateScreenHeight(20)),
-          Container(
-            color: Colors.white10,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Text('nickname', style: TextStyle(color: Colors.grey[800], fontFamily: "Roboto",
-                        fontSize: getProportionateScreenHeight(35), fontWeight: FontWeight.w700
-                    ),),
-                    Text("name surname", style: TextStyle(color: Colors.grey[500], fontFamily: "Roboto",
-                        fontSize:getProportionateScreenHeight(18), fontWeight: FontWeight.w400
-                    ),),
-                  ],
-                ),
-                SizedBox(width: getProportionateScreenWidth(20)),
-                IconButton(
-                  icon: Icon(Icons.sms,color: kPrimaryColor,size: getProportionateScreenHeight(40)),
-                  onPressed: (){},
-                ),
-              ],
-            ),
-          ),
-
-        ],
-      ),
+              );
+            }
+          }),
     );
   }
 }

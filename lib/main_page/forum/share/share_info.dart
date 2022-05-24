@@ -260,7 +260,11 @@ class _ShareInfoState extends State<ShareInfo> {
               ],
             );
           } else {
-            return Text('Bir hata ile karşılaştık');
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
           }
         },
       ),

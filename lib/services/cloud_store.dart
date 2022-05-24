@@ -47,9 +47,6 @@ class CloudStore {
     print(count);
     postData.reference
         .update({'shareLikeCount': FieldValue.increment(isLikeShare ? -1 : 1)});
-    // if(!isLikePost){
-    //   await FirebaseMessaging.instance.sendMessage('${myProfileData.myName} likes your post','${myProfileData.myName}',postData['FCMToken']);
-    // }
   }
 
   // share comment like count

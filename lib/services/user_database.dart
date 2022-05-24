@@ -53,6 +53,7 @@ class UserDatabase {
       disease: snapshot['disease'],
       image: snapshot['image'],
       nickname: snapshot['nickname'],
+      //isLikeList: snapshot['isLikeList'],
       // //hangisinin işe yaradığı test edilecek
       // firstName: (snapshot.data() as DocumentSnapshot)['firstName'],
       // lastName: (snapshot.data() as DocumentSnapshot)['lastName'],

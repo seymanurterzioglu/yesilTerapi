@@ -28,13 +28,13 @@ class _ForumPageState extends State<ForumPage> {
     }
     if (prefs.get('isLikeList') == null) {
       prefs.setStringList('isLikeList', []);
-      
+
     }
     setState(() {
       myData = MyProfileData(
-        myName: myName,
-        image: image,
-        myLikeList:prefs.getStringList('likeList')
+          myName: myName,
+          image: image,
+          myLikeList:prefs.getStringList('likeList')
       );
     });
   }
@@ -62,30 +62,30 @@ class _ForumPageState extends State<ForumPage> {
               return ForumMain(myData: myData,updateMyData: updateMyData,);
             }
             else
-              {
-                Container(
-                  child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                            Icons.error,
-                            color: Colors.grey[700],
-                            size: 64,
+            {
+              Container(
+                child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.error,
+                          color: Colors.grey[700],
+                          size: 64,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(14.0),
+                          child: Text(
+                            'Bir hata ile karşılaşıldı',
+                            style: TextStyle(
+                                fontSize: 16, color: Colors.grey[700]),
+                            textAlign: TextAlign.center,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(14.0),
-                            child: Text(
-                              'Bir hata ile karşılaşıldı',
-                              style: TextStyle(
-                                  fontSize: 16, color: Colors.grey[700]),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      )),
-                );
-              }
+                        ),
+                      ],
+                    )),
+              );
+            }
             return Container(
               child: Center(
                 child: CircularProgressIndicator(),
@@ -95,4 +95,3 @@ class _ForumPageState extends State<ForumPage> {
     );
   }
 }
-

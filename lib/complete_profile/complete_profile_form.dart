@@ -21,6 +21,7 @@ class CompleteProfileForm extends StatefulWidget {
 }
 
 class _CompleteProfileFormState extends State<CompleteProfileForm> {
+  //Future<SharedPreferences> prefs =  SharedPreferences.getInstance();
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
   String? firstName;
@@ -32,7 +33,9 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   String? weight;
   String? disease; // hastalık
   String? nickname=Utils().generateRandomString(6);
-  //List<String>? isLikeList=[];
+  List<String>? isLikeList=['isLikeList'];
+
+  
 
   void addError({String? error}) {
     if (!errors.contains(error))
@@ -110,6 +113,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                   'disease': disease,
                   'image': _pickImage,
                   'nickname':nickname,
+                  'isLikeList':isLikeList,
 
                 });
                 _formKey.currentState!.save();
