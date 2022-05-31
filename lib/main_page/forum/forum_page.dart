@@ -52,6 +52,7 @@ class _ForumPageState extends State<ForumPage> {
     UserDatabase userDatabase = UserDatabase(uid: currentUser!.uid);
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       body: StreamBuilder<UserData>(
           stream: userDatabase.userData,
           builder: (context, snapshot) {

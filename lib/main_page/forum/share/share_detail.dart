@@ -170,45 +170,7 @@ class _ShareDetailState extends State<ShareDetail> {
                                   mainAxisAlignment: MainAxisAlignment
                                       .end,
                                   children: [
-                                    // Beğen
-                                    // Row(
-                                    //   children: [
-                                    //     Icon(Icons.thumb_up_alt_outlined),
-                                    //     SizedBox(
-                                    //         width: getProportionateScreenWidth(
-                                    //             5)),
-                                    //
-                                    //     // farklı renklerde metinler yazabilmek için
-                                    //     RichText(
-                                    //       text: TextSpan(children: <TextSpan>[
-                                    //         TextSpan(
-                                    //             text: 'Beğen ',
-                                    //             style: TextStyle(
-                                    //               color: kPrimaryColor,
-                                    //               fontSize:
-                                    //               getProportionateScreenHeight(
-                                    //                   18),
-                                    //             )),
-                                    //         TextSpan(
-                                    //             text: '(${share
-                                    //                 .shareLikeCount})',
-                                    //             style: TextStyle(
-                                    //               color: Colors.black,
-                                    //               fontSize:
-                                    //               getProportionateScreenHeight(
-                                    //                   18),
-                                    //             )),
-                                    //       ]),
-                                    //     ),
-                                    //     // Text(
-                                    //     //   "Beğen (${share.shareLikeCount})",
-                                    //     //   style: TextStyle(
-                                    //     //       color: kPrimaryColor,
-                                    //     //       fontSize: getProportionateScreenHeight(18),
-                                    //     //       fontWeight: FontWeight.bold),
-                                    //     // ),
-                                    //   ],
-                                    // ),
+
                                     // Yorum
                                     Row(
                                       children: [

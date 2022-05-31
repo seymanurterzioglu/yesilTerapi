@@ -57,6 +57,11 @@ class _ForumMainState extends State<ForumMain>
   void resetStreamWithSearch(int index) {
     setState(() {
       if (_searchController.text != "") {
+        newStream = FirebaseFirestore.instance
+            .collection('shares')
+            .where('shareTitle', isGreaterThanOrEqualTo: _searchController.text)
+            .where('shareTitle', isLessThan: _searchController.text + 'z')
+            .snapshots();
       } else {
         if (index == 0) {
           newStream = FirebaseFirestore.instance
