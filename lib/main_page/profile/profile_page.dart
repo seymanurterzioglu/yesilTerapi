@@ -495,7 +495,7 @@ class ProfileSideBar extends StatelessWidget {
             ),
             ProfileListItem(
               icon: Icons.add_box,
-              text: 'Forumda Paylaş',
+              text: 'Çay/Kür Paylaş',
               onPress: () {
                 Navigator.push(
                   context,

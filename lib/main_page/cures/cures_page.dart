@@ -306,7 +306,7 @@ class _CuresPageState extends State<CuresPage> {
             icon: Icon(Icons.comment_outlined),
             onPressed: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => CureCommentPage(document: document,)),
+              MaterialPageRoute(builder: (context) => CureCommentPage(document: document,name: cures.curesName!,)),
             ),
           ),
         ],

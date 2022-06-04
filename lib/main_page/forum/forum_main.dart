@@ -4,9 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitterapi/main_page/forum/share/share_detail.dart';
 import 'package:fitterapi/main_page/forum/share/share_info.dart';
 import 'package:fitterapi/main_page/forum/visit_user_profile.dart';
+import 'package:fitterapi/main_page/prepared/bottom_nav_bar.dart';
 import 'package:fitterapi/main_page/prepared/idb_icons.dart';
 import 'package:fitterapi/main_page/prepared/localTempDB.dart';
 import 'package:fitterapi/main_page/prepared/utils.dart';
+import 'package:fitterapi/main_page/profile/profile_page.dart';
 import 'package:fitterapi/main_page/profile/user_and_datas.dart';
 import 'package:fitterapi/services/cloud_store.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +39,8 @@ class _ForumMainState extends State<ForumMain>
 
   late Future resultsLoaded;
 
- //isLikeList for
+  //isLikeList for
   final currentUser = FirebaseAuth.instance.currentUser;
-
 
   int defaultChoiceIndex = 0;
   late int newChoice;
@@ -153,23 +154,18 @@ class _ForumMainState extends State<ForumMain>
   //   });
   // }
 
-  void _updateLikeCount(DocumentSnapshot document,bool isLikeShare) async {
-
+  void _updateLikeCount(DocumentSnapshot document, bool isLikeShare) async {
     List<String>? newLikeList = await LocalTempDB.saveLikeList(
-        document['shareId'], widget.myData.myLikeList,isLikeShare);
+        document['shareId'], widget.myData.myLikeList, isLikeShare);
     MyProfileData myProfileData = MyProfileData(
         myName: widget.myData.myName,
         image: widget.myData.image,
         myLikeList: newLikeList);
     widget.updateMyData(myProfileData);
-    await CloudStore.updateShareLikeCount(document,isLikeShare);
+    await CloudStore.updateShareLikeCount(document, isLikeShare);
     await CloudStore.likeToShare(
-        document['shareId'],
-        widget.myData,
-        isLikeShare
-    );
+        document['shareId'], widget.myData, isLikeShare);
   }
-
 
   void _moveToShareDetail(DocumentSnapshot document) {
     Navigator.push(
@@ -364,8 +360,7 @@ class _ForumMainState extends State<ForumMain>
                                                 //kür-soru... icon
                                                 Padding(
                                                   padding:
-                                                      const EdgeInsets.all(
-                                                          8.0),
+                                                      const EdgeInsets.all(8.0),
                                                   child: Icon(
                                                     icon == 'Çay'
                                                         ? DBIcons.tea
@@ -384,23 +379,37 @@ class _ForumMainState extends State<ForumMain>
                                                 ),
                                                 Column(
                                                   crossAxisAlignment:
-                                                      CrossAxisAlignment
-                                                          .start,
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     //  kullanıcı ismine tıklandığında kullanıcının profil sayfasını götürecek
                                                     GestureDetector(
                                                       onTap: () {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) => VisitUserProfile(user:  (listOfDocumentSnapshot[
-                                                              index]
-                                                                  .data()
-                                                              as Map)[
-                                                              'userId'] ??
-                                                                  ' ')),
-                                                        );
-
+                                                        // eğer kullanıcı currentuser ise profil sayfasına gönder
+                                                        if ((listOfDocumentSnapshot[
+                                                                            index]
+                                                                        .data()
+                                                                    as Map)[
+                                                                'userId'] ==
+                                                                currentUser!
+                                                                    .uid) {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  BottomNavBar(selectedIndex: 5),
+                                                            ),
+                                                          );
+                                                        } else {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    VisitUserProfile(
+                                                                        user: (listOfDocumentSnapshot[index].data()
+                                                                                as Map)['userId'] ??
+                                                                            ' ')),
+                                                          );
+                                                        }
                                                       },
                                                       child: Text(
                                                         (listOfDocumentSnapshot[
@@ -410,7 +419,9 @@ class _ForumMainState extends State<ForumMain>
                                                                 'userName'] ??
                                                             ' ',
                                                         style: TextStyle(
-                                                          decoration: TextDecoration.underline,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline,
                                                           fontSize:
                                                               getProportionateScreenHeight(
                                                                   20),
@@ -423,7 +434,8 @@ class _ForumMainState extends State<ForumMain>
                                                                 2)),
                                                     Text(
                                                       Utils().readTimestamp(
-                                                          (listOfDocumentSnapshot[index]
+                                                          (listOfDocumentSnapshot[
+                                                                              index]
                                                                           .data()
                                                                       as Map)[
                                                                   'shareTime'] ??
@@ -451,8 +463,7 @@ class _ForumMainState extends State<ForumMain>
                                                 padding: EdgeInsets.fromLTRB(
                                                     7, 4, 10, 2),
                                                 child: Text(
-                                                  (listOfDocumentSnapshot[
-                                                                  index]
+                                                  (listOfDocumentSnapshot[index]
                                                               .data() as Map)[
                                                           'shareTitle'] ??
                                                       ' ',
@@ -498,16 +509,19 @@ class _ForumMainState extends State<ForumMain>
                                           // Beğen
                                           GestureDetector(
                                             onTap: () {
-                                              _updateLikeCount(listOfDocumentSnapshot[index],widget.myData
-                                                  .myLikeList !=
-                                                  null &&
-                                                  widget.myData
-                                                      .myLikeList!
-                                                      .contains(listOfDocumentSnapshot[
-                                                  index]
-                                                  [
-                                                  'shareId'])
-                                                  ? true : false);
+                                              _updateLikeCount(
+                                                  listOfDocumentSnapshot[index],
+                                                  widget.myData.myLikeList !=
+                                                              null &&
+                                                          widget.myData
+                                                              .myLikeList!
+                                                              .contains(
+                                                                  listOfDocumentSnapshot[
+                                                                          index]
+                                                                      [
+                                                                      'shareId'])
+                                                      ? true
+                                                      : false);
                                               print('tıklandı');
                                             },
                                             child: Padding(
@@ -566,7 +580,8 @@ class _ForumMainState extends State<ForumMain>
                                             onTap: () => _moveToShareDetail(
                                                 listOfDocumentSnapshot[index]),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(5.0),
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
                                               child: Row(
                                                 children: [
                                                   Icon(Icons.comment_outlined),
@@ -575,28 +590,26 @@ class _ForumMainState extends State<ForumMain>
                                                           getProportionateScreenWidth(
                                                               5)),
                                                   RichText(
-                                                    text: TextSpan(
-                                                        children: <TextSpan>[
-                                                          TextSpan(
-                                                              text: 'Yorum ',
-                                                              style: TextStyle(
-                                                                color:
-                                                                    Colors.black,
-                                                                fontSize:
-                                                                    getProportionateScreenHeight(
-                                                                        18),
-                                                              )),
-                                                          TextSpan(
-                                                              text:
-                                                                  '(${(listOfDocumentSnapshot[index].data() as Map)['shareCommentCount'] ?? ' '})',
-                                                              style: TextStyle(
-                                                                color:
-                                                                    Colors.black,
-                                                                fontSize:
-                                                                    getProportionateScreenHeight(
-                                                                        18),
-                                                              )),
-                                                        ]),
+                                                    text: TextSpan(children: <
+                                                        TextSpan>[
+                                                      TextSpan(
+                                                          text: 'Yorum ',
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize:
+                                                                getProportionateScreenHeight(
+                                                                    18),
+                                                          )),
+                                                      TextSpan(
+                                                          text:
+                                                              '(${(listOfDocumentSnapshot[index].data() as Map)['shareCommentCount'] ?? ' '})',
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            fontSize:
+                                                                getProportionateScreenHeight(
+                                                                    18),
+                                                          )),
+                                                    ]),
                                                   ),
                                                 ],
                                               ),

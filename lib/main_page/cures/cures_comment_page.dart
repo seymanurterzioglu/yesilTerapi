@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitterapi/main_page/cures/cures.dart';
+import 'package:fitterapi/main_page/forum/visit_user_profile.dart';
+import 'package:fitterapi/main_page/prepared/bottom_nav_bar.dart';
 import 'package:fitterapi/main_page/prepared/utils.dart';
 import 'package:fitterapi/services/cloud_store.dart';
 
@@ -11,8 +13,9 @@ import '../../size_config.dart';
 
 class CureCommentPage extends StatefulWidget {
   final DocumentSnapshot document;
+  final String name;
 
-  CureCommentPage({required this.document});
+  CureCommentPage({required this.document,required this.name});
 
   @override
   _CureCommentPageState createState() => _CureCommentPageState();
@@ -23,17 +26,21 @@ class _CureCommentPageState extends State<CureCommentPage> {
   final currentUser = FirebaseAuth.instance.currentUser;
   String? nickname;
   String? image;
+  String? id;
 
   Future<String?> getData(String userId) async {
     DocumentReference documentReference = FirebaseFirestore.instance.collection('users').doc(userId);
     String? nick;
     String? img;
+    String? uId;
     await documentReference.get().then((snapshot) {
       nick = snapshot.get('nickname').toString();
       img = snapshot.get('image').toString();
+      uId=img = snapshot.get('userId').toString();
     });
     nickname=nick;
     image=img;
+    id=uId;
     return null;
   }
 
@@ -64,9 +71,9 @@ class _CureCommentPageState extends State<CureCommentPage> {
         ),
         backgroundColor: kPrimaryColor,
         title: Text(
-          'Yorumlar',
+          '${widget.name} Yorumları',
           style: TextStyle(
-              fontSize: getProportionateScreenHeight(25),
+              fontSize: getProportionateScreenHeight(20),
               fontWeight: FontWeight.bold),
         ),
       ),
@@ -133,11 +140,35 @@ class _CureCommentPageState extends State<CureCommentPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        data['userName'],
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: getProportionateScreenHeight(18)),
+                      GestureDetector(
+                        onTap: (){
+                          // eğer kullanıcı currentuser ise profil sayfasına gönder
+                          if (data['userId'] ==
+                              currentUser!
+                                  .uid) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    BottomNavBar(selectedIndex: 5),
+                              ),
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      VisitUserProfile(
+                                          user: data['userId'])),
+                            );
+                          }
+                        },
+                        child: Text(
+                          data['userName'],
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: getProportionateScreenHeight(18)),
+                        ),
                       ),
                       SizedBox(
                         height: getProportionateScreenHeight(5),
@@ -236,7 +267,7 @@ class _CureCommentPageState extends State<CureCommentPage> {
     try {
       //print('nickname: ${widget.myData.myName}');
       CloudStore.commentToCures(
-          _cures.curesId!, _msgTextController.text, nickname!,image!);
+          _cures.curesId!, _msgTextController.text, nickname!,image!,id!);
       FocusScope.of(context).requestFocus(FocusNode());
       _msgTextController.text = '';
     } catch (e) {

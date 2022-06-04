@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 
 
 class BottomNavBar extends StatefulWidget {
+  late int selectedIndex;
+  BottomNavBar({required this.selectedIndex});
   @override
   State<BottomNavBar> createState() => _BottomNavBarState();
 }
@@ -16,11 +18,11 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
 
 
-  int _selectedIndex = 0;
+
 
   void _onItemTap(int index) {
     setState(() {
-      _selectedIndex = index;
+      widget.selectedIndex = index;
     });
   }
 
@@ -31,7 +33,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       //sanırım klavye çıkınca ekranı yeniden ölçeklendirmeyi devre dışı bırakıyor
       resizeToAvoidBottomInset: false,
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
+        currentIndex: widget.selectedIndex,
         onTap: _onItemTap,
         items: const <BottomNavigationBarItem>[
           // forum sayfasını dizayn etmedim
@@ -70,7 +72,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       // userData bilgilerini profil data ya ekleme home_screen de materialapp altına yapılınca
       // sayfa yüklenmede sorun oluyor. hafıza sürekli doluyor .
       body: IndexedStack(
-        index: _selectedIndex,
+        index: widget.selectedIndex,
         children: [
           ForumPage(), //index 0
           TeaPage(), // index 1

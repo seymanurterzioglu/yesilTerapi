@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
     //UserDatabase userDatabase = UserDatabase(uid: currentUser!.uid);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BottomNavBar(),
+      home: BottomNavBar(selectedIndex: 0),
     );
   }
 }

@@ -3,8 +3,8 @@ import 'package:fitterapi/main_page/forum/profil_data.dart';
 import 'package:fitterapi/main_page/prepared/utils.dart';
 
 class CloudStore {
-  static Future<void> likeToShare(String shareId, MyProfileData userProfile,
-      bool isLikeShare) async {
+  static Future<void> likeToShare(
+      String shareId, MyProfileData userProfile, bool isLikeShare) async {
     if (isLikeShare) {
       DocumentReference likeReference = FirebaseFirestore.instance
           .collection('shares')
@@ -41,9 +41,10 @@ class CloudStore {
   }
 
   //share like count
-  static Future<void> updateShareLikeCount(DocumentSnapshot postData, bool isLikeShare) async {
-    int count=postData['shareLikeCount'];
-    isLikeShare ? count=count-1 : count=count+1;
+  static Future<void> updateShareLikeCount(
+      DocumentSnapshot postData, bool isLikeShare) async {
+    int count = postData['shareLikeCount'];
+    isLikeShare ? count = count - 1 : count = count + 1;
     print(count);
     postData.reference
         .update({'shareLikeCount': FieldValue.increment(isLikeShare ? -1 : 1)});
@@ -107,7 +108,7 @@ class CloudStore {
   }
 
   static Future<void> commentToCures(String curesId, String commentContent,
-      String userName, String image) async {
+      String userName, String image,String Id) async {
     String commentId = Utils().generateRandomString(20);
     FirebaseFirestore.instance
         .collection('cures')
@@ -120,7 +121,17 @@ class CloudStore {
       'commentTime': DateTime.now().millisecondsSinceEpoch,
       'commentContent': commentContent,
       'userImage': image,
+      'userId':Id,
       // 'userImage':
     });
+  }
+
+  static Future<void> sendMessage(
+      String senderId, String takerId, String message) async {
+    FirebaseFirestore.instance.collection('chat').doc(senderId + takerId).collection('message').doc().set({
+      'users': [senderId, takerId],
+      'message': message,
+      'messageTime': DateTime.now().millisecondsSinceEpoch,
+    }).then((value) => print("Mesaj gönderildi"));
   }
 }
