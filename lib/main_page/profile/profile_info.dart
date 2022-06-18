@@ -9,6 +9,8 @@ import 'package:fitterapi/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../const.dart';
+
 class ProfileInfo extends StatefulWidget {
 
   @override
@@ -93,15 +95,18 @@ class _ProfileInfoState extends State<ProfileInfo> {
     UserDatabase userDatabase = UserDatabase(uid: currentUser!.uid);
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
-          "Profil ",
+          'Profil',
           style: TextStyle(
-            color: Colors.black,
-          ),
+              fontSize: getProportionateScreenHeight(25),
+              fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
+        toolbarHeight: getProportionateScreenHeight(95),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
+        ),
+        backgroundColor: kPrimaryColor,
       ),
       body: SingleChildScrollView(
         child: Padding(

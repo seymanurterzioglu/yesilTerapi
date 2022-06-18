@@ -85,16 +85,16 @@ class _TeasPregnancyListState extends State<TeasPregnancyList> {
                       ),
                     ),
                     SizedBox(width: getProportionateScreenWidth(1)),
-                    Container(
-                      padding: EdgeInsets.all(getProportionateScreenWidth(7)),
-                      height: getProportionateScreenHeight(45),
-                      width: getProportionateScreenWidth(45),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: SvgPicture.asset("assets/icons/bell5.svg"),
-                    ),
+                    // Container(
+                    //   padding: EdgeInsets.all(getProportionateScreenWidth(7)),
+                    //   height: getProportionateScreenHeight(45),
+                    //   width: getProportionateScreenWidth(45),
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.white,
+                    //     shape: BoxShape.circle,
+                    //   ),
+                    //   child: SvgPicture.asset("assets/icons/bell5.svg"),
+                    // ),
                   ],
                 ),
               ),

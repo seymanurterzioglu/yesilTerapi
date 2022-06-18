@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitterapi/const.dart';
+import 'package:fitterapi/main_page/chat/friend_list.dart';
+import 'package:fitterapi/main_page/chat/my_messages.dart';
 import 'package:fitterapi/main_page/profile/add_page.dart';
 import 'package:fitterapi/main_page/profile/profile_info.dart';
 import 'package:fitterapi/main_page/profile/settings.dart';
@@ -473,6 +475,27 @@ class ProfileSideBar extends StatelessWidget {
                       fit: BoxFit.cover)),
             ),
             ProfileListItem(
+              icon: Icons.people_alt_sharp,
+              text: 'Arkadaşlarım',
+              onPress: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => FriendList()),
+                );
+              },
+
+            ),
+            ProfileListItem(
+              icon: Icons.menu_book,
+              text: 'Mesajlarım',
+              onPress: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyMessages()),
+                );
+              },
+            ),
+            ProfileListItem(
               icon: Icons.person_add_alt_1,
               text: 'Profil Düzenle',
               onPress: () {
@@ -495,7 +518,7 @@ class ProfileSideBar extends StatelessWidget {
             ),
             ProfileListItem(
               icon: Icons.add_box,
-              text: 'Çay/Kür Paylaş',
+              text: 'Çay/Kür Ekle',
               onPress: () {
                 Navigator.push(
                   context,

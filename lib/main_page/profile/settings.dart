@@ -35,15 +35,18 @@ class _SettingsProfileState extends State<SettingsProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
-          "Ayarlar",
+          'Ayarlar',
           style: TextStyle(
-            color: Colors.black,
-          ),
+              fontSize: getProportionateScreenHeight(25),
+              fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
+        toolbarHeight: getProportionateScreenHeight(95),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
+        ),
+        backgroundColor: kPrimaryColor,
       ),
       body: Container(
         padding: EdgeInsets.all(getProportionateScreenHeight(10)),

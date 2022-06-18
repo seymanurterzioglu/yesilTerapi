@@ -9,6 +9,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:image_picker/image_picker.dart';
 
+import '../../const.dart';
+
 class NewCureScreen extends StatefulWidget {
   @override
   State<NewCureScreen> createState() => _NewCureScreenState();
@@ -57,21 +59,24 @@ class _NewCureScreenState extends State<NewCureScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        //automaticallyImplyLeading: false,
-        centerTitle: true,
         title: Text(
-          "Kür Ekle",
+          'Kür Ekle',
           style: TextStyle(
-            color: Colors.black38,
-          ),
+              fontSize: getProportionateScreenHeight(25),
+              fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
+        toolbarHeight: getProportionateScreenHeight(95),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
+        ),
+        backgroundColor: kPrimaryColor,
       ),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
           child: Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(5.0),
             child: Column(
               children: [
                 Padding(

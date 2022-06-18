@@ -9,7 +9,8 @@ import '../../const.dart';
 import '../../size_config.dart';
 
 class VisitUserProfile extends StatefulWidget {
-  final String user;
+  final String user; // takerId
+  // final String userImage; //currentUserImage
 
   VisitUserProfile({required this.user});
 
@@ -24,12 +25,26 @@ class _VisitUserProfileState extends State<VisitUserProfile> {
   int? share_count;
   List<DocumentSnapshot> listOfDocumentSnapshot = [];
 
+  List myFriendList = [];
+
+  getFriendList() async {
+    var list = await FirebaseFirestore.instance
+        .collection('friend')
+        .doc(currentUser!.uid)
+        .collection('list')
+        .get();
+    setState(() {
+      myFriendList = list.docs;
+    });
+  }
+
   final TextEditingController _msgTextController = new TextEditingController();
   FocusNode _writingTextFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     UserDatabase userDatabase = UserDatabase(uid: widget.user);
+    getFriendList();  //arkadaş listesini aldık
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -203,20 +218,37 @@ class _VisitUserProfileState extends State<VisitUserProfile> {
                                       actions: [
                                         TextButton(
                                           onPressed: () {
-                                            CloudStore.sendMessage(
-                                                currentUser!.uid,
-                                                _userData.uid!,
-                                                _msgTextController.text);
                                             Navigator.of(context).pop();
                                           },
-                                          child: Text('Gönder'),
+                                          child: Text('Kapat'),
                                         ),
                                         TextButton(
                                           onPressed: () {
-                                            Navigator.of(context).pop();
+                                            //mesaj yollayanlar listesine kaydet
+                                            CloudStore.messageList(
+                                              //takerId
+                                              _userData.uid!,
+                                              //senderId = currentUserId
+                                              currentUser!.uid,
+                                              // //takerImage
+                                              // _userData.image!,
+                                              // // currentUserImage =senderImage
+                                              // widget.userImage,
+                                            );
 
+                                            //mesajı kaydet
+                                            CloudStore.sendMessage(
+                                                //senderId
+                                                currentUser!.uid,
+                                                //takerID
+                                                _userData.uid!,
+                                                // //takerImage
+                                                // _userData.image!,
+                                                _msgTextController.text);
+
+                                            Navigator.of(context).pop();
                                           },
-                                          child: Text('Kapat'),
+                                          child: Text('Gönder'),
                                         ),
                                       ],
                                     );
@@ -237,6 +269,58 @@ class _VisitUserProfileState extends State<VisitUserProfile> {
                               size: getProportionateScreenHeight(35),
                             ),
                           ),
+                          // send friend request (if we ara not friend)
+                          myFriendList.contains(_userData.uid)
+                              ? Text('')
+                              : IconButton(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10.0))),
+                                            title: Text(
+                                                'Arkadaşlık isteği gönder'),
+                                            // content: Column(
+                                            //   mainAxisSize: MainAxisSize.min,
+                                            //   children: [
+                                            //   ],
+                                            // ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  // arkadaşlık isreği gönder
+                                                  FirebaseFirestore.instance
+                                                      .collection(
+                                                          'friendRequest')
+                                                      .doc(_userData.uid)
+                                                      .collection('list')
+                                                      .doc(currentUser!.uid)
+                                                      .set({
+                                                    'requestSenderId':currentUser!.uid,
+                                                    'time': DateTime.now(),
+                                                  });
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('Kapat'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('Gönder'),
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                  },
+                                  icon: Icon(
+                                    Icons.person_add_alt_1,
+                                    color: kPrimaryColor,
+                                  ),
+                                ),
                         ],
                       ),
                     ),

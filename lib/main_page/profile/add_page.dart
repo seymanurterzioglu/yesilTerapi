@@ -4,20 +4,25 @@ import 'package:fitterapi/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../const.dart';
+
 class AddPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,
         title: Text(
-          'Bilgilerini Paylaş',
+          'Ekleme yap',
           style: TextStyle(
-            color: Colors.black,
-          ),
+              fontSize: getProportionateScreenHeight(25),
+              fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
+        toolbarHeight: getProportionateScreenHeight(95),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
+        ),
+        backgroundColor: kPrimaryColor,
       ),
       resizeToAvoidBottomInset: false,
       body: Column(

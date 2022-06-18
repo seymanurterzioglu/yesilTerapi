@@ -62,15 +62,18 @@ class _NewTeaScreenState extends State<NewTeaScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        //automaticallyImplyLeading: false,
-        centerTitle: true,
         title: Text(
-          "Çay Ekle",
+          'Çay Ekle',
           style: TextStyle(
-            color: Colors.black38,
-          ),
+              fontSize: getProportionateScreenHeight(25),
+              fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
+        toolbarHeight: getProportionateScreenHeight(95),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(50)),
+        ),
+        backgroundColor: kPrimaryColor,
       ),
       body: SingleChildScrollView(
         child: Form(

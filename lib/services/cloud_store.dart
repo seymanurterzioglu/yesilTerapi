@@ -108,7 +108,7 @@ class CloudStore {
   }
 
   static Future<void> commentToCures(String curesId, String commentContent,
-      String userName, String image,String Id) async {
+      String userName, String image, String Id) async {
     String commentId = Utils().generateRandomString(20);
     FirebaseFirestore.instance
         .collection('cures')
@@ -121,17 +121,66 @@ class CloudStore {
       'commentTime': DateTime.now().millisecondsSinceEpoch,
       'commentContent': commentContent,
       'userImage': image,
-      'userId':Id,
+      'userId': Id,
       // 'userImage':
     });
   }
 
   static Future<void> sendMessage(
-      String senderId, String takerId, String message) async {
-    FirebaseFirestore.instance.collection('chat').doc(senderId + takerId).collection('message').doc().set({
+      String senderId, String takerId,String message) async {
+    FirebaseFirestore.instance.collection('chat').doc().set({
       'users': [senderId, takerId],
       'message': message,
-      'messageTime': DateTime.now().millisecondsSinceEpoch,
+      'messageTime': DateTime.now(),
     }).then((value) => print("Mesaj gönderildi"));
+  }
+
+  static Future<void> messageList(String takerId, String senderId) async {
+    // eger sender takerın listesinde yok ise ekleme yap
+    List _allResults = [];
+    var data = await FirebaseFirestore.instance
+        .collection('chatroom')
+        .doc(takerId)
+        .collection('who')
+        .get();
+    _allResults = data.docs;
+    if (_allResults.contains(senderId)) {
+      _allResults=_allResults;
+    }else {
+      FirebaseFirestore.instance
+          .collection('chatroom')
+          .doc(takerId)
+          .collection('who')
+          .doc()
+          .set({
+        'whoId': senderId,
+
+      });
+    }
+
+    // eger taker senderın listesinde yok ise ekleme yap
+    List _sResult = [];
+    var data2 = await FirebaseFirestore.instance
+        .collection('chatroom')
+        .doc(senderId)
+        .collection('who')
+        .get();
+    _sResult = data2.docs;
+    if (_sResult.contains(takerId)) {
+      null;
+    } else {
+      FirebaseFirestore.instance
+          .collection('chatroom')
+          .doc(senderId)
+          .collection('who')
+          .doc()
+          .set({
+        'whoId': takerId,
+
+      });
+    }
+
+
+
   }
 }
