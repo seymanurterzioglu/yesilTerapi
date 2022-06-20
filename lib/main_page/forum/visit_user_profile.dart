@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fitterapi/main_page/chat/send_message.dart';
 import 'package:fitterapi/main_page/profile/user_and_datas.dart';
 import 'package:fitterapi/services/cloud_store.dart';
 import 'package:fitterapi/services/user_database.dart';
@@ -27,15 +26,31 @@ class _VisitUserProfileState extends State<VisitUserProfile> {
 
   List myFriendList = [];
 
-  getFriendList() async {
-    var list = await FirebaseFirestore.instance
+  Future<void> getData() async {
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('friend')
         .doc(currentUser!.uid)
         .collection('list')
         .get();
-    setState(() {
-      myFriendList = list.docs;
-    });
+
+    // Get data from docs and convert map to List
+    var allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    //for a specific field
+    allData = querySnapshot.docs.map((doc) => doc.get('friendId')).toList();
+    myFriendList = List.from(allData);
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   final TextEditingController _msgTextController = new TextEditingController();
@@ -44,7 +59,7 @@ class _VisitUserProfileState extends State<VisitUserProfile> {
   @override
   Widget build(BuildContext context) {
     UserDatabase userDatabase = UserDatabase(uid: widget.user);
-    getFriendList();  //arkadaş listesini aldık
+    getData(); //arkadaş listesini aldık
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -270,7 +285,7 @@ class _VisitUserProfileState extends State<VisitUserProfile> {
                             ),
                           ),
                           // send friend request (if we ara not friend)
-                          myFriendList.contains(_userData.uid)
+                          myFriendList.contains(widget.user)
                               ? Text('')
                               : IconButton(
                                   onPressed: () {
@@ -289,25 +304,27 @@ class _VisitUserProfileState extends State<VisitUserProfile> {
                                             //   ],
                                             // ),
                                             actions: [
+
                                               TextButton(
                                                 onPressed: () {
-                                                  // arkadaşlık isreği gönder
-                                                  FirebaseFirestore.instance
-                                                      .collection(
-                                                          'friendRequest')
-                                                      .doc(_userData.uid)
-                                                      .collection('list')
-                                                      .doc(currentUser!.uid)
-                                                      .set({
-                                                    'requestSenderId':currentUser!.uid,
-                                                    'time': DateTime.now(),
-                                                  });
                                                   Navigator.of(context).pop();
                                                 },
                                                 child: Text('Kapat'),
                                               ),
                                               TextButton(
                                                 onPressed: () {
+                                                  // arkadaşlık isreği gönder
+                                                  FirebaseFirestore.instance
+                                                      .collection(
+                                                      'friendRequest')
+                                                      .doc(_userData.uid)
+                                                      .collection('list')
+                                                      .doc(currentUser!.uid)
+                                                      .set({
+                                                    'requestSenderId':
+                                                    currentUser!.uid,
+                                                    'time': DateTime.now(),
+                                                  });
                                                   Navigator.of(context).pop();
                                                 },
                                                 child: Text('Gönder'),

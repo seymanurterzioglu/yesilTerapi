@@ -145,7 +145,7 @@ class FriendRequest extends StatelessWidget {
                                         Column(
                                           children: [
                                             GestureDetector(
-                                              child: Row(
+                                              child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceBetween,
@@ -155,7 +155,7 @@ class FriendRequest extends StatelessWidget {
                                                       children: [
                                                         TextSpan(
                                                           text:
-                                                              '${_userData.nickname!}   ',
+                                                              '   ${_userData.nickname!}   ',
                                                           style: TextStyle(
                                                             color: Colors.black,
                                                             fontSize:
@@ -173,14 +173,14 @@ class FriendRequest extends StatelessWidget {
                                                   ),
                                                   // ekleyeceğim
                                                   Text(
-                                                    DateFormat('kk:mm \n dd-MM-yyyy')
+                                                    DateFormat('kk:mm\ndd-MM-yyyy')
                                                         .format(((listOfDocumentSnapshot[
                                                                             index]
                                                                         .data() as Map)['time'] ??
                                                                 ' ')
                                                             .toDate()),
                                                     style: TextStyle(
-                                                      fontSize: 11,
+                                                      fontSize: 10,
                                                       fontWeight: FontWeight.w600,
                                                       color: Colors.black54,
                                                     ),
