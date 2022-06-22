@@ -4,7 +4,9 @@ import 'package:fitterapi/main_page/cures/cures.dart';
 import 'package:fitterapi/main_page/forum/visit_user_profile.dart';
 import 'package:fitterapi/main_page/prepared/bottom_nav_bar.dart';
 import 'package:fitterapi/main_page/prepared/utils.dart';
+import 'package:fitterapi/main_page/profile/user_and_datas.dart';
 import 'package:fitterapi/services/cloud_store.dart';
+import 'package:fitterapi/services/user_database.dart';
 
 import 'package:flutter/material.dart';
 
@@ -15,7 +17,7 @@ class CureCommentPage extends StatefulWidget {
   final DocumentSnapshot document;
   final String name;
 
-  CureCommentPage({required this.document,required this.name});
+  CureCommentPage({required this.document, required this.name});
 
   @override
   _CureCommentPageState createState() => _CureCommentPageState();
@@ -28,39 +30,36 @@ class _CureCommentPageState extends State<CureCommentPage> {
   String? image;
   String? id;
 
-  Future<String?> getData(String userId) async {
-    DocumentReference documentReference = FirebaseFirestore.instance.collection('users').doc(userId);
-    String? nick;
-    String? img;
-    String? uId;
-    await documentReference.get().then((snapshot) {
-      nick = snapshot.get('nickname').toString();
-      img = snapshot.get('image').toString();
-      uId=img = snapshot.get('userId').toString();
-    });
-    nickname=nick;
-    image=img;
-    id=uId;
-    return null;
-  }
-
+  // Future<String?> getData(String userId) async {
+  //   DocumentReference documentReference =
+  //       FirebaseFirestore.instance.collection('users').doc(userId);
+  //   String? nick;
+  //   String? img;
+  //   String? uId;
+  //   await documentReference.get().then((snapshot) {
+  //     nick = snapshot.get('nickname').toString();
+  //     img = snapshot.get('image').toString();
+  //     uId = img = snapshot.get('userId').toString();
+  //   });
+  //   nickname = nick;
+  //   image = img;
+  //   id = uId;
+  //   print('nick' + '${nickname}');
+  //   return null;
+  // }
 
   final TextEditingController _msgTextController = new TextEditingController();
   FocusNode _writingTextFocus = FocusNode();
 
-
   @override
   void initState() {
     super.initState();
-   getData(currentUser!.uid);
+    // getData(currentUser!.uid);
   }
-
 
   @override
   Widget build(BuildContext context) {
-        final size = MediaQuery
-        .of(context)
-        .size;
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -85,8 +84,10 @@ class _CureCommentPageState extends State<CureCommentPage> {
             .orderBy('commentTime', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
+          UserDatabase userDatabase = UserDatabase(uid: (currentUser!.uid));
+          if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
+          }
           return Column(
             children: [
               Expanded(
@@ -97,20 +98,37 @@ class _CureCommentPageState extends State<CureCommentPage> {
                     children: [
                       SizedBox(height: getProportionateScreenHeight(10)),
                       // docs da sıkıntı çıkarsa StreamBuilder<QuerySnapshot>olarak düzenle
-                      snapshot.data!.docs.length > 0 ? Expanded(
-                        child: ListView(
-                          shrinkWrap: true,
-                          children: snapshot.data!.docs.map((document) {
-                            return commentListItem(document, size);
-                          }).toList(),
-                        ),
-                      )
-                          : Container(child: Center(child: Text('İlk yorumu siz yapabilirsiniz'))),
+                      snapshot.data!.docs.length > 0
+                          ? Expanded(
+                              child: ListView(
+                                shrinkWrap: true,
+                                children: snapshot.data!.docs.map((document) {
+                                  return commentListItem(document, size);
+                                }).toList(),
+                              ),
+                            )
+                          : Container(
+                              child: Center(
+                                  child:
+                                      Text('İlk yorumu siz yapabilirsiniz'))),
                     ],
                   ),
                 ),
               ),
-              _buildTextComposer(),
+              StreamBuilder<UserData>(
+                  stream: userDatabase.userData,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      UserData? _userData = snapshot.data;
+                      nickname=_userData!.nickname;
+                      image=_userData.image;
+                      id=_userData.uid;
+
+                      return _buildTextComposer();
+                    } else {
+                      return Center();
+                    }
+                  }),
             ],
           );
         },
@@ -141,11 +159,9 @@ class _CureCommentPageState extends State<CureCommentPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           // eğer kullanıcı currentuser ise profil sayfasına gönder
-                          if (data['userId'] ==
-                              currentUser!
-                                  .uid) {
+                          if (data['userId'] == currentUser!.uid) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -158,8 +174,7 @@ class _CureCommentPageState extends State<CureCommentPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      VisitUserProfile(
-                                          user: data['userId'])),
+                                      VisitUserProfile(user: data['userId'])),
                             );
                           }
                         },
@@ -230,7 +245,7 @@ class _CureCommentPageState extends State<CureCommentPage> {
                 elevation: 4.0,
                 shape: RoundedRectangleBorder(
                   borderRadius:
-                  BorderRadius.circular(getProportionateScreenHeight(12)),
+                      BorderRadius.circular(getProportionateScreenHeight(12)),
                 ),
                 child: Container(
                   child: Padding(
@@ -267,7 +282,7 @@ class _CureCommentPageState extends State<CureCommentPage> {
     try {
       //print('nickname: ${widget.myData.myName}');
       CloudStore.commentToCures(
-          _cures.curesId!, _msgTextController.text, nickname!,image!,id!);
+          _cures.curesId!, _msgTextController.text, nickname!, image!, id!);
       FocusScope.of(context).requestFocus(FocusNode());
       _msgTextController.text = '';
     } catch (e) {

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitterapi/main_page/forum/profil_data.dart';
 import 'package:fitterapi/main_page/prepared/utils.dart';
+import 'package:flutter/material.dart';
 
 class CloudStore {
   static Future<void> likeToShare(
@@ -127,60 +128,71 @@ class CloudStore {
   }
 
   static Future<void> sendMessage(
-      String senderId, String takerId,String message) async {
+      String senderId, String takerId, String message) async {
     FirebaseFirestore.instance.collection('chat').doc().set({
-      'users': [senderId, takerId],
+      'sender': senderId,
+      'taker':takerId,
+      'messageId': senderId+takerId,
       'message': message,
       'messageTime': DateTime.now(),
     }).then((value) => print("Mesaj gönderildi"));
   }
 
   static Future<void> messageList(String takerId, String senderId) async {
+    // her iki kullanıcının (sender ve taker) messageListine birbirlerini gönder
     // eger sender takerın listesinde yok ise ekleme yap
     List _allResults = [];
-    var data = await FirebaseFirestore.instance
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('chatroom')
         .doc(takerId)
         .collection('who')
         .get();
-    _allResults = data.docs;
+
+    // Get data from docs and convert map to List
+    var allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    //for a specific field
+    allData = querySnapshot.docs.map((doc) => doc.get('whoId')).toList();
+    _allResults = List.from(allData);
+
     if (_allResults.contains(senderId)) {
-      _allResults=_allResults;
-    }else {
+      _allResults = _allResults;
+    } else {
+      //senderId listede yok ise ekle
       FirebaseFirestore.instance
           .collection('chatroom')
           .doc(takerId)
           .collection('who')
-          .doc()
+          .doc(senderId)
           .set({
         'whoId': senderId,
-
       });
     }
 
     // eger taker senderın listesinde yok ise ekleme yap
     List _sResult = [];
-    var data2 = await FirebaseFirestore.instance
+    QuerySnapshot querySnapshot2 = await FirebaseFirestore.instance
         .collection('chatroom')
         .doc(senderId)
         .collection('who')
         .get();
-    _sResult = data2.docs;
+
+    // Get data from docs and convert map to List
+    var allData2 = querySnapshot2.docs.map((doc) => doc.data()).toList();
+    //for a specific field
+    allData2 = querySnapshot.docs.map((doc) => doc.get('whoId')).toList();
+    _allResults = List.from(allData2);
+
     if (_sResult.contains(takerId)) {
-      null;
+      _sResult=_sResult;
     } else {
       FirebaseFirestore.instance
           .collection('chatroom')
           .doc(senderId)
           .collection('who')
-          .doc()
+          .doc(takerId)
           .set({
         'whoId': takerId,
-
       });
     }
-
-
-
   }
 }

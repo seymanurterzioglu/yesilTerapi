@@ -26,7 +26,7 @@ class _VisitUserProfileState extends State<VisitUserProfile> {
 
   List myFriendList = [];
 
-  Future<void> getData() async {
+  Future<dynamic> getData() async {
     // Get docs from collection reference
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('friend')
@@ -39,6 +39,7 @@ class _VisitUserProfileState extends State<VisitUserProfile> {
     //for a specific field
     allData = querySnapshot.docs.map((doc) => doc.get('friendId')).toList();
     myFriendList = List.from(allData);
+    print(myFriendList);
 
   }
 
@@ -51,6 +52,12 @@ class _VisitUserProfileState extends State<VisitUserProfile> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    getData();
   }
 
   final TextEditingController _msgTextController = new TextEditingController();
@@ -79,6 +86,7 @@ class _VisitUserProfileState extends State<VisitUserProfile> {
         child: StreamBuilder<UserData>(
             stream: userDatabase.userData,
             builder: (context, snapshot) {
+              getData();
               if (snapshot.hasData) {
                 UserData? _userData = snapshot.data;
                 return Column(
@@ -285,7 +293,7 @@ class _VisitUserProfileState extends State<VisitUserProfile> {
                             ),
                           ),
                           // send friend request (if we ara not friend)
-                          myFriendList.contains(widget.user)
+                          myFriendList.contains(_userData.uid)
                               ? Text('')
                               : IconButton(
                                   onPressed: () {

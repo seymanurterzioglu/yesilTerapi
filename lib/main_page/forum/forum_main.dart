@@ -8,7 +8,6 @@ import 'package:fitterapi/main_page/prepared/bottom_nav_bar.dart';
 import 'package:fitterapi/main_page/prepared/idb_icons.dart';
 import 'package:fitterapi/main_page/prepared/localTempDB.dart';
 import 'package:fitterapi/main_page/prepared/utils.dart';
-import 'package:fitterapi/main_page/profile/profile_page.dart';
 import 'package:fitterapi/main_page/profile/user_and_datas.dart';
 import 'package:fitterapi/services/cloud_store.dart';
 import 'package:flutter/material.dart';
