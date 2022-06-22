@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitterapi/const.dart';
 import 'package:fitterapi/main_page/cures/cures.dart';
+import 'package:fitterapi/main_page/cures/cures_comment_page.dart';
 import 'package:fitterapi/main_page/prepared/idb_icons.dart';
 import 'package:fitterapi/main_page/prepared/pricer_cliper.dart';
 import 'package:fitterapi/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:share_plus/share_plus.dart';
 
 Widget listFavoritesCures() {
   return Scaffold(
@@ -118,6 +120,12 @@ Widget listCure(BuildContext context, DocumentSnapshot document) {
     ),
   );
 }
+void shareCure(BuildContext context, String message) {
+  RenderBox? box = context.findRenderObject() as RenderBox;
+  Share.share(message,
+      subject: 'Deneme',
+      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
+}
 
 Widget detailCures(BuildContext context, DocumentSnapshot document) {
   final cures = Cures.fromSnapshot(document);
@@ -135,11 +143,16 @@ Widget detailCures(BuildContext context, DocumentSnapshot document) {
       actions: [
         IconButton(
           icon: Icon(Icons.share),
-          onPressed: () {},
+          onPressed: () async {
+            shareCure(context, cures.recipe!);
+          },
         ),
         IconButton(
-          icon: Icon(Icons.more_vert),
-          onPressed: () {},
+          icon: Icon(Icons.comment_outlined),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CureCommentPage(document: document,name: cures.curesName!,)),
+          ),
         ),
       ],
     ),

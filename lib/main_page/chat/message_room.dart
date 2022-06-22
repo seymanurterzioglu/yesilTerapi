@@ -136,12 +136,10 @@ class _MessageRoomState extends State<MessageRoom> {
                                                           'messageTime'] ??
                                                       ' ')
                                                   .toDate()),
-
                                           style: TextStyle(
                                             fontSize: 12,
                                             color: Colors.black45,
                                           ),
-
                                         ),
                                         SizedBox(
                                           width: 10,
